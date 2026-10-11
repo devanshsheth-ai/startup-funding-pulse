@@ -427,3 +427,8 @@ export function buildEventCandidate(
     },
   };
 }
+
+/** Watchlist natural key: investor names use the investor normaliser, everything else the company one. */
+export function watchKey(type: string, value: string): string {
+  return type === "investor" ? normalizeInvestorKey(value) : normalizeCompanyName(value);
+}
