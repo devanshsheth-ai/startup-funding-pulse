@@ -5,7 +5,8 @@ import { newRunId } from "@/lib/logger";
 import { generateAndMaybeSend } from "@/pipeline/deliver";
 
 /** POST /api/cron/digest?profile=&mode=&send=1 — generate (and send) a digest now (PRD §21.2). */
-export const maxDuration = 60;
+// Narration can take ~45 s; Hobby allows 300 s. Chunked stages keep their own 50 s budget (D-062).
+export const maxDuration = 300;
 
 const query = z.object({ profile: z.string().regex(/^[a-z0-9-]+$/), mode: z.enum(["weekly", "daily"]).default("weekly"), send: z.enum(["0", "1"]).default("0") });
 

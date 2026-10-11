@@ -130,7 +130,8 @@
       "url": "https://gnews.io/api/v4/search?q=India+startup+raises+funding&lang=en&country=in&max=10&sortby=publishedAt",
       "tier": 2,
       "parser": "gnews",
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled 2026-10-12: on the GNews free tier (12-hour delay) this narrow query returns 0 articles; replaced by broad queries (D-061)."
     },
     {
       "name": "GNews: Series A / Series B",
@@ -138,7 +139,8 @@
       "url": "https://gnews.io/api/v4/search?q=Indian+startup+%28%22Series+A%22+OR+%22Series+B%22%29+raises&lang=en&country=in&max=10&sortby=publishedAt",
       "tier": 2,
       "parser": "gnews",
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled 2026-10-12: on the GNews free tier (12-hour delay) this narrow query returns 0 articles; replaced by broad queries (D-061)."
     },
     {
       "name": "GNews: Seed round",
@@ -146,7 +148,8 @@
       "url": "https://gnews.io/api/v4/search?q=India+startup+%22seed+round%22+million&lang=en&country=in&max=10&sortby=publishedAt",
       "tier": 2,
       "parser": "gnews",
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled 2026-10-12: on the GNews free tier (12-hour delay) this narrow query returns 0 articles; replaced by broad queries (D-061)."
     },
     {
       "name": "GNews: Fintech",
@@ -154,7 +157,8 @@
       "url": "https://gnews.io/api/v4/search?q=India+fintech+startup+raises&lang=en&country=in&max=10&sortby=publishedAt",
       "tier": 2,
       "parser": "gnews",
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled 2026-10-12: on the GNews free tier (12-hour delay) this narrow query returns 0 articles; replaced by broad queries (D-061)."
     },
     {
       "name": "GNews: B2B SaaS",
@@ -162,7 +166,8 @@
       "url": "https://gnews.io/api/v4/search?q=India+SaaS+startup+funding&lang=en&country=in&max=10&sortby=publishedAt",
       "tier": 2,
       "parser": "gnews",
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled 2026-10-12: on the GNews free tier (12-hour delay) this narrow query returns 0 articles; replaced by broad queries (D-061)."
     },
     {
       "name": "GNews: Supply chain & logistics",
@@ -170,7 +175,8 @@
       "url": "https://gnews.io/api/v4/search?q=India+logistics+OR+%22supply+chain%22+startup+raises+funding&lang=en&country=in&max=10&sortby=publishedAt",
       "tier": 2,
       "parser": "gnews",
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled 2026-10-12: on the GNews free tier (12-hour delay) this narrow query returns 0 articles; replaced by broad queries (D-061)."
     },
     {
       "name": "GNews: Healthtech",
@@ -178,7 +184,8 @@
       "url": "https://gnews.io/api/v4/search?q=India+healthtech+startup+raises&lang=en&country=in&max=10&sortby=publishedAt",
       "tier": 2,
       "parser": "gnews",
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled 2026-10-12: on the GNews free tier (12-hour delay) this narrow query returns 0 articles; replaced by broad queries (D-061)."
     },
     {
       "name": "GNews: AI applications",
@@ -186,7 +193,8 @@
       "url": "https://gnews.io/api/v4/search?q=India+AI+startup+raises+funding&lang=en&country=in&max=10&sortby=publishedAt",
       "tier": 2,
       "parser": "gnews",
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled 2026-10-12: on the GNews free tier (12-hour delay) this narrow query returns 0 articles; replaced by broad queries (D-061)."
     },
     {
       "name": "GNews: Consumer & D2C",
@@ -194,7 +202,8 @@
       "url": "https://gnews.io/api/v4/search?q=India+D2C+brand+raises+funding&lang=en&country=in&max=10&sortby=publishedAt",
       "tier": 2,
       "parser": "gnews",
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled 2026-10-12: on the GNews free tier (12-hour delay) this narrow query returns 0 articles; replaced by broad queries (D-061)."
     },
     {
       "name": "GNews: Acquisitions",
@@ -202,7 +211,8 @@
       "url": "https://gnews.io/api/v4/search?q=India+startup+acquires+OR+acquisition&lang=en&country=in&max=10&sortby=publishedAt",
       "tier": 2,
       "parser": "gnews",
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled 2026-10-12: on the GNews free tier (12-hour delay) this narrow query returns 0 articles; replaced by broad queries (D-061)."
     },
     {
       "name": "GNews: Fund closes",
@@ -210,7 +220,8 @@
       "url": "https://gnews.io/api/v4/search?q=India+venture+fund+%22final+close%22+OR+%22first+close%22+OR+%22new+fund%22&lang=en&country=in&max=10&sortby=publishedAt",
       "tier": 2,
       "parser": "gnews",
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled 2026-10-12: on the GNews free tier (12-hour delay) this narrow query returns 0 articles; replaced by broad queries (D-061)."
     },
     {
       "name": "Inc42",
@@ -243,6 +254,54 @@
         "pages": 2
       },
       "note": "Weekly funding report roundup. Used by the backfill script, not live collection."
+    },
+    {
+      "name": "GNews: startup funding",
+      "type": "newsapi",
+      "url": "https://gnews.io/api/v4/search?q=startup+funding&lang=en&country=in&max=10",
+      "tier": 2,
+      "parser": "gnews",
+      "enabled": true
+    },
+    {
+      "name": "GNews: startup funding India",
+      "type": "newsapi",
+      "url": "https://gnews.io/api/v4/search?q=startup+funding+India&lang=en&country=in&max=10",
+      "tier": 2,
+      "parser": "gnews",
+      "enabled": true
+    },
+    {
+      "name": "GNews: Indian startups funding",
+      "type": "newsapi",
+      "url": "https://gnews.io/api/v4/search?q=Indian+startups+funding&lang=en&country=in&max=10",
+      "tier": 2,
+      "parser": "gnews",
+      "enabled": true
+    },
+    {
+      "name": "GNews: startup raises crore",
+      "type": "newsapi",
+      "url": "https://gnews.io/api/v4/search?q=startup+raises+crore&lang=en&country=in&max=10",
+      "tier": 2,
+      "parser": "gnews",
+      "enabled": true
+    },
+    {
+      "name": "GNews: seed funding Indian startup",
+      "type": "newsapi",
+      "url": "https://gnews.io/api/v4/search?q=seed+funding+Indian+startup&lang=en&country=in&max=10",
+      "tier": 2,
+      "parser": "gnews",
+      "enabled": true
+    },
+    {
+      "name": "GNews: venture capital fund India",
+      "type": "newsapi",
+      "url": "https://gnews.io/api/v4/search?q=venture+capital+fund+India&lang=en&country=in&max=10",
+      "tier": 2,
+      "parser": "gnews",
+      "enabled": true
     }
   ]
 }
