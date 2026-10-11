@@ -475,3 +475,11 @@ India", "Indian startups funding", "startup raises crore", "seed funding Indian 
 "venture capital fund India". The first live run fetched 31 articles (22 new). Stage A filters
 the off-topic ones cheaply. The 11 originals stay in the registry, disabled with this reason,
 and quota use drops from 11 to 6 of the 100 daily calls.
+
+**D-062 · Function duration for digest work.** On Vercel, the weekly preview took 48 s, almost
+all of it the Gemini narration call, against a 60 s `maxDuration`. The scheduled send runs in
+the dispatcher after collection and scoring, so a slow narration could be killed mid-send.
+→ The dispatch, preview and manual-digest routes declare `maxDuration = 300` (the Hobby
+maximum). Chunked pipeline stages still stop at their 50 s work budget and continue in a new
+invocation; only the single digest step uses the headroom. The Gemini call has its own 60 s
+timeout, so no invocation can approach 300 s.

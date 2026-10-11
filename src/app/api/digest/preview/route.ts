@@ -8,7 +8,8 @@ import { buildDigest, loadProfileWithName } from "@/pipeline/digest";
  * GET /api/digest/preview?profile=&mode=weekly|daily — renders the digest
  * template for the current window WITHOUT sending or saving it (PRD §16.3).
  */
-export const maxDuration = 60;
+// Narration can take ~45 s; Hobby allows 300 s. Chunked stages keep their own 50 s budget (D-062).
+export const maxDuration = 300;
 
 const query = z.object({ profile: z.string().regex(/^[a-z0-9-]+$/).default("aarav-familyoffice"), mode: z.enum(["weekly", "daily"]).default("weekly"), format: z.enum(["html", "text", "json"]).default("html") });
 

@@ -14,7 +14,8 @@ import { dispatch, STAGES, type DispatchPosition } from "@/pipeline/dispatch";
  * returns the result (manual trigger / debugging).
  */
 
-export const maxDuration = 60;
+// Narration can take ~45 s; Hobby allows 300 s. Chunked stages keep their own 50 s budget (D-062).
+export const maxDuration = 300;
 
 const querySchema = z.object({
   run_id: z.string().regex(/^run_[0-9A-Za-z_]+$/).optional(),
