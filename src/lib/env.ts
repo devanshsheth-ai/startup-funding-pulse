@@ -25,6 +25,8 @@ const envSchema = z.object({
   GEMINI_API_KEY: optionalString,
   GEMINI_MODEL: optionalString,
   GEMINI_EMBEDDING_MODEL: optionalString,
+  /** Requests per minute to pace Gemini calls at (default 10, free-tier safe). */
+  GEMINI_RPM: optionalString,
   RESEND_API_KEY: optionalString,
   EMAIL_FROM: optionalString,
   CRON_SECRET: optionalString,
