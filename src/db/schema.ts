@@ -265,7 +265,10 @@ export const portfolio = pgTable("portfolio", {
   embedding: vector("embedding", { dimensions: EMBEDDING_DIMENSIONS }),
   isActive: boolean("is_active").notNull().default(true),
   ...timestamps,
-}, (t) => [index("portfolio_embedding_hnsw_idx").using("hnsw", t.embedding.op("vector_cosine_ops"))]);
+}, (t) => [
+  index("portfolio_embedding_hnsw_idx").using("hnsw", t.embedding.op("vector_cosine_ops")),
+  unique("portfolio_profile_name_unique").on(t.profileId, t.name),
+]);
 
 export const relevanceScores = pgTable("relevance_scores", {
   dealId: text("deal_id").notNull().references(() => deals.id, { onDelete: "cascade" }),
@@ -455,3 +458,19 @@ export const geminiCache = pgTable("gemini_cache", {
   tokens: integer("tokens"),
   ...timestamps,
 });
+
+/**
+ * Gemini sector-fit verdicts, cached per (profile, sector, sub-sector, mandate
+ * hash) so a deal never triggers its own call (PRD §11.1). Editing the mandate
+ * changes the hash and therefore re-evaluates (D-046).
+ */
+export const sectorFit = pgTable("sector_fit", {
+  id: serial("id").primaryKey(),
+  profileId: text("profile_id").notNull().references(() => profiles.id, { onDelete: "cascade" }),
+  sector: text("sector").notNull(),
+  subSectorKey: text("sub_sector_key").notNull(), // lowercased sub-sector, '' when absent
+  mandateHash: text("mandate_hash").notNull(),
+  fit: numeric("fit").notNull(), // 0..1
+  reason: text("reason").notNull(),
+  ...timestamps,
+}, (t) => [unique("sector_fit_key_unique").on(t.profileId, t.sector, t.subSectorKey, t.mandateHash)]);

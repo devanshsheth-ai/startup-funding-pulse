@@ -1,0 +1,241 @@
+{
+  "id": "fintech-seed-fund",
+  "display_name": "Fintech seed fund — Mumbai",
+  "fund_type": "vc_fund",
+  "is_default": false,
+  "config": {
+    "assumption_note": "Mandate inferred from the problem statement. All values user-editable.",
+    "scoring_weights": {
+      "sector_fit": 30,
+      "stage_fit": 20,
+      "cheque_fit": 10,
+      "tracked_investor": 12,
+      "geography_fit": 5,
+      "recency": 5,
+      "ecosystem_significance": 18,
+      "override_watchlist": 40,
+      "override_adjacency_competitor": 35,
+      "override_adjacency_same_layer": 25,
+      "override_adjacency_adjacent": 15,
+      "override_investor_first_move": 10,
+      "confidence_discount_single_source": 0.85
+    },
+    "tier_thresholds": {
+      "act_now": 80,
+      "high": 60,
+      "relevant": 40,
+      "context": 20
+    },
+    "serendipity": {
+      "enabled": true,
+      "count": 3,
+      "max_mandate_score": 40
+    },
+    "delivery": {
+      "mode": "weekly",
+      "days": [
+        "monday"
+      ],
+      "send_hour": "06:30",
+      "timezone": "Asia/Kolkata",
+      "recipients": [
+        "partners@example-fintechseed.com"
+      ],
+      "min_deals_to_send": 1
+    },
+    "alerts": {
+      "enabled": true,
+      "severity_threshold": "high",
+      "quiet_hours": [
+        "22:00",
+        "07:00"
+      ],
+      "max_immediate_per_day": 3,
+      "cluster_window_days": 14,
+      "cluster_threshold": 2,
+      "triggers_enabled": {
+        "competitor_raise": true,
+        "watchlist_raise": true,
+        "same_layer_raise": true,
+        "portfolio_mentioned": true,
+        "adjacency_cluster": true,
+        "sector_momentum_flip": true,
+        "competitor_acquired": true,
+        "competitor_shutdown": true
+      }
+    },
+    "mandate": {
+      "country": "India",
+      "geographies_primary": [
+        "Mumbai"
+      ],
+      "geographies_secondary": [
+        "Bengaluru",
+        "Delhi-NCR",
+        "Pune"
+      ],
+      "stages": [
+        "Seed"
+      ],
+      "stages_adjacent": [
+        "Pre-seed",
+        "Pre-Series A"
+      ],
+      "cheque_size_usd": {
+        "min": 500000,
+        "max": 2000000
+      },
+      "round_size_interest_usd": {
+        "min": 500000,
+        "max": 2000000
+      }
+    },
+    "sectors_core": [
+      {
+        "name": "Fintech",
+        "sub": [
+          "lending",
+          "payments",
+          "credit cards",
+          "wealthtech",
+          "insurtech",
+          "neobanking",
+          "regtech",
+          "fintech infrastructure"
+        ]
+      }
+    ],
+    "sectors_watch": [
+      "B2B SaaS"
+    ],
+    "sectors_excluded": [
+      "Crypto/Web3 tokens",
+      "Real-money gaming"
+    ],
+    "keywords_excluded": [
+      "real money gaming",
+      "real-money gaming",
+      "rummy",
+      "fantasy sports",
+      "sports betting",
+      "online betting",
+      "crypto exchange",
+      "cryptocurrency",
+      "web3 token",
+      "nft",
+      "k-12",
+      "school tuition"
+    ]
+  },
+  "portfolio": [
+    {
+      "name": "Kiwi",
+      "description": "App that issues RuPay credit cards digitally and lets users pay with credit on UPI at online and offline merchants.",
+      "sector": "Fintech",
+      "sub_sector": "credit on UPI",
+      "stage_held": "Seed",
+      "city": "Bengaluru",
+      "relationship_type": "simulated_holding",
+      "adjacency_keywords": [
+        "credit on UPI",
+        "RuPay credit card",
+        "digital credit card",
+        "UPI payments app",
+        "card issuance",
+        "consumer credit"
+      ]
+    },
+    {
+      "name": "Stable Money",
+      "description": "Fixed-income investing platform for booking bank fixed deposits and bonds digitally, plus FD-secured credit cards.",
+      "sector": "Fintech",
+      "sub_sector": "fixed income investing",
+      "stage_held": "Seed",
+      "city": "Bengaluru",
+      "relationship_type": "simulated_holding",
+      "adjacency_keywords": [
+        "fixed deposits",
+        "fixed income investing",
+        "bond platform",
+        "secured credit card",
+        "retail savings",
+        "wealthtech app"
+      ]
+    },
+    {
+      "name": "Scapia",
+      "description": "Travel fintech offering a co-branded travel credit card with rewards redeemable on its own booking platform.",
+      "sector": "Fintech",
+      "sub_sector": "travel credit card",
+      "stage_held": "Seed",
+      "city": "Bengaluru",
+      "relationship_type": "simulated_holding",
+      "adjacency_keywords": [
+        "travel credit card",
+        "co-branded credit card",
+        "travel rewards",
+        "travel booking",
+        "forex-free card",
+        "card rewards platform"
+      ]
+    }
+  ],
+  "watchlist": [
+    {
+      "watch_type": "company",
+      "value": "Uni Cards",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "company",
+      "value": "Snapmint",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "company",
+      "value": "Fibe",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "company",
+      "value": "Jupiter",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "Better Capital",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "Rainmatter",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "Kae Capital",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "Info Edge Ventures",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    }
+  ]
+}

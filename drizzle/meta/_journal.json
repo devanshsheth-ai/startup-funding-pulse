@@ -50,6 +50,13 @@
       "when": 1791719902083,
       "tag": "0006_event_subject_key",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1791738014882,
+      "tag": "0007_profiles_scoring",
+      "breakpoints": true
     }
   ]
 }
