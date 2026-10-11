@@ -25,7 +25,7 @@ export interface StageResult {
 export interface SourceOutcome {
   sourceId: number;
   name: string;
-  status: "ok" | "empty" | "error";
+  status: "ok" | "empty" | "stale" | "error";
   fetched: number;
   tooOld: number;
   inserted: number;
@@ -89,13 +89,16 @@ async function collectOne(source: SourceRow, runId: string): Promise<SourceOutco
       inserted += res.length;
     }
 
-    const status = items.length === 0 ? "empty" : "ok";
+    // A feed whose every item is past the freshness window is reported as
+    // stale rather than "ok", so an empty contribution is explained.
+    const stale = items.length > 0 && tooOld === items.length;
+    const status = items.length === 0 ? "empty" : stale ? "stale" : "ok";
     await db
       .update(sources)
       .set({
         lastFetchedAt: new Date(),
         lastStatus: status,
-        lastError: null,
+        lastError: stale ? `All ${items.length} items older than ${PIPELINE.collect.liveMaxAgeDays} days` : null,
         successCount: sql`${sources.successCount} + 1`,
       })
       .where(eq(sources.id, source.id));

@@ -40,6 +40,7 @@ function statusClass(s: string | null): string {
     case "ok":
       return "text-emerald-700 dark:text-emerald-400";
     case "empty":
+    case "stale":
       return "text-amber-700 dark:text-amber-400";
     case "error":
       return "text-red-700 dark:text-red-400";
