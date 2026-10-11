@@ -1,0 +1,198 @@
+{
+  "$comment": "Known Indian VC name variants \u2192 canonical name (PRD \u00a710 Stage E.3). Lookup is on normalised names (lowercase, punctuation stripped). Extend freely; new investors are created as-is when no alias matches.",
+  "investors": {
+    "Accel India": [
+      "Accel",
+      "Accel Partners",
+      "Accel Partners India",
+      "Accel India Partners",
+      "Accel Atoms"
+    ],
+    "Peak XV Partners": [
+      "Peak XV",
+      "Sequoia India",
+      "Sequoia Capital India",
+      "Sequoia India & SEA",
+      "Sequoia Capital India & SEA"
+    ],
+    "Elevation Capital": [
+      "Elevation",
+      "SAIF Partners",
+      "SAIF Partners India"
+    ],
+    "Blume Ventures": [
+      "Blume",
+      "Blume Venture Advisors"
+    ],
+    "Prime Venture Partners": [
+      "Prime Venture",
+      "Prime Ventures"
+    ],
+    "India Quotient": [
+      "IQ",
+      "India Quotient Fund"
+    ],
+    "3one4 Capital": [
+      "3one4",
+      "3one4 Capital Partners",
+      "3 one 4 Capital"
+    ],
+    "Together Fund": [
+      "Together"
+    ],
+    "Stellaris Venture Partners": [
+      "Stellaris",
+      "Stellaris Ventures"
+    ],
+    "All In Capital": [
+      "All-In Capital",
+      "AllIn Capital"
+    ],
+    "Lightspeed India": [
+      "Lightspeed",
+      "Lightspeed Venture Partners",
+      "Lightspeed India Partners"
+    ],
+    "Matrix Partners India": [
+      "Matrix Partners",
+      "Z47",
+      "Z47 (formerly Matrix Partners India)"
+    ],
+    "Nexus Venture Partners": [
+      "Nexus",
+      "Nexus Ventures"
+    ],
+    "Kalaari Capital": [
+      "Kalaari"
+    ],
+    "Chiratae Ventures": [
+      "Chiratae",
+      "IDG Ventures India"
+    ],
+    "Info Edge Ventures": [
+      "Info Edge",
+      "Info Edge Venture Fund",
+      "IEVF"
+    ],
+    "Antler India": [
+      "Antler"
+    ],
+    "Y Combinator": [
+      "YC",
+      "Y-Combinator"
+    ],
+    "Tiger Global": [
+      "Tiger Global Management"
+    ],
+    "SoftBank Vision Fund": [
+      "SoftBank",
+      "SoftBank Vision Fund 2",
+      "SVF"
+    ],
+    "Bessemer Venture Partners": [
+      "Bessemer",
+      "BVP",
+      "Bessemer India"
+    ],
+    "General Catalyst": [
+      "General Catalyst India",
+      "Venture Highway"
+    ],
+    "Rainmatter": [
+      "Rainmatter Capital",
+      "Zerodha Rainmatter"
+    ],
+    "Fireside Ventures": [
+      "Fireside"
+    ],
+    "Alteria Capital": [
+      "Alteria"
+    ],
+    "Trifecta Capital": [
+      "Trifecta"
+    ],
+    "Stride Ventures": [
+      "Stride"
+    ],
+    "BEENEXT": [
+      "Beenext"
+    ],
+    "Better Capital": [
+      "Better"
+    ],
+    "Inflection Point Ventures": [
+      "IPV",
+      "Inflection Point"
+    ],
+    "Indian Angel Network": [
+      "IAN",
+      "IAN Fund",
+      "IAN Group"
+    ],
+    "Venture Catalysts": [
+      "VCats",
+      "Venture Catalysts Group"
+    ],
+    "LetsVenture": [
+      "Lets Venture"
+    ],
+    "Mumbai Angels": [
+      "Mumbai Angels Network"
+    ],
+    "Omnivore": [
+      "Omnivore Partners"
+    ],
+    "Avaana Capital": [
+      "Avaana"
+    ],
+    "WestBridge Capital": [
+      "WestBridge",
+      "Westbridge Capital Partners"
+    ],
+    "A91 Partners": [
+      "A91"
+    ],
+    "Jungle Ventures": [
+      "Jungle"
+    ],
+    "Speciale Invest": [
+      "Speciale"
+    ],
+    "Endiya Partners": [
+      "Endiya"
+    ],
+    "Unicorn India Ventures": [
+      "Unicorn India"
+    ],
+    "Orios Venture Partners": [
+      "Orios"
+    ],
+    "Arkam Ventures": [
+      "Arkam"
+    ],
+    "Eximius Ventures": [
+      "Eximius"
+    ],
+    "Kae Capital": [
+      "Kae"
+    ],
+    "Saama Capital": [
+      "Saama"
+    ],
+    "Pi Ventures": [
+      "pi Ventures",
+      "PI Ventures"
+    ],
+    "Bertelsmann India Investments": [
+      "BII",
+      "Bertelsmann"
+    ],
+    "Temasek": [
+      "Temasek Holdings"
+    ],
+    "Google": [
+      "Google LLC",
+      "Alphabet"
+    ]
+  }
+}
