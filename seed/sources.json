@@ -211,6 +211,38 @@
       "tier": 2,
       "parser": "gnews",
       "enabled": true
+    },
+    {
+      "name": "Inc42",
+      "type": "roundup",
+      "url": "https://inc42.com/tag/funding-galore/feed/",
+      "tier": 1,
+      "parser": "roundup",
+      "enabled": false,
+      "role": "backfill",
+      "config": {
+        "discovery": "rss_feed",
+        "match": "Indian Startups Raised .* This Week"
+      },
+      "note": "Weekly 'Funding Galore' roundup (full deal table). Used by the backfill script, not live collection."
+    },
+    {
+      "name": "Entrackr",
+      "type": "roundup",
+      "url": "https://entrackr.com/weekly-funding-report-weekly-funding-report",
+      "tier": 1,
+      "parser": "roundup",
+      "enabled": false,
+      "role": "backfill",
+      "config": {
+        "discovery": "listing",
+        "match": "/report/weekly-funding-report[^/]*/funding-and-acquisitions-in-indian-startups?-this-week-",
+        "extraListings": [
+          "https://entrackr.com/report/weekly-funding-report"
+        ],
+        "pages": 2
+      },
+      "note": "Weekly funding report roundup. Used by the backfill script, not live collection."
     }
   ]
 }

@@ -171,7 +171,7 @@ async function HealthContent() {
                     </td>
                     <td className="px-3 py-2">{s.tier}</td>
                     <td className={`px-3 py-2 ${statusClass(s.enabled ? s.lastStatus : "disabled")}`}>
-                      {s.enabled ? (s.lastStatus ?? "not yet run") : "disabled"}
+                      {s.enabled ? (s.lastStatus ?? "not yet run") : s.lastStatus === "backfill_only" ? "backfill source" : "disabled"}
                     </td>
                     <td className="px-3 py-2">
                       {pct(s.successRate)} <span className="opacity-60">({s.attempts})</span>

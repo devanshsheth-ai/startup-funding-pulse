@@ -1,4 +1,4 @@
-import { and, asc, eq, gt, inArray, isNull } from "drizzle-orm";
+import { and, asc, eq, gt, inArray, isNull, ne } from "drizzle-orm";
 import { PIPELINE } from "@/config/pipeline";
 import { getDb } from "@/db/client";
 import { extractedRecords, rawArticles, sources } from "@/db/schema";
@@ -154,7 +154,15 @@ export async function runExtract(opts: {
     })
     .from(rawArticles)
     .leftJoin(sources, eq(sources.id, rawArticles.sourceId))
-    .where(and(eq(rawArticles.filterVerdict, "relevant"), isNull(rawArticles.processedAt), gt(rawArticles.id, afterId)))
+    .where(
+      and(
+        eq(rawArticles.filterVerdict, "relevant"),
+        isNull(rawArticles.processedAt),
+        gt(rawArticles.id, afterId),
+        // Weekly roundups use their own prompt (backfill.ts), never the per-article one.
+        ne(rawArticles.eventTypeGuess, "roundup"),
+      ),
+    )
     .orderBy(asc(rawArticles.id))
     .limit(PIPELINE.extract.maxArticlesPerInvocation);
 
