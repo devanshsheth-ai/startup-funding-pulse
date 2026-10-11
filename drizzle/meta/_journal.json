@@ -57,6 +57,13 @@
       "when": 1791738014882,
       "tag": "0007_profiles_scoring",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1791743085012,
+      "tag": "0008_patterns_subject_detector_runs",
+      "breakpoints": true
     }
   ]
 }
