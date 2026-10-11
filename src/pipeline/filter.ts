@@ -108,7 +108,7 @@ export async function runFilter(opts: { runId: string; cursor: string | null; de
     } catch (err) {
       if (err instanceof GeminiUnavailableError) {
         stopReason = err.message;
-        log.warn("gemini unavailable; filter paused", { error: err.message, status: err.status });
+        log.warn("gemini call failed; filter paused", { error: err.message, status: err.status });
         break;
       }
       const ids = batch.map((a) => a.id);

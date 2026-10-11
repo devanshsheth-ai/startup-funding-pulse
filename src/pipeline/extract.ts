@@ -175,7 +175,7 @@ export async function runExtract(opts: {
       } catch (err) {
         if (err instanceof GeminiUnavailableError) {
           stopReason = err.message;
-          log.warn("gemini unavailable; extract paused", { status: err.status });
+          log.warn("gemini call failed; extract paused", { error: err.message, status: err.status });
           break outer;
         }
         // Retry one by one so a single malformed article is isolated.

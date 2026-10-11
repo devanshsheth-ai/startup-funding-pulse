@@ -90,7 +90,37 @@ export function renderPrompt(template: string, vars: Record<string, string>): st
 
 // ─── Schema conversion ─────────────────────────────────────────────────────
 
-/** Zod → the JSON Schema subset Gemini accepts (no $schema, no safe-int bounds). */
+/**
+ * Keywords Gemini's responseJsonSchema documents as supported. Anything else
+ * (pattern, exclusiveMinimum, minLength, maxLength, …) makes the API reject
+ * the request with INVALID_ARGUMENT, so it is dropped from the schema sent to
+ * Gemini. The full Zod schema still validates every reply (D-035).
+ */
+const GEMINI_SCHEMA_KEYWORDS = new Set([
+  "$id",
+  "$defs",
+  "$ref",
+  "$anchor",
+  "type",
+  "format",
+  "title",
+  "description",
+  "enum",
+  "items",
+  "prefixItems",
+  // minItems/maxItems are supported but, nested, they multiply the decoding
+  // grammar until the API rejects the schema; Zod enforces them instead.
+  "minimum",
+  "maximum",
+  "anyOf",
+  "oneOf",
+  "properties",
+  "additionalProperties",
+  "required",
+  "propertyOrdering",
+]);
+
+/** Zod → the JSON Schema subset Gemini accepts. */
 export function toGeminiSchema(schema: z.ZodType): unknown {
   const json = z.toJSONSchema(schema, { target: "draft-2020-12" }) as Record<string, unknown>;
   const strip = (node: unknown): unknown => {
@@ -98,9 +128,14 @@ export function toGeminiSchema(schema: z.ZodType): unknown {
     if (node && typeof node === "object") {
       const out: Record<string, unknown> = {};
       for (const [k, v] of Object.entries(node)) {
-        if (k === "$schema") continue;
+        if (!GEMINI_SCHEMA_KEYWORDS.has(k)) continue;
         if ((k === "minimum" || k === "maximum") && typeof v === "number" && Math.abs(v) >= Number.MAX_SAFE_INTEGER) continue;
-        out[k] = strip(v);
+        if ((k === "properties" || k === "$defs") && v && typeof v === "object") {
+          // Keys here are field names, not keywords: keep every one.
+          out[k] = Object.fromEntries(Object.entries(v).map(([name, sub]) => [name, strip(sub)]));
+        } else {
+          out[k] = strip(v);
+        }
       }
       return out;
     }
@@ -113,7 +148,8 @@ export function toGeminiSchema(schema: z.ZodType): unknown {
 
 let client: GoogleGenAI | undefined;
 function getClient(): GoogleGenAI {
-  client ??= new GoogleGenAI({ apiKey: requireEnv("GEMINI_API_KEY") });
+  // 60 s per request: a hung call must not stall a stage past its budget.
+  client ??= new GoogleGenAI({ apiKey: requireEnv("GEMINI_API_KEY"), httpOptions: { timeout: 60_000 } });
   return client;
 }
 
@@ -149,7 +185,11 @@ async function withRetry<T>(fn: () => Promise<T>, attempts = 4, baseMs = 2_000):
   }
   const status = last instanceof ApiError ? last.status : null;
   const msg = last instanceof Error ? last.message : String(last);
-  throw new GeminiUnavailableError(`Gemini request failed: ${msg.slice(0, 300)}`, status);
+  // 4xx other than 429 means the request itself was rejected (schema, model id,
+  // key) — a systemic problem, so stages pause rather than quarantine every
+  // article, but the message must say "rejected", not "unavailable".
+  const kind = status !== null && status >= 400 && status < 500 && status !== 429 ? "rejected the request" : "unavailable";
+  throw new GeminiUnavailableError(`Gemini ${kind} (HTTP ${status ?? "n/a"}): ${msg.slice(0, 300)}`, status);
 }
 
 function modelId(): string {

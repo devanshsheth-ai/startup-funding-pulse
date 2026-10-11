@@ -39,6 +39,16 @@ describe("toGeminiSchema", () => {
     expect(json).toContain('"enum":["a","b"]');
     expect(json).toContain('"null"');
   });
+  it("drops keywords Gemini rejects but keeps every property name", () => {
+    const json = JSON.stringify(
+      toGeminiSchema(z.object({ pattern: z.string().regex(/^\d{4}$/), maxItems: z.array(z.string()).max(3), n: z.number().positive() })),
+    );
+    expect(json).not.toMatch(/"pattern":"/);
+    expect(json).not.toContain('"maxItems":3');
+    expect(json).not.toContain("exclusiveMinimum");
+    expect(json).toContain('"properties":{"pattern"');
+    expect(json).toContain('"maxItems":{');
+  });
   it("constrains sector and stage to the taxonomy in the extraction schema", () => {
     const json = JSON.stringify(toGeminiSchema(extractDealsResponseSchema));
     expect(json).toContain('"Fintech"');
