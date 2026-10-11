@@ -8,14 +8,17 @@ import {
   companies,
   dealInvestors,
   deals,
+  detectorRuns,
   EMBEDDING_DIMENSIONS,
   investors,
+  patterns,
   portfolio,
   profiles,
   relevanceScores,
   sectorFit,
   watchlist,
 } from "@/db/schema";
+import { latestCompletedWeek } from "@/db/queries/detection";
 import { embedTexts, geminiConfigured, GeminiUnavailableError, generateStructured } from "@/lib/gemini";
 import { runLogger } from "@/lib/logger";
 import { startStage, type StageCounters } from "@/lib/run-log";
@@ -317,6 +320,30 @@ export async function scoreProfile(p: ProfileRow, data: Awaited<ReturnType<typeo
     if (!cur || (rank[e.relationship] ?? 0) > (rank[cur.relationship] ?? 0)) bestEdge.set(e.dealId, e);
   }
 
+  // +10 override: a watchlist investor's first move into a core sector, only as
+  // found by the investor-rotation detector after all four guards (PRD §11.2).
+  const week = latestCompletedWeek(now);
+  const [rotationRun] = await db
+    .select({ runId: detectorRuns.runId })
+    .from(detectorRuns)
+    .where(and(eq(detectorRuns.profileId, p.id), eq(detectorRuns.isoWeek, week), eq(detectorRuns.detectorKey, "investor_rotation")))
+    .limit(1);
+  const rotations = rotationRun
+    ? await db
+        .select({ statBasis: patterns.statBasis, evidence: patterns.evidenceDealIds })
+        .from(patterns)
+        .where(and(eq(patterns.profileId, p.id), eq(patterns.isoWeek, week), eq(patterns.detectorKey, "investor_rotation"), eq(patterns.runId, rotationRun.runId)))
+    : [];
+  const coreSectors = new Set(p.config.sectors_core.map((c) => c.name));
+  const firstMoveByDeal = new Map<string, { investor: string; sector: string }>();
+  for (const r of rotations) {
+    const sb = r.statBasis as { investor?: string; sector?: string };
+    if (!sb.investor || !sb.sector || !coreSectors.has(sb.sector)) continue;
+    const display = watchedInvestors.get(normalizeInvestorKey(sb.investor));
+    if (!display) continue;
+    for (const id of r.evidence ?? []) firstMoveByDeal.set(id, { investor: display, sector: sb.sector });
+  }
+
   const cards: { id: string; card: Scorecard; inWindow: boolean }[] = [];
   for (const d of data.deals) {
     const facts: DealFacts = {
@@ -343,7 +370,7 @@ export async function scoreProfile(p: ProfileRow, data: Awaited<ReturnType<typeo
       watchedInvestors,
       watchlistCompany: watched,
       adjacency: edge ? { relationship: edge.relationship as AdjacencyRelationship, portfolioName: edge.portfolioName, rationale: edge.rationale } : null,
-      investorFirstMove: null, // gated by the investor-rotation detector (M6)
+      investorFirstMove: firstMoveByDeal.get(d.id) ?? null,
       chequePercentile: data.cheque.get(d.id) ?? null,
       investorTier: data.investorTierByDeal.get(d.id) ?? null,
       window,
