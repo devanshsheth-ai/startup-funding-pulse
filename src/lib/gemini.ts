@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { ApiError, GoogleGenAI } from "@google/genai";
+import { ApiError, GoogleGenAI, ThinkingLevel } from "@google/genai";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { getDb } from "@/db/client";
@@ -26,6 +26,20 @@ import { sha256 } from "@/pipeline/ingest/url";
  */
 
 export type GeminiTask = "classify" | "extract" | "adjudicate" | "narrate" | "filter_nl" | "label";
+
+/**
+ * Thinking level per task. Classification, extraction and adjudication are
+ * transcription, not reasoning: LOW gave identical roundup output 26% faster
+ * with zero thought tokens (D-043). Narration keeps the model default.
+ */
+const THINKING: Record<GeminiTask, ThinkingLevel | undefined> = {
+  classify: ThinkingLevel.LOW,
+  extract: ThinkingLevel.LOW,
+  adjudicate: ThinkingLevel.LOW,
+  filter_nl: ThinkingLevel.LOW,
+  label: ThinkingLevel.LOW,
+  narrate: undefined,
+};
 
 const TEMPERATURE_CEILING: Record<GeminiTask, number> = {
   classify: 0.2,
@@ -243,6 +257,7 @@ export async function generateStructured<T>(call: StructuredCall<T>): Promise<St
     }
   }
 
+  const maxOutputTokens = call.maxOutputTokens ?? 8192;
   const response = await withRetry(() =>
     getClient().models.generateContent({
       model,
@@ -251,7 +266,10 @@ export async function generateStructured<T>(call: StructuredCall<T>): Promise<St
         temperature: call.temperature,
         responseMimeType: "application/json",
         responseJsonSchema: toGeminiSchema(call.schema),
-        maxOutputTokens: call.maxOutputTokens ?? 8192,
+        maxOutputTokens,
+        ...(THINKING[call.task] ? { thinkingConfig: { thinkingLevel: THINKING[call.task] } } : {}),
+        // Long structured outputs (roundups) need more than the default deadline.
+        httpOptions: { timeout: maxOutputTokens > 8192 ? 240_000 : 60_000 },
       },
     }),
   );
