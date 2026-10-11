@@ -82,3 +82,66 @@ column. A fresh Neon branch therefore needs no manual console step.
 `::vector::text`, computes `<=>` cosine distance in Postgres, compares it with the
 same distance computed in TypeScript, and reports the pgvector extension version. The
 full `/health` page (sources, funnel, run logs) is built from M1 onward.
+
+---
+
+## M1 — Ingestion (2026-10-11)
+
+**D-014 · Tier 1 sources were verified live, not assumed.** Each source was probed on
+2026-10-11.
+- **Working:** Entrackr (`/rss`), Inc42, YourStory, the ET Tech Startups and Funding
+  feeds, Mint Companies, BusinessLine Companies, TechCrunch India, Moneycontrol Business
+  (intermittent; see below) and VCCircle (HTML listing).
+- **Disabled, with the reason stored on the source row and shown on `/health`:**
+  - Business Standard returns 403 to identified bots.
+  - Techcircle's listings stop at 2023.
+  - The CapTable does not respond.
+  - MediaNama's robots.txt disallows `*/feed/*`.
+
+Broad business feeds (Mint, BusinessLine, Moneycontrol) were added for coverage. Stage A
+filters out their non-startup noise cheaply.
+
+**D-015 · Google News RSS is excluded and Tier 2 uses the GNews API.** PRD §9.1 suggests
+Google News RSS query endpoints, but news.google.com's robots.txt disallows `/rss/search`
+for all agents, and PRD §9.2 forbids fetching robots-blocked content. → Tier 2 is the GNews
+search API. Its free tier allows 100 requests a day, 10 articles per request and a 12-hour
+delay, for non-commercial and academic use, which this exam project is. There are 11
+structured queries per run, per §9.1. The key comes from `NEWS_API_KEY`, is appended at
+request time and is never stored. With no key, those sources record an honest error rather
+than being faked.
+
+**D-016 · `sources.config` (jsonb).** Parser-specific options, such as the HTML listing
+link pattern, live on the registry row, so adding an HTML source is a config change, not a
+code change.
+
+**D-017 · Bodies are fetched lazily.** Listing pages and teaser feeds provide only a headline
+or lead. Fetching full pages for every item would cost the most on articles the filter
+rejects (about 80%). → Store what the feed gives. Stage B fetches the article page only for
+items Stage A marks relevant, and resolves `<link rel=canonical>` at that point. Article
+identity stays the hash of the normalised feed URL, which is stable across re-runs.
+
+**D-018 · Honest crawling.** The user-agent is `FundingPulseBot/0.1`, never a spoofed
+browser. robots.txt is parsed per RFC 9309 (a 5xx means disallow-all, a 4xx means
+allow-all) and checked before every crawl request. Crawl-delay is honoured as per-host
+spacing. Hosts with a Crawl-delay over 5 s are not retried within an invocation, to protect
+the time budget; the next run retries them. APIs (GNews, FX) are not crawling and skip the
+robots check.
+
+**D-019 · Live freshness window.** Live collection drops items published more than 21 days
+ago, so a stale feed cannot pass old news off as current. Weeks of history come only from the
+dated weekly-roundup backfill (M4). Future publish dates are clamped to fetch time.
+
+**D-020 · Dispatcher continuation.** `/api/cron/dispatch` replies 202 at once and runs the
+stage chain in `after()`, within `maxDuration = 60` and a 50 s work budget. When the budget
+runs out it calls itself with `(run_id, stage, cursor)`, capped at 50 hops, so one logical run
+spans several short invocations under one `run_id`. `?sync=1` runs inline for manual triggers.
+Cron and manual stage endpoints accept `CRON_SECRET` or `ADMIN_SECRET` as a Bearer token. An
+unset secret denies every request.
+
+**D-021 · FX source.** Frankfurter (ECB reference rates) is keyless and supports date ranges,
+which backfill needs. Configured via `FX_API_URL` (`https://api.frankfurter.dev/v1`). The FX
+stage runs first in the chain, and a failure there never blocks collection.
+
+**D-022 · Shared HTTP lives in `src/lib`.** `http.ts` (polite fetch) and `robots.ts` are
+infrastructure used by ingestion and FX, so they sit in `lib` rather than in a pipeline
+stage's module.
