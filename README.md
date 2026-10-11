@@ -9,8 +9,8 @@ Built for MESA Cohort C4, *AI and its Applications*, Final Examination, Problem
 Statement 14. The full specification is [`docs/PRD.md`](docs/PRD.md), and the
 engineering rules are in [`CLAUDE.md`](CLAUDE.md).
 
-> **Status: Milestone M0 (foundation).** No deals are collected yet. The app serves a
-> placeholder page and an infrastructure probe. See [Build status](#build-status).
+> **Status: M0–M4 complete.** Live collection runs daily; 13 weeks of history were backfilled
+> from weekly roundups. See [Build status](#build-status) and the live [/health](https://startup-funding-pulse.vercel.app/health) page.
 
 ---
 
@@ -106,7 +106,14 @@ pgvector, with the database's cosine distance matching the value computed locall
 
 ## Limitations
 
-- M0 only: there is no ingestion, extraction or digest yet.
+- History before live operation began (11 Oct 2026) comes from weekly roundups (Inc42, Entrackr),
+  not continuous collection; `/health` shows the backfill/live split. Roundups list fewer
+  details per deal than full articles (often no city or founders).
+- Live RSS alone caught 15% of the deals the weekly roundups list over the same 3 weeks
+  (cross-check, D-042); breadth comes from roundups plus the optional GNews key.
+- Stage is left `Undisclosed` when an article does not name the round (~40% of deals).
+- VCCircle's 20 s Crawl-delay limits article-page fetches, so its deals are extracted from
+  headlines and leads, dated by first sighting (D-036).
 - Vercel Hobby cron fires once a day with up to ±59 minutes of jitter, so the "06:30 IST"
   delivery time is approximate.
 
@@ -114,7 +121,11 @@ pgvector, with the database's cosine distance matching the value computed locall
 
 | Milestone | State |
 |---|---|
-| M0 Foundation | Code complete. Deployment and live DB verification pending |
-| M1–M9 | Not started |
+| M0 Foundation | Done, verified in production |
+| M1 Ingestion | Done: 10 live Tier 1 sources, idempotent collection, verified in production |
+| M2 Extraction | Done: 9/10 spot-check correct; 0 unvalidated writes |
+| M3 Dedupe + enrich | Done: multi-outlet deals merge to one row; investor variants resolve |
+| M4 Backfill | Done: 293 unique deals over 14 ISO weeks (249 backfill, 44 live); cross-check logged |
+| M5–M9 | Not started |
 
 Implementation decisions are logged in [`DECISIONS.md`](DECISIONS.md).
