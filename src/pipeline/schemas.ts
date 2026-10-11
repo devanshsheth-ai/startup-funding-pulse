@@ -149,3 +149,11 @@ export const extractEventsResponseSchema = z.object({
     )
     .max(12),
 });
+
+// ─── Backfill: weekly roundup (one call per roundup) ───────────────────────
+
+export const extractRoundupResponseSchema = z.object({
+  deals: z.array(extractedDealSchema).max(80),
+  events: z.array(extractedEventSchema).max(60),
+});
+export type ExtractedRoundup = z.infer<typeof extractRoundupResponseSchema>;

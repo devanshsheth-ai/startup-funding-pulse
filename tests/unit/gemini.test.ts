@@ -16,6 +16,7 @@ describe("prompt files", () => {
     ["extract-deal", 1, ["stages", "sectors", "articles"]],
     ["extract-event", 1, ["sectors", "articles"]],
     ["dedupe-adjudicate", 1, ["record_a", "record_b"]],
+    ["dedupe-adjudicate", 2, ["record_a", "record_b"]],
   ];
   it.each(cases)("%s.v%i renders with exactly its stage's variables", (name, version, vars) => {
     const tpl = loadPrompt({ name, version });

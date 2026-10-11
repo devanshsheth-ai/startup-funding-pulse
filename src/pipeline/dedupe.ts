@@ -132,6 +132,7 @@ export async function findMatch(
   c: DealCandidate,
   embedding: number[] | null,
   counters: StageCounters,
+  publication: string | null = null,
 ): Promise<MatchResult | null> {
   const db = getDb();
   const base = and(stageClause(c.roundStage), windowClause(c.announcedDate));
@@ -166,9 +167,16 @@ export async function findMatch(
     .where(
       and(
         base,
+        // A publication never lists one deal twice under different names, so
+        // fuzzy layers must not merge two records from the same outlet (D-044).
+        publication
+          ? sql`NOT EXISTS (SELECT 1 FROM ${dealSources} s WHERE s.deal_id = ${deals.id} AND lower(s.publication) = lower(${publication}))`
+          : sql`TRUE`,
+        // Parenthesised: drizzle's and() does not wrap each condition, so a bare
+        // OR here would escape the window/stage/publication filters.
         embedding
-          ? sql`(${companies.embedding} IS NOT NULL AND 1 - (${companies.embedding} <=> ${vec(embedding)}::vector) >= ${W.vectorLow}) OR ${trgmExpr} > ${W.trigram}`
-          : sql`${trgmExpr} > ${W.trigram}`,
+          ? sql`((${companies.embedding} IS NOT NULL AND 1 - (${companies.embedding} <=> ${vec(embedding)}::vector) >= ${W.vectorLow}) OR ${trgmExpr} > ${W.trigram})`
+          : sql`(${trgmExpr} > ${W.trigram})`,
       ),
     )
     .orderBy(sql`greatest(${simExpr}, ${trgmExpr}) DESC`)
@@ -195,7 +203,7 @@ export async function findMatch(
     for (const n of near) {
       const { data } = await generateStructured({
         task: "adjudicate",
-        prompt: { name: "dedupe-adjudicate", version: 1 },
+        prompt: { name: "dedupe-adjudicate", version: 2 },
         vars: { record_a: JSON.stringify(await describeDeal(n.id), null, 1), record_b: JSON.stringify(recordB, null, 1) },
         schema: adjudicationSchema,
         temperature: 0.1,
@@ -694,7 +702,7 @@ export async function runDedupe(opts: { runId: string; cursor: string | null; de
         }
         const c = built.value;
         const embedding = embeddingByRecord.get(rec.id) ?? null;
-        const match = await findMatch(c, embedding, stage.counters);
+        const match = await findMatch(c, embedding, stage.counters, art.publication);
         const { dealId, created } = await attachDeal(
           c,
           match,

@@ -15,13 +15,15 @@ import { logger, newRunId } from "@/lib/logger";
 
 const sourceSeed = z.object({
   name: z.string().min(1),
-  type: z.enum(["rss", "html", "newsapi", "manual"]),
+  type: z.enum(["rss", "html", "newsapi", "manual", "roundup"]),
   url: z.string().url(),
   tier: z.number().int().min(1).max(3),
   parser: z.string().min(1),
   enabled: z.boolean(),
   config: z.record(z.string(), z.unknown()).optional(),
   note: z.string().optional(),
+  /** "backfill": a roundup source used only by the backfill script. */
+  role: z.enum(["live", "backfill"]).default("live"),
 });
 const sourcesFile = z.object({ sources: z.array(sourceSeed).min(1) });
 
@@ -46,7 +48,7 @@ async function seedSources(): Promise<number> {
         enabled: r.enabled,
         config: r.config ?? null,
         // A disabled source states why on /health instead of silently vanishing.
-        lastStatus: r.enabled ? null : "disabled",
+        lastStatus: r.role === "backfill" ? "backfill_only" : r.enabled ? null : "disabled",
         lastError: r.enabled ? null : (r.note ?? "Disabled in seed configuration"),
       })),
     )
@@ -59,7 +61,7 @@ async function seedSources(): Promise<number> {
         parser: sql`excluded.parser`,
         enabled: sql`excluded.enabled`,
         config: sql`excluded.config`,
-        lastStatus: sql`CASE WHEN excluded.enabled THEN ${sources.lastStatus} ELSE 'disabled' END`,
+        lastStatus: sql`CASE WHEN excluded.last_status = 'backfill_only' THEN 'backfill_only' WHEN excluded.enabled THEN ${sources.lastStatus} ELSE 'disabled' END`,
         lastError: sql`CASE WHEN excluded.enabled THEN ${sources.lastError} ELSE excluded.last_error END`,
         updatedAt: new Date(),
       },

@@ -250,3 +250,65 @@ A post-repair audit found 0 sources naming a different company from their deal.
 **D-038 · Log redaction keeps usage counts.** The secret-key pattern matched any key
 containing "token", which hid Gemini token counts in logs. → It now matches credential-style
 keys only (`token`, `access_token`, `auth_token`, …), not `tokens` / `gemini_tokens`.
+
+---
+
+## M4 — Backfill (2026-10-11)
+
+**D-039 · Roundup sources.** Two publications publish a dated weekly roundup that robots.txt
+permits us to fetch:
+- **Inc42 "Funding Galore":** a full deal table (date, company, sector, sub-sector, model,
+  amount, round, investors, lead), discovered through its tag RSS feed, which carries
+  publish dates. Inc42's robots.txt forbids pagination and query strings, which the feed
+  avoids. Its content signal allows AI input (`ai-input=yes`).
+- **Entrackr "Funding and acquisitions in Indian startups this week":** prose plus
+  appointments, fund launches and M&A, discovered from its two category archives (pages 1–2).
+  The week range is parsed from the URL slug, with the year inferred so a week is never in
+  the future.
+
+Both are seeded as `type = roundup`, `enabled = false`, `last_status = backfill_only`. The
+live collector skips them, and `/health` labels them "backfill source". Each is named after
+the outlet ("Inc42", "Entrackr"), so corroboration counts outlets, not feeds. An Inc42
+article and an Inc42 roundup reporting the same deal count as one source.
+
+**D-040 · One week per roundup source, 13 weeks.** Discovery keeps one roundup per ISO week
+per source, newest first. That is 13 weeks: 12 of baseline plus the current one. Entrackr's
+archive lacks 13–18 July, so its 13th roundup is the week before. Inc42 covers that week.
+
+**D-041 · Roundup extraction is separate from article extraction.** `extract-roundup.v1`
+takes one roundup and returns `{deals[], events[]}` in one call (maxOutputTokens 32k). Roundups
+are stored as `raw_articles` with `event_type_guess = 'roundup'` and a `week:` category. The
+live extract stage explicitly excludes them, so they never go through the per-article prompt.
+Records are tagged `ingestion_mode = 'backfill'` and take the same Stage C/D/E path as live
+data, so a deal seen live and in a roundup merges into one deal with both sources. A deal
+first created by live collection keeps `ingestion_mode = 'live'`.
+
+**D-042 · Cross-check method.** For the 3 most recent roundup weeks, the normalised company
+names extracted from roundups are compared with the companies of deals collected live in the
+same ISO weeks. The result is logged to `run_logs` (stage `backfill_crosscheck`) with both
+recall directions and the unmatched names on each side.
+
+**D-043 · Thinking level and timeouts.** The first backfill run hit `504 DEADLINE_EXCEEDED`.
+With default thinking, one roundup took 66 s, more than the 60 s request deadline (which is
+passed to Google). Measured on the same Inc42 roundup, `thinkingLevel: LOW` took 49 s, used
+0 thought tokens instead of 3,352, and extracted the same 21 deals. → Classify, extract and
+adjudicate run with LOW thinking. Narration keeps the model default. The request timeout
+scales with the requested output size: 240 s for calls above 8,192 output tokens (roundups),
+60 s otherwise.
+
+**D-044 · Fuzzy dedupe guards (from the M4 audit).** After the backfill, an audit of merges
+whose source names a different company found 5 cases. Four were correct spelling variants
+(e.g. "Banglore"/"Bangalore Watch Company", "Carrum"/"Carrum Mobility"). One was false:
+Zoppler Systems was merged into KshatraLabs by Gemini adjudication, because both were Inc42
+rows (two different weekly tables) for defence-tech startups backed by the same accelerator.
+Fixes:
+1. Fuzzy layers (3–4) never merge two records from the same publication, which never lists
+   one deal twice under different names. Exact layers (1–2) still can.
+2. `dedupe-adjudicate.v2` requires the names to plausibly be the same entity, and states
+   that shared investors, sector or description are not evidence.
+3. A real SQL precedence bug was fixed: drizzle's `and()` does not parenthesise each
+   condition, so the candidate query's `… OR trigram > 0.7` escaped the date-window, stage
+   and publication filters. The OR is now wrapped.
+
+The bad link was repaired (link row removed, record re-processed through v2, which rejected
+all 3 candidates). The post-repair audit shows only the 4 legitimate variants.
