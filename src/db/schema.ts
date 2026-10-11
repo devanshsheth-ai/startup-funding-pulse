@@ -306,6 +306,8 @@ export const patterns = pgTable("patterns", {
   profileId: text("profile_id").references(() => profiles.id),
   isoWeek: text("iso_week").notNull(),
   detectorKey: text("detector_key").notNull(),
+  /** What the pattern is about (a sector, stage, investor pair…); '' for global (D-052). */
+  subject: text("subject").notNull().default(""),
   title: text("title").notNull(),
   statement: text("statement").notNull(),
   confidence: text("confidence").notNull(), // strong | emerging | weak_signal
@@ -315,8 +317,29 @@ export const patterns = pgTable("patterns", {
   evidenceDealIds: text("evidence_deal_ids").array(),
   evidenceEventIds: text("evidence_event_ids").array(),
   consecutiveWeeks: integer("consecutive_weeks").notNull().default(1),
+  runId: text("run_id"),
   ...timestamps,
-}, (t) => [unique("patterns_profile_week_detector_unique").on(t.profileId, t.isoWeek, t.detectorKey)]);
+}, (t) => [unique("patterns_profile_week_detector_subject_unique").on(t.profileId, t.isoWeek, t.detectorKey, t.subject)]);
+
+/**
+ * Every detector's outcome per profile per week — fired, quiet or suppressed,
+ * with the reason and the gate values — so suppression is shown on
+ * /methodology instead of silently absent (PRD §14.1).
+ */
+export const detectorRuns = pgTable("detector_runs", {
+  id: serial("id").primaryKey(),
+  profileId: text("profile_id").notNull().references(() => profiles.id, { onDelete: "cascade" }),
+  isoWeek: text("iso_week").notNull(),
+  detectorKey: text("detector_key").notNull(),
+  status: text("status").notNull(), // fired | quiet | suppressed
+  reason: text("reason").notNull(),
+  gates: jsonb("gates").notNull(), // { n_min, e_min, b_min, observed: { n, effect, baseline_weeks } }
+  findings: integer("findings").notNull().default(0),
+  runId: text("run_id").notNull(),
+  ...timestamps,
+}, (t) => [
+  unique("detector_runs_profile_week_key_unique").on(t.profileId, t.isoWeek, t.detectorKey),
+]);
 
 export const marketMapClusters = pgTable("market_map_clusters", {
   id: serial("id").primaryKey(),

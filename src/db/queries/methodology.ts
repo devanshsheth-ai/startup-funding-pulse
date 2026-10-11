@@ -1,7 +1,7 @@
 import { and, desc, eq, gte, sql } from "drizzle-orm";
 import { mandateConfigSchema, type MandateConfig } from "@/config/profile";
 import { getDb } from "@/db/client";
-import { companies, dealSources, deals, profiles, relevanceScores, sources } from "@/db/schema";
+import { companies, dealSources, deals, detectorRuns, profiles, relevanceScores, sources } from "@/db/schema";
 import type { Scorecard } from "@/pipeline/rubric";
 import { digestWindow } from "@/pipeline/score";
 
@@ -85,4 +85,27 @@ export async function getProvenance() {
   const modes = await db.select({ mode: deals.ingestionMode, n: sql<number>`count(*)::int` }).from(deals).groupBy(deals.ingestionMode);
   const [scored] = await db.select({ n: sql<number>`count(*)::int`, profiles: sql<number>`count(distinct ${relevanceScores.profileId})::int` }).from(relevanceScores);
   return { sources: src ?? { live: 0, backfill: 0, disabled: 0 }, modes, scored: scored ?? { n: 0, profiles: 0 } };
+}
+
+export interface DetectorRow {
+  key: string;
+  status: string;
+  reason: string;
+  findings: number;
+  isoWeek: string;
+}
+
+/** Latest detector outcomes for a profile (one row per detector, most recent week). */
+export async function getDetectorStatus(profileId: string): Promise<{ week: string | null; rows: DetectorRow[] }> {
+  const db = getDb();
+  const [latest] = await db
+    .select({ week: sql<string | null>`max(${detectorRuns.isoWeek})` })
+    .from(detectorRuns)
+    .where(eq(detectorRuns.profileId, profileId));
+  if (!latest?.week) return { week: null, rows: [] };
+  const rows = await db
+    .select({ key: detectorRuns.detectorKey, status: detectorRuns.status, reason: detectorRuns.reason, findings: detectorRuns.findings, isoWeek: detectorRuns.isoWeek })
+    .from(detectorRuns)
+    .where(and(eq(detectorRuns.profileId, profileId), eq(detectorRuns.isoWeek, latest.week)));
+  return { week: latest.week, rows };
 }

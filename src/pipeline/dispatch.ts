@@ -6,6 +6,7 @@ import { runDedupe } from "@/pipeline/dedupe";
 import { runEnrich } from "@/pipeline/enrich";
 import { runExtract } from "@/pipeline/extract";
 import { runFilter } from "@/pipeline/filter";
+import { runDetect } from "@/pipeline/detect/run";
 import { runScore } from "@/pipeline/score";
 import { runCollect, type StageResult } from "@/pipeline/ingest/collect";
 
@@ -46,6 +47,8 @@ export const STAGES: ReadonlyArray<{ key: string; run: StageRunner }> = [
   { key: "extract", run: (ctx) => runExtract(ctx) },
   { key: "dedupe", run: (ctx) => runDedupe(ctx) },
   { key: "enrich", run: (ctx) => runEnrich(ctx) },
+  // Detect before score: the investor first-move override reads this week's rotation findings.
+  { key: "detect", run: (ctx) => runDetect(ctx) },
   { key: "score", run: (ctx) => runScore(ctx) },
 ];
 

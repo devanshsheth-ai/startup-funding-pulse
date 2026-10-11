@@ -9,7 +9,7 @@ Built for MESA Cohort C4, *AI and its Applications*, Final Examination, Problem
 Statement 14. The full specification is [`docs/PRD.md`](docs/PRD.md), and the
 engineering rules are in [`CLAUDE.md`](CLAUDE.md).
 
-> **Status: M0–M5 complete.** Live collection runs daily; 13 weeks of history were backfilled
+> **Status: M0–M6 complete.** Live collection runs daily; 13 weeks of history were backfilled
 > from weekly roundups. See [Build status](#build-status) and the live [/health](https://startup-funding-pulse.vercel.app/health) page.
 
 ---
@@ -112,6 +112,11 @@ pgvector, with the database's cosine distance matching the value computed locall
 - Live RSS alone caught 15% of the deals the weekly roundups list over the same 3 weeks
   (cross-check, D-042); breadth comes from roundups plus the optional GNews key.
 - Stage is left `Undisclosed` when an article does not name the round (~40% of deals).
+- The newest week is covered by live collection *and* roundups while baseline weeks are
+  roundup-only, so this week's counts (and sector momentum) read higher than a like-for-like
+  comparison would until live history fills the baseline.
+- Geographic-shift and follow-on-compression detectors are suppressed today for lack of
+  city-reported and earlier round-pair history; they say so on `/methodology`.
 - VCCircle's 20 s Crawl-delay limits article-page fetches, so its deals are extracted from
   headlines and leads, dated by first sighting (D-036).
 - Vercel Hobby cron fires once a day with up to ±59 minutes of jitter, so the "06:30 IST"
@@ -127,6 +132,7 @@ pgvector, with the database's cosine distance matching the value computed locall
 | M3 Dedupe + enrich | Done: multi-outlet deals merge to one row; investor variants resolve |
 | M4 Backfill | Done: 293 unique deals over 14 ISO weeks (249 backfill, 44 live); cross-check logged |
 | M5 Scoring + adjacency | Done: 882 scorecards (294 deals × 3 profiles), 45 adjacency edges with rationales, distinct top-10s per profile; live `/methodology` |
-| M6–M9 | Not started |
+| M6 Aggregates + patterns | Done: 12 three-gate detectors (5 fired, 5 quiet, 2 suppressed with reasons for W41); zero fires below gates under restricted history; Aggregates object with `n` everywhere |
+| M7–M9 | Not started |
 
 Implementation decisions are logged in [`DECISIONS.md`](DECISIONS.md).
