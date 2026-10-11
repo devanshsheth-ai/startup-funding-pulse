@@ -370,3 +370,55 @@ sub-sector of core AI Applications, so sector fit rates AI Infrastructure deals 
 - Recency and serendipity use the profile's digest window (`last_digest_sent_at` → now, else
   7 days). Deals before the window score 0 recency, but are still scored, so the explorer can
   rank them.
+
+---
+
+## M6 — Aggregates and patterns (2026-10-12)
+
+**D-051 · Detector calibrations (measured on our data).**
+- **Thesis clustering:** cohesion must exceed max(0.75, the corpus 99th-percentile pairwise
+  cosine). With `gemini-embedding-001`, the median company pair already scores ≈ 0.77, and
+  roundup-derived template descriptions ("AI startup operating in the application layer")
+  embed as near-twins (≈ 0.95). So 0.75 alone would call any three deals a thesis, which is
+  the false positive the PRD warns about. The corpus p99 is ≈ 0.92 today. When quiet, the
+  detector reports its tightest triple.
+- **Sector momentum:** σ is floored at 1 deal/week, so a flat baseline (e.g. 0, 0, 0) cannot
+  yield an infinite z-score. Both directions are reported. Accelerating needs ≥ 3 deals this
+  week; cooling needs a baseline mean ≥ 3.
+- **Outlier deal:** z is computed on log10(amount). Round sizes are heavy-tailed, so a linear
+  σ is set by one mega-round. The bucket excludes the deal itself, and n ≥ 8 is required
+  (stage × sector, else stage-only, else suppressed).
+- **Geographic shift:** also requires ≥ 20 baseline deals with a reported city. Weekly
+  roundups rarely name cities (0–5 per week), so the detector is suppressed with that reason
+  until live history accumulates.
+- **Follow-on compression:** needs ≥ 4 recent (last 4 weeks) **and** ≥ 4 earlier round pairs,
+  else suppressed with the counts. Prior-round mentions come from full articles, so they are
+  concentrated in live data.
+- **Confidence labels:** effect ≥ 2 × e_min → strong; ≥ 1.33 × → emerging; otherwise
+  weak_signal.
+- **Target week:** the latest completed ISO week (Sunday ≤ today). The baseline is the 8
+  calendar weeks before it; weeks with zero deals count as zeros.
+
+**D-052 · Pattern subjects and detector outcomes.** PRD §7.4 keys patterns on (profile, week,
+detector), but one detector can fire for several subjects in a week (Fintech *and* Healthtech
+momentum), and §14.4 tracks "the same subject last week". → patterns are keyed on (profile,
+week, detector, subject), carrying run_id and consecutive_weeks. A new `detector_runs` table
+stores every detector's outcome per profile and week (fired / quiet / suppressed, reason,
+gates, observed n / effect / baseline weeks), which /methodology renders.
+
+**D-053 · Order of stages.** Detect runs before score, because the PRD §11.2 `investor_first_move`
+override (+10) comes only from investor-rotation findings that passed all four guards, for a
+watchlist investor in a mandate core sector. It first fired for Aarav on 3one4 Capital's first
+Healthtech deal (Sunfox Technologies).
+
+**D-054 · Aggregates window and temperature.** Window comparisons use the digest window,
+normalised to a 7-day rate, against 8 seven-day buckets ending at the window start (fixed
+regardless of cadence). Market temperature maps each component's z-score through the standard
+normal CDF (Φ(z) × 100), weighted 0.35 / 0.35 / 0.15 / 0.15 per PRD §12.3, and always
+returns its raw components. Coverage success rate includes the GNews sources that currently
+lack a key.
+
+**Known limitation:** the current week has both live collection and roundup coverage, while
+the baseline weeks have only roundups. That raises counts for the newest week (33 deals vs a
+≈ 22/week baseline), so momentum for the current week is biased upward until live history
+replaces backfill in the baseline. This is stated in the README limitations.

@@ -1,6 +1,7 @@
 import { connection } from "next/server";
 import { Suspense } from "react";
-import { getProfileConfig, getProvenance, getWorkedExample, listProfiles } from "@/db/queries/methodology";
+import { DETECTORS, type DetectorKey } from "@/config/detectors";
+import { getDetectorStatus, getProfileConfig, getProvenance, getWorkedExample, listProfiles } from "@/db/queries/methodology";
 import { SERENDIPITY_RULE, SIMULATED_PORTFOLIO_DISCLOSURE } from "@/lib/copy";
 import { logger } from "@/lib/logger";
 
@@ -29,9 +30,9 @@ function usd(n: number): string {
 async function load(profileParam: string | null) {
   try {
     const [profiles, active] = await Promise.all([listProfiles(), getProfileConfig(profileParam)]);
-    if (!active) return { profiles, active: null, example: null, prov: null };
-    const [example, prov] = await Promise.all([getWorkedExample(active.id, active.window.start), getProvenance()]);
-    return { profiles, active, example, prov };
+    if (!active) return { profiles, active: null, example: null, prov: null, detectors: null };
+    const [example, prov, detectors] = await Promise.all([getWorkedExample(active.id, active.window.start), getProvenance(), getDetectorStatus(active.id)]);
+    return { profiles, active, example, prov, detectors };
   } catch (err) {
     logger.error("methodology load failed", { error: err instanceof Error ? err : String(err) });
     return null;
@@ -45,7 +46,7 @@ async function Content({ searchParams }: { searchParams: Promise<Record<string, 
   const data = await load(profileParam);
   if (!data) return <p className="text-sm text-red-700 dark:text-red-300">Methodology data is temporarily unavailable.</p>;
   if (!data.active) return <p className="text-sm">Unknown profile.</p>;
-  const { profiles, active, example, prov } = data;
+  const { profiles, active, example, prov, detectors } = data;
   const cfg = active.config;
   const w = cfg.scoring_weights;
   const t = cfg.tier_thresholds;
@@ -188,10 +189,51 @@ async function Content({ searchParams }: { searchParams: Promise<Record<string, 
 
       <section className="text-sm">
         <h2 className="mb-2 text-lg font-semibold">6. Pattern detectors</h2>
-        <p className="opacity-75">
-          The twelve statistically gated detectors (sample size, effect size and history gates) are built in milestone M6. This section will list each detector&apos;s gates and
-          whether it is active or suppressed, with the reason.
+        <p className="mb-2 opacity-75">
+          A detector fires only when all three gates pass: sample size ≥ n_min, effect size ≥ e_min and weeks of history ≥ b_min. A detector without enough history is
+          shown as <strong>suppressed</strong> with its reason, never silently absent.
+          {detectors?.week ? ` Status for ISO week ${detectors.week}.` : " No detector run recorded yet."}
         </p>
+        <div className="overflow-x-auto rounded border border-black/10 dark:border-white/15">
+          <table className="w-full min-w-[760px] text-left text-sm">
+            <thead className="bg-black/[0.03] dark:bg-white/[0.05]">
+              <tr>
+                <th className="px-3 py-2">Detector</th>
+                <th className="px-3 py-2">n_min</th>
+                <th className="px-3 py-2">e_min</th>
+                <th className="px-3 py-2">b_min</th>
+                <th className="px-3 py-2">Status</th>
+                <th className="px-3 py-2">Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(Object.keys(DETECTORS) as DetectorKey[]).map((k) => {
+                const g = DETECTORS[k];
+                const st = detectors?.rows.find((r) => r.key === k);
+                const label = st ? (st.status === "fired" ? "active" : st.status) : "not run";
+                const cls = st?.status === "fired" ? "text-emerald-700 dark:text-emerald-400" : st?.status === "suppressed" ? "text-amber-700 dark:text-amber-400" : "opacity-70";
+                return (
+                  <tr key={k} className="border-t border-black/5 align-top dark:border-white/10">
+                    <td className="px-3 py-2">
+                      <span className="font-medium">{g.label}</span>
+                      {g.bestEffort ? <span className="ml-1 rounded bg-black/5 px-1 text-xs dark:bg-white/10">best effort</span> : null}
+                      <div className="text-xs opacity-70">{g.signal}</div>
+                      {g.note ? <div className="mt-1 text-xs opacity-60">{g.note}</div> : null}
+                    </td>
+                    <td className="px-3 py-2">{g.nMin === null ? "—" : `${g.nMin} ${g.nUnit}`}</td>
+                    <td className="px-3 py-2">{g.eMin === null ? "—" : `${g.eMin} ${g.eUnit}`}</td>
+                    <td className="px-3 py-2">{g.bMin} wk</td>
+                    <td className={`px-3 py-2 font-medium ${cls}`}>
+                      {label}
+                      {st && st.findings > 0 ? ` (${st.findings})` : ""}
+                    </td>
+                    <td className="px-3 py-2 text-xs opacity-80">{st?.reason ?? ""}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <section className="space-y-1 text-sm">
