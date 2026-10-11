@@ -9,7 +9,7 @@ Built for MESA Cohort C4, *AI and its Applications*, Final Examination, Problem
 Statement 14. The full specification is [`docs/PRD.md`](docs/PRD.md), and the
 engineering rules are in [`CLAUDE.md`](CLAUDE.md).
 
-> **Status: M0–M6 complete.** Live collection runs daily; 13 weeks of history were backfilled
+> **Status: M0–M7 complete.** Live collection runs daily; 13 weeks of history were backfilled
 > from weekly roundups. See [Build status](#build-status) and the live [/health](https://startup-funding-pulse.vercel.app/health) page.
 
 ---
@@ -117,6 +117,9 @@ pgvector, with the database's cosine distance matching the value computed locall
   comparison would until live history fills the baseline.
 - Geographic-shift and follow-on-compression detectors are suppressed today for lack of
   city-reported and earlier round-pair history; they say so on `/methodology`.
+- Email uses Resend's shared test sender, which only delivers to the Resend account owner;
+  `DIGEST_TO` routes every profile's digest there until a sending domain is verified.
+- Vercel Hobby cron can fire up to 59 minutes late, so the 06:30 IST brief lands 06:30–07:29.
 - VCCircle's 20 s Crawl-delay limits article-page fetches, so its deals are extracted from
   headlines and leads, dated by first sighting (D-036).
 - Vercel Hobby cron fires once a day with up to ±59 minutes of jitter, so the "06:30 IST"
@@ -133,6 +136,7 @@ pgvector, with the database's cosine distance matching the value computed locall
 | M4 Backfill | Done: 293 unique deals over 14 ISO weeks (249 backfill, 44 live); cross-check logged |
 | M5 Scoring + adjacency | Done: 882 scorecards (294 deals × 3 profiles), 45 adjacency edges with rationales, distinct top-10s per profile; live `/methodology` |
 | M6 Aggregates + patterns | Done: 12 three-gate detectors (5 fired, 5 quiet, 2 suppressed with reasons for W41); zero fires below gates under restricted history; Aggregates object with `n` everywhere |
-| M7–M9 | Not started |
+| M7 Digest + email | Done: weekly + daily React Email templates (375 px verified), evidence-enforced narration, preview routes, share links; real digest delivered via Resend; window advances only on success |
+| M8–M9 | Not started |
 
 Implementation decisions are logged in [`DECISIONS.md`](DECISIONS.md).
