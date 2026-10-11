@@ -1,0 +1,249 @@
+{
+  "id": "consumer-syndicate",
+  "display_name": "Consumer angel syndicate",
+  "fund_type": "angel_syndicate",
+  "is_default": false,
+  "config": {
+    "assumption_note": "Mandate inferred from the problem statement. All values user-editable.",
+    "scoring_weights": {
+      "sector_fit": 30,
+      "stage_fit": 20,
+      "cheque_fit": 10,
+      "tracked_investor": 12,
+      "geography_fit": 5,
+      "recency": 5,
+      "ecosystem_significance": 18,
+      "override_watchlist": 40,
+      "override_adjacency_competitor": 35,
+      "override_adjacency_same_layer": 25,
+      "override_adjacency_adjacent": 15,
+      "override_investor_first_move": 10,
+      "confidence_discount_single_source": 0.85
+    },
+    "tier_thresholds": {
+      "act_now": 80,
+      "high": 60,
+      "relevant": 40,
+      "context": 20
+    },
+    "serendipity": {
+      "enabled": true,
+      "count": 3,
+      "max_mandate_score": 40
+    },
+    "delivery": {
+      "mode": "weekly",
+      "days": [
+        "monday"
+      ],
+      "send_hour": "06:30",
+      "timezone": "Asia/Kolkata",
+      "recipients": [
+        "syndicate@example-consumerangels.com"
+      ],
+      "min_deals_to_send": 1
+    },
+    "alerts": {
+      "enabled": true,
+      "severity_threshold": "high",
+      "quiet_hours": [
+        "22:00",
+        "07:00"
+      ],
+      "max_immediate_per_day": 3,
+      "cluster_window_days": 14,
+      "cluster_threshold": 2,
+      "triggers_enabled": {
+        "competitor_raise": true,
+        "watchlist_raise": true,
+        "same_layer_raise": true,
+        "portfolio_mentioned": true,
+        "adjacency_cluster": true,
+        "sector_momentum_flip": true,
+        "competitor_acquired": true,
+        "competitor_shutdown": true
+      }
+    },
+    "mandate": {
+      "country": "India",
+      "geographies_primary": [
+        "Delhi-NCR",
+        "Mumbai",
+        "Bengaluru"
+      ],
+      "geographies_secondary": [
+        "Pune",
+        "Hyderabad",
+        "Jaipur"
+      ],
+      "stages": [
+        "Angel",
+        "Pre-seed"
+      ],
+      "stages_adjacent": [
+        "Seed"
+      ],
+      "cheque_size_usd": {
+        "min": 25000,
+        "max": 250000
+      },
+      "round_size_interest_usd": {
+        "min": 100000,
+        "max": 500000
+      }
+    },
+    "sectors_core": [
+      {
+        "name": "D2C & Commerce",
+        "sub": [
+          "fashion",
+          "beauty and personal care",
+          "premium F&B",
+          "home and lifestyle",
+          "pet care"
+        ]
+      },
+      {
+        "name": "Quick Commerce",
+        "sub": [
+          "quick commerce",
+          "10-minute delivery",
+          "dark stores"
+        ]
+      }
+    ],
+    "sectors_watch": [
+      "Consumer Internet",
+      "Media & Content"
+    ],
+    "sectors_excluded": [
+      "Real-money gaming",
+      "Crypto/Web3 tokens"
+    ],
+    "keywords_excluded": [
+      "real money gaming",
+      "real-money gaming",
+      "rummy",
+      "fantasy sports",
+      "sports betting",
+      "online betting",
+      "crypto exchange",
+      "cryptocurrency",
+      "web3 token",
+      "nft",
+      "k-12",
+      "school tuition"
+    ]
+  },
+  "portfolio": [
+    {
+      "name": "Snitch",
+      "description": "D2C menswear fashion brand selling online and through a growing chain of retail stores and quick commerce.",
+      "sector": "D2C & Commerce",
+      "sub_sector": "menswear",
+      "stage_held": "Pre-seed",
+      "city": "Bengaluru",
+      "relationship_type": "simulated_holding",
+      "adjacency_keywords": [
+        "menswear brand",
+        "D2C fashion",
+        "fast fashion",
+        "omnichannel apparel",
+        "men's casual wear",
+        "fashion retail stores"
+      ]
+    },
+    {
+      "name": "Sleepy Owl",
+      "description": "D2C premium coffee brand selling cold brew packs, instant coffee, ready-to-drink cans and brewing kits.",
+      "sector": "D2C & Commerce",
+      "sub_sector": "premium F&B",
+      "stage_held": "Pre-seed",
+      "city": "Delhi-NCR",
+      "relationship_type": "simulated_holding",
+      "adjacency_keywords": [
+        "D2C coffee",
+        "cold brew",
+        "ready-to-drink coffee",
+        "premium instant coffee",
+        "specialty coffee brand",
+        "coffee subscriptions"
+      ]
+    },
+    {
+      "name": "Slikk",
+      "description": "Quick fashion delivery app delivering apparel from partner brands within 60 minutes in Bengaluru.",
+      "sector": "Quick Commerce",
+      "sub_sector": "quick fashion delivery",
+      "stage_held": "Angel",
+      "city": "Bengaluru",
+      "relationship_type": "simulated_holding",
+      "adjacency_keywords": [
+        "quick fashion delivery",
+        "60-minute delivery",
+        "apparel quick commerce",
+        "fashion marketplace app",
+        "instant returns",
+        "dark store fashion"
+      ]
+    }
+  ],
+  "watchlist": [
+    {
+      "watch_type": "company",
+      "value": "Swish",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "company",
+      "value": "Superyou",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "company",
+      "value": "Zepto",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "company",
+      "value": "Sugar Cosmetics",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "Fireside Ventures",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "Sauce VC",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "DSG Consumer Partners",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "Titan Capital",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    }
+  ]
+}

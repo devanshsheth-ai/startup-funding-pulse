@@ -1,0 +1,452 @@
+{
+  "id": "aarav-familyoffice",
+  "display_name": "Aarav — Bengaluru family office",
+  "fund_type": "single_family_office",
+  "is_default": true,
+  "config": {
+    "assumption_note": "Mandate inferred from the problem statement. All values user-editable.",
+    "scoring_weights": {
+      "sector_fit": 30,
+      "stage_fit": 20,
+      "cheque_fit": 10,
+      "tracked_investor": 12,
+      "geography_fit": 5,
+      "recency": 5,
+      "ecosystem_significance": 18,
+      "override_watchlist": 40,
+      "override_adjacency_competitor": 35,
+      "override_adjacency_same_layer": 25,
+      "override_adjacency_adjacent": 15,
+      "override_investor_first_move": 10,
+      "confidence_discount_single_source": 0.85
+    },
+    "tier_thresholds": {
+      "act_now": 80,
+      "high": 60,
+      "relevant": 40,
+      "context": 20
+    },
+    "serendipity": {
+      "enabled": true,
+      "count": 3,
+      "max_mandate_score": 40
+    },
+    "delivery": {
+      "mode": "weekly",
+      "days": [
+        "monday"
+      ],
+      "send_hour": "06:30",
+      "timezone": "Asia/Kolkata",
+      "recipients": [
+        "aarav@example-familyoffice.com"
+      ],
+      "min_deals_to_send": 1
+    },
+    "alerts": {
+      "enabled": true,
+      "severity_threshold": "high",
+      "quiet_hours": [
+        "22:00",
+        "07:00"
+      ],
+      "max_immediate_per_day": 3,
+      "cluster_window_days": 14,
+      "cluster_threshold": 2,
+      "triggers_enabled": {
+        "competitor_raise": true,
+        "watchlist_raise": true,
+        "same_layer_raise": true,
+        "portfolio_mentioned": true,
+        "adjacency_cluster": true,
+        "sector_momentum_flip": true,
+        "competitor_acquired": true,
+        "competitor_shutdown": true
+      }
+    },
+    "mandate": {
+      "country": "India",
+      "geographies_primary": [
+        "Bengaluru",
+        "Delhi-NCR",
+        "Mumbai"
+      ],
+      "geographies_secondary": [
+        "Pune",
+        "Hyderabad",
+        "Chennai",
+        "Ahmedabad"
+      ],
+      "stages": [
+        "Pre-seed",
+        "Seed",
+        "Pre-Series A",
+        "Series A"
+      ],
+      "stages_adjacent": [
+        "Angel",
+        "Bridge",
+        "Series B"
+      ],
+      "cheque_size_usd": {
+        "min": 250000,
+        "max": 3000000
+      },
+      "round_size_interest_usd": {
+        "min": 500000,
+        "max": 20000000
+      }
+    },
+    "sectors_core": [
+      {
+        "name": "Fintech",
+        "sub": [
+          "SME lending",
+          "embedded finance",
+          "wealthtech",
+          "B2B payments",
+          "insurtech"
+        ]
+      },
+      {
+        "name": "B2B SaaS",
+        "sub": [
+          "vertical SaaS",
+          "devtools",
+          "AI-native SaaS",
+          "revenue ops",
+          "compliance tech"
+        ]
+      },
+      {
+        "name": "Supply Chain & Logistics",
+        "sub": [
+          "B2B commerce",
+          "freight & trucking",
+          "warehousing",
+          "procurement",
+          "cross-border"
+        ]
+      },
+      {
+        "name": "Healthtech",
+        "sub": [
+          "diagnostics",
+          "care delivery",
+          "health SaaS",
+          "mental health",
+          "pharma supply"
+        ]
+      },
+      {
+        "name": "AI Applications",
+        "sub": [
+          "applied AI",
+          "AI agents",
+          "vernacular AI",
+          "AI infrastructure",
+          "document AI"
+        ]
+      },
+      {
+        "name": "D2C & Commerce",
+        "sub": [
+          "premium F&B",
+          "personal care",
+          "creator economy"
+        ]
+      },
+      {
+        "name": "Quick Commerce",
+        "sub": [
+          "quick commerce"
+        ]
+      }
+    ],
+    "sectors_watch": [
+      "Climate & Energy",
+      "Agritech",
+      "Deeptech",
+      "Spacetech"
+    ],
+    "sectors_excluded": [
+      "Real-money gaming",
+      "Crypto/Web3 tokens",
+      "K-12 Edtech"
+    ],
+    "keywords_excluded": [
+      "real money gaming",
+      "real-money gaming",
+      "rummy",
+      "fantasy sports",
+      "sports betting",
+      "online betting",
+      "crypto exchange",
+      "cryptocurrency",
+      "web3 token",
+      "nft",
+      "k-12",
+      "school tuition"
+    ]
+  },
+  "portfolio": [
+    {
+      "name": "Khatabook",
+      "description": "Digital ledger and bookkeeping app for Indian SMEs, kirana stores and small merchants, with payments collection and merchant lending layered on top.",
+      "sector": "B2B SaaS",
+      "sub_sector": "SME bookkeeping",
+      "stage_held": "Seed",
+      "city": "Bengaluru",
+      "relationship_type": "simulated_holding",
+      "adjacency_keywords": [
+        "SME bookkeeping",
+        "digital ledger",
+        "kirana tech",
+        "merchant software",
+        "GST compliance",
+        "small business accounting"
+      ]
+    },
+    {
+      "name": "Rupifi",
+      "description": "Embedded B2B credit and buy-now-pay-later rails, plus SME cards, that marketplaces and distributors plug in for their merchant buyers.",
+      "sector": "Fintech",
+      "sub_sector": "embedded finance",
+      "stage_held": "Series A",
+      "city": "Bengaluru",
+      "relationship_type": "simulated_holding",
+      "adjacency_keywords": [
+        "embedded finance",
+        "B2B BNPL",
+        "working capital",
+        "supply chain finance",
+        "lending API",
+        "merchant credit"
+      ]
+    },
+    {
+      "name": "Bizongo",
+      "description": "B2B vendor digitisation and supply-chain platform for packaging and raw materials, with embedded supply-chain financing.",
+      "sector": "Supply Chain & Logistics",
+      "sub_sector": "B2B commerce",
+      "stage_held": "Pre-Series A",
+      "city": "Mumbai",
+      "relationship_type": "simulated_holding",
+      "adjacency_keywords": [
+        "B2B commerce",
+        "vendor digitisation",
+        "packaging procurement",
+        "raw material sourcing",
+        "supply chain financing",
+        "industrial marketplace"
+      ]
+    },
+    {
+      "name": "Even Healthcare",
+      "description": "Hospital-led managed-care provider in Bengaluru: owned multi-speciality hospitals and clinics with a membership model covering primary care, diagnostics and hospital care.",
+      "sector": "Healthtech",
+      "sub_sector": "managed care",
+      "stage_held": "Seed",
+      "city": "Bengaluru",
+      "relationship_type": "simulated_holding",
+      "adjacency_keywords": [
+        "managed care",
+        "health membership",
+        "primary care clinics",
+        "multi-speciality hospital",
+        "care coordination",
+        "outcome-based healthcare"
+      ]
+    },
+    {
+      "name": "Sarvam AI",
+      "description": "Indic-language foundation models, speech models and agent platforms for Indian enterprises and government.",
+      "sector": "AI Applications",
+      "sub_sector": "foundation models",
+      "stage_held": "Pre-seed",
+      "city": "Bengaluru",
+      "relationship_type": "simulated_holding",
+      "adjacency_keywords": [
+        "Indic language models",
+        "foundation models",
+        "vernacular AI",
+        "conversational AI agents",
+        "sovereign AI",
+        "Indian language speech AI"
+      ]
+    },
+    {
+      "name": "The Whole Truth Foods",
+      "description": "Clean-label packaged foods, protein and kids' nutrition products, sold D2C and through quick commerce.",
+      "sector": "D2C & Commerce",
+      "sub_sector": "packaged food",
+      "stage_held": "Seed",
+      "city": "Mumbai",
+      "relationship_type": "simulated_holding",
+      "adjacency_keywords": [
+        "clean label",
+        "packaged food",
+        "protein snacking",
+        "D2C food brand",
+        "healthy snacking",
+        "quick commerce brand"
+      ]
+    }
+  ],
+  "watchlist": [
+    {
+      "watch_type": "company",
+      "value": "Recur Club",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "company",
+      "value": "Jai Kisan",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "company",
+      "value": "Vegrow",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "company",
+      "value": "FarMart",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "company",
+      "value": "Zolve",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "company",
+      "value": "Wysa",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "company",
+      "value": "Dukaan",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "company",
+      "value": "Jar",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "company",
+      "value": "CoRover",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "company",
+      "value": "Zetwerk",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "company",
+      "value": "Ultrahuman",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "company",
+      "value": "Wakefit",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "Blume Ventures",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "Accel India",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "Peak XV Partners",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "Elevation Capital",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "Prime Venture Partners",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "India Quotient",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "3one4 Capital",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "Together Fund",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "Stellaris Venture Partners",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    },
+    {
+      "watch_type": "investor",
+      "value": "All In Capital",
+      "aliases": [],
+      "notes": null,
+      "tags": []
+    }
+  ]
+}

@@ -46,6 +46,22 @@ export const PIPELINE = {
     maxAdjudicationsPerCandidate: 3,
     recordsPerInvocation: 60,
   },
+  score: {
+    /** Sector-fit pairs per Gemini call. */
+    sectorFitBatch: 40,
+    /** Cheque percentile needs at least this many priced deals in a bucket (else stage-only, else none). */
+    chequeBucketMin: 5,
+    /**
+     * Phase 1 vector shortlist floor. PRD §13.2 says 0.72, but gemini-embedding-001
+     * places the median company at 0.74–0.79 against every tracked company, so
+     * 0.72 admits nearly everything. Calibrated to 0.78 plus a top-N cap (D-047).
+     */
+    adjacencyMinSimilarity: 0.78,
+    /** Write an edge only when Gemini is at least this confident (PRD §13.2). */
+    adjacencyMinConfidence: 0.6,
+    /** Shortlist size per tracked company: the N most similar above the floor. */
+    adjacencyMaxPerPortfolio: 15,
+  },
   retention: {
     bodyTextDays: 30,
   },

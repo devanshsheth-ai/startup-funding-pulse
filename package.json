@@ -14,7 +14,8 @@
     "seed": "tsx src/scripts/seed.ts",
     "pipeline": "tsx src/scripts/run-pipeline.ts",
     "spot-check": "tsx src/scripts/spot-check.ts",
-    "backfill": "tsx src/scripts/backfill.ts"
+    "backfill": "tsx src/scripts/backfill.ts",
+    "rescore": "tsx src/scripts/score.ts"
   },
   "dependencies": {
     "@google/genai": "^2.28.0",
