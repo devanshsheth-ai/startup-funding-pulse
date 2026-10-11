@@ -312,3 +312,61 @@ Fixes:
 
 The bad link was repaired (link row removed, record re-processed through v2, which rejected
 all 3 candidates). The post-repair audit shows only the 4 legitimate variants.
+
+---
+
+## M5 — Scoring and adjacency (2026-10-11)
+
+**D-045 · Excluded "sectors" that are not taxonomy sectors.** PRD §8.1 excludes "Real-money
+gaming", "Crypto/Web3 tokens" and "K-12 Edtech", which are sub-sectors of taxonomy sectors
+(Gaming, Fintech, Edtech). → A `sectors_excluded` entry that is a taxonomy sector excludes the
+whole sector. Any other entry is a label, enforced through `keywords_excluded` ("rummy",
+"fantasy sports", "crypto exchange", "k-12", …). Keywords match on word boundaries against the
+sub-sector, description and company name. Exclusion is applied before scoring: score 0, tier
+archive, no components (PRD §11.2).
+
+**D-046 · Sector-fit cache.** PRD §11.1 says to cache Gemini's sector fit per (sector,
+sub-sector, profile). → `sector_fit` stores (profile, sector, lowercased sub-sector,
+mandate_hash). mandate_hash covers only core and watch sectors, so editing a weight never
+re-calls Gemini, but editing the sectors re-evaluates. Pairs are sent 40 per call
+(`sector-fit.v1`, calibration anchors from §11.1).
+
+**D-047 · Adjacency shortlist calibration.** PRD §13.2's 0.72 cosine threshold was measured
+against our data. With `gemini-embedding-001` at 768 dims, the median company scores 0.74–0.79
+against every tracked company, so 0.72 admitted 238–252 of 252 companies per tracked company.
+That defeats Phase 1 (about 3,000 adjudications). → The shortlist is the **15 most similar
+companies above 0.78** (above the median) per tracked company, about 180 adjudications on the
+first run, all content-cached after. The top-ranked pairs were sensible (Bizongo ← Udaan,
+Groyyo; Rupifi ← NeoGrowth; The Whole Truth ← Protein Pantry). Edges are written for
+`is_related` with confidence ≥ 0.6, as specified. A tracked company's own raise is excluded
+from adjacency, because it is a `portfolio_mentioned` alert (M9).
+
+**D-048 · Portfolio description updates (verified 2026-10-11).**
+- Even Healthcare has pivoted to a hospital-led managed-care model and is winding down
+  insurance (2026 layoffs; own Bengaluru hospitals). Its description and keywords drop
+  "hospitalisation cover" / "health insurance alternative", which would mis-flag insurers
+  as competitors.
+- Sarvam AI adds speech models and agent platforms (Arya, Samvaad, Bulbul).
+- Rupifi adds SME cards. Khatabook adds merchant lending.
+
+The other two profiles' portfolios, which the PRD leaves open, use verified real companies as
+simulated holdings: Kiwi, Stable Money and Scapia (fintech seed fund); Snitch, Sleepy Owl and
+Slikk (consumer syndicate).
+
+**D-049 · Taxonomy mapping of Aarav's "Consumer & D2C".** The taxonomy splits this into
+"D2C & Commerce" and "Quick Commerce", so both are core sectors. "AI infrastructure" stays a
+sub-sector of core AI Applications, so sector fit rates AI Infrastructure deals highly.
+
+**D-050 · Rubric edge cases (PRD silent).**
+- Unnamed rounds (`Undisclosed`) score 0 stage fit, per "else score 0". Debt or Grant use the
+  prior equity stage when the article names one.
+- City not reported scores 0 geography, rather than "other India".
+- An undisclosed amount contributes 0 to the cheque-percentile term of ecosystem
+  significance; cheque fit itself stays neutral (4/10).
+- The percentile bucket needs ≥ 5 priced deals in stage × sector, else stage-only, else none.
+- Investor tier is the deal's best investor `deal_count` percentile in our own data.
+- The `investor_first_move` override is wired but stays off until the M6 investor-rotation
+  detector and its four guards exist.
+- Recency and serendipity use the profile's digest window (`last_digest_sent_at` → now, else
+  7 days). Deals before the window score 0 recency, but are still scored, so the explorer can
+  rank them.

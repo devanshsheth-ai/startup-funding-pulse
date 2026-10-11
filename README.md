@@ -9,7 +9,7 @@ Built for MESA Cohort C4, *AI and its Applications*, Final Examination, Problem
 Statement 14. The full specification is [`docs/PRD.md`](docs/PRD.md), and the
 engineering rules are in [`CLAUDE.md`](CLAUDE.md).
 
-> **Status: M0–M4 complete.** Live collection runs daily; 13 weeks of history were backfilled
+> **Status: M0–M5 complete.** Live collection runs daily; 13 weeks of history were backfilled
 > from weekly roundups. See [Build status](#build-status) and the live [/health](https://startup-funding-pulse.vercel.app/health) page.
 
 ---
@@ -126,6 +126,7 @@ pgvector, with the database's cosine distance matching the value computed locall
 | M2 Extraction | Done: 9/10 spot-check correct; 0 unvalidated writes |
 | M3 Dedupe + enrich | Done: multi-outlet deals merge to one row; investor variants resolve |
 | M4 Backfill | Done: 293 unique deals over 14 ISO weeks (249 backfill, 44 live); cross-check logged |
-| M5–M9 | Not started |
+| M5 Scoring + adjacency | Done: 882 scorecards (294 deals × 3 profiles), 45 adjacency edges with rationales, distinct top-10s per profile; live `/methodology` |
+| M6–M9 | Not started |
 
 Implementation decisions are logged in [`DECISIONS.md`](DECISIONS.md).
