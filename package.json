@@ -10,12 +10,16 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx src/scripts/migrate.ts"
+    "db:migrate": "tsx src/scripts/migrate.ts",
+    "seed": "tsx src/scripts/seed.ts",
+    "pipeline": "tsx src/scripts/run-pipeline.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",
     "drizzle-orm": "^0.45.4",
+    "fast-xml-parser": "^5.11.2",
     "next": "16.4.0",
+    "node-html-parser": "^9.0.4",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "zod": "^4.6.5"
