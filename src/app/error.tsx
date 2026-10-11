@@ -12,7 +12,11 @@ export default function RouteError({ reset }: { error: Error & { digest?: string
         <a className="link" href="/health">
           /health
         </a>
-        .
+        . The{" "}
+        <a className="link" href="/brief/latest">
+          latest brief
+        </a>{" "}
+        is always available.
       </p>
       <button type="button" onClick={reset} className="rounded-md border border-line px-3 py-1 text-sm">
         Try again
