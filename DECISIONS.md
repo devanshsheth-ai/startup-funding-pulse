@@ -148,6 +148,64 @@ stage's module.
 
 ---
 
+## M2 / M3 — Extraction, normalisation, dedupe, enrich (2026-10-11)
+
+**D-023 · `extracted_records` staging table.** PRD §10 Stage B says output goes "to a staging
+state" but defines no table. → `extracted_records` holds one Zod-validated payload per
+candidate record, with its prompt version, ingestion mode and status (`pending` → `merged` or
+`rejected`, with a reason). It is the "candidate records" step of the dedupe funnel on
+`/health`, and it lets a prompt change be replayed against stored articles.
+
+**D-024 · `gemini_cache` table.** CLAUDE.md §4 asks for caching by content hash. → The key is
+sha256(model | prompt id | rendered prompt). A prompt-version bump changes the key, so an
+edited prompt is never answered from a stale cache.
+
+**D-025 · A null sector maps to `Other`.** `deals.sector_primary` is NOT NULL, and the
+extractor is told to return null rather than guess. → An unclassifiable deal goes to `Other`,
+the taxonomy's explicit bucket, which is visible and countable. It is never assigned a
+guessed sector.
+
+**D-026 · Per-source reports and recompute-on-merge.** PRD §6.10 requires field-level badges
+(corroborated, single-source, disputed). → Each `deal_sources` row stores what that source
+reported (stage, amount and its confidence, lead investors). The deal row is always recomputed
+from all of its sources by the pure `mergeReports()`. That makes merging idempotent and
+order-independent, and the PRD merge rules are unit-tested. `Undisclosed` is treated as
+compatible with any named stage when matching, and defers to the named stage when merging,
+because one outlet often omits the round name another prints.
+
+**D-027 · `events.subject_key`.** Event identity needs a stable subject: the target for M&A,
+the fund name for fund closes, `person@company` for people moves. → It is stored and indexed,
+so the same event reported in two different ISO weeks within ±14 days still merges.
+
+**D-028 · Round pairs come from existing columns.** Stage E.4 asks to "write prior round back
+onto company history". → No new table. Detector 7's round pairs are derived from
+`deals.prior_round_stage` / `prior_round_date` (extracted from "has raised X to date"
+sentences) plus consecutive observed rounds for the same company.
+
+**D-029 · Structured output uses `responseJsonSchema`, generated from Zod.** CLAUDE.md §4
+names `responseSchema`. In `@google/genai`, `responseJsonSchema` is the documented field for
+standard JSON Schema. → Each output contract is one Zod schema that is both sent to Gemini
+(via `z.toJSONSchema`, with `$schema` and safe-integer bounds stripped) and used to validate
+the reply. The contract and the check cannot drift apart. Temperature ceilings (≤ 0.2 for
+classify, extract and adjudicate; ≤ 0.4 for narrate) are enforced in code.
+
+**D-030 · Gemini pacing.** Free-tier limits change and are per-model. → `GEMINI_RPM`
+(default 10) spaces calls. 429 and 5xx errors retry with exponential backoff. If quota is
+exhausted, the stage pauses cleanly and records `partial` with the reason, and the next
+daily run resumes the backlog. Nothing is marked processed that wasn't.
+
+**D-031 · Body fetching is bounded.** Article pages are fetched (robots-checked) only for
+relevant articles whose feed text is under 600 characters, one at a time per host, and are
+skipped if the host's politeness wait exceeds 3 s. VCCircle's 20 s Crawl-delay therefore
+means its articles are extracted from headline and lead. Text comes from JSON-LD
+`articleBody` when present, otherwise from the densest `<p>` block.
+
+**D-032 · Layer 3/4 candidates.** Layer 3 compares the candidate's embedding with existing
+companies' embeddings, within the same window and a compatible stage. Layer 4 sends up to 3
+of the nearest candidates to Gemini: cosine 0.78–0.88, or pg_trgm name similarity above 0.7
+(the pg_trgm extension is enabled in migration 0004). Adjudication needs `same_event` with
+confidence ≥ 0.7. Until the Gemini key is configured, only layers 1–2 run, and `/health`
+reports that.
 ## Deployment (2026-10-11)
 
 **D-033 · Functions run in `sin1` (Singapore).** Neon is in AWS ap-southeast-1 (Singapore).
