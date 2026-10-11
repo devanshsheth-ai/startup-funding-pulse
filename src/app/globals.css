@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Dark mode follows a class set before first paint (system by default, user-overridable). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #fafaf9;
   --foreground: #1c1917;
@@ -17,23 +20,23 @@
   --grid: #e7e5e4;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0c0a09;
-    --foreground: #e7e5e4;
-    --card: #1c1917;
-    --muted: #a8a29e;
-    --border: #292524;
-    --accent: #818cf8;
-    --up: #34d399;
-    --down: #f87171;
-    --chart-1: #818cf8;
-    --chart-2: #22d3ee;
-    --chart-3: #fbbf24;
-    --chart-4: #c084fc;
-    --chart-5: #94a3b8;
-    --grid: #292524;
-  }
+/* Same tokens, applied by class so the header toggle can override the OS setting. */
+:root.dark {
+  --background: #0c0a09;
+  --foreground: #e7e5e4;
+  --card: #1c1917;
+  --muted: #a8a29e;
+  --border: #292524;
+  --accent: #818cf8;
+  --up: #34d399;
+  --down: #f87171;
+  --chart-1: #818cf8;
+  --chart-2: #22d3ee;
+  --chart-3: #fbbf24;
+  --chart-4: #c084fc;
+  --chart-5: #94a3b8;
+  --grid: #292524;
+  color-scheme: dark;
 }
 
 @theme inline {

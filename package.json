@@ -17,7 +17,8 @@
     "backfill": "tsx src/scripts/backfill.ts",
     "rescore": "tsx src/scripts/score.ts",
     "detect": "tsx src/scripts/detect.ts",
-    "mapclusters": "tsx src/scripts/market-maps.ts"
+    "mapclusters": "tsx src/scripts/market-maps.ts",
+    "alerts": "tsx src/scripts/alerts.ts"
   },
   "dependencies": {
     "@google/genai": "^2.28.0",

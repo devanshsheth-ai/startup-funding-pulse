@@ -1,7 +1,7 @@
 import { Body, Container, Head, Html, Link, Preview, Section, Text } from "@react-email/components";
 import type { DigestContent } from "@/pipeline/digest";
 import { withUtm } from "@/pipeline/digest";
-import { AdjacencySection, C, DealBlock, EventLine, Footer, S, SectionTitle, usd } from "./parts";
+import { AdjacencySection, HeldAlerts, C, DealBlock, EventLine, Footer, S, SectionTitle, usd } from "./parts";
 
 /** Weekly digest — section order per PRD §16.1. */
 export function WeeklyDigest({ c }: { c: DigestContent }) {
@@ -44,6 +44,7 @@ export function WeeklyDigest({ c }: { c: DigestContent }) {
 
           {/* 4. Tracked-company adjacency (incl. cluster trigger) */}
           <AdjacencySection c={c} mode={mode} />
+          <HeldAlerts c={c} />
 
           {/* 5. TL;DR */}
           {c.tldr.length ? (

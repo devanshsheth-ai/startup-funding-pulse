@@ -10,6 +10,7 @@ import { runDeliver } from "@/pipeline/deliver";
 import { runDetect } from "@/pipeline/detect/run";
 import { runScore } from "@/pipeline/score";
 import { runMarketMaps } from "@/pipeline/market-map";
+import { runAlerts } from "@/pipeline/alerts/engine";
 import { runCollect, type StageResult } from "@/pipeline/ingest/collect";
 
 /**
@@ -52,6 +53,8 @@ export const STAGES: ReadonlyArray<{ key: string; run: StageRunner }> = [
   // Detect before score: the investor first-move override reads this week's rotation findings.
   { key: "detect", run: (ctx) => runDetect(ctx) },
   { key: "score", run: (ctx) => runScore(ctx) },
+  // Alerts after scoring (edges and scorecards are fresh) and before deliver (batched alerts fold into the digest).
+  { key: "alerts", run: (ctx) => runAlerts(ctx) },
   { key: "deliver", run: (ctx) => runDeliver(ctx) },
   // After delivery so ~20 labelling calls never delay the 06:30 send; pages read the latest map.
   { key: "mapclusters", run: (ctx) => runMarketMaps(ctx) },
@@ -66,23 +69,38 @@ export interface DispatchResult {
   runId: string;
   done: boolean;
   next: DispatchPosition | null;
-  steps: { stage: string; processed: number; next_cursor: string | null }[];
+  steps: { stage: string; processed: number; next_cursor: string | null; error?: string }[];
 }
 
-export async function dispatch(runId: string, from: DispatchPosition, startedAt = Date.now()): Promise<DispatchResult> {
+/**
+ * Graceful degradation (CLAUDE.md §6): a stage that throws is logged and
+ * skipped for this run; the chain continues, so a broken source or a Gemini
+ * outage degrades a section instead of stopping scoring and delivery.
+ */
+export async function dispatch(runId: string, from: DispatchPosition, startedAt = Date.now(), stages: ReadonlyArray<{ key: string; run: StageRunner }> = STAGES): Promise<DispatchResult> {
   const log = runLogger(runId, "dispatch");
   const deadline = startedAt + PIPELINE.invocationBudgetMs;
   const steps: DispatchResult["steps"] = [];
   let { stageIndex, cursor } = from;
 
-  while (stageIndex < STAGES.length) {
-    const stage = STAGES[stageIndex];
+  while (stageIndex < stages.length) {
+    const stage = stages[stageIndex];
     if (!stage) break;
     if (Date.now() > deadline) {
       log.info("budget reached, continuing in next invocation", { stage: stage.key, cursor });
       return { runId, done: false, next: { stageIndex, cursor }, steps };
     }
-    const res = await stage.run({ runId, cursor, deadline });
+    let res: StageResult;
+    try {
+      res = await stage.run({ runId, cursor, deadline });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      log.error("stage failed; continuing with the next stage", { stage: stage.key, error: message });
+      steps.push({ stage: stage.key, processed: 0, next_cursor: null, error: message.slice(0, 300) });
+      stageIndex++;
+      cursor = null;
+      continue;
+    }
     steps.push({ stage: stage.key, processed: res.processed, next_cursor: res.next_cursor });
     if (res.next_cursor === null) {
       stageIndex++;

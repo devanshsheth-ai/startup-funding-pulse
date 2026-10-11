@@ -8,6 +8,7 @@ import {
   getSourceHealth,
 } from "@/db/queries/ingestion";
 import { getDetectorStatus, getProvenance, listProfiles } from "@/db/queries/methodology";
+import { getAlertHealth } from "@/db/queries/alerts";
 import { DETECTORS, type DetectorKey } from "@/config/detectors";
 import { logger } from "@/lib/logger";
 
@@ -63,9 +64,10 @@ async function loadHealth() {
       getProvenance(),
       listProfiles(),
     ]);
+    const alertHealth = await getAlertHealth();
     const detectors = profiles[0] ? { profile: profiles[0].displayName, ...(await getDetectorStatus(profiles[0].id)) } : null;
     const live24h = lastCollect !== null && Date.now() - lastCollect.getTime() < 24 * 3_600_000;
-    return { sources, totals, lastCollect, runs, funnel, prov, detectors, live24h, nextRun: nextCronRun() };
+    return { sources, totals, lastCollect, runs, funnel, prov, detectors, alertHealth, live24h, nextRun: nextCronRun() };
   } catch (err) {
     logger.error("health page query failed", { error: err instanceof Error ? err : String(err) });
     return null;
@@ -152,7 +154,17 @@ async function HealthContent() {
           </div>
         </section>
 
-        <section className="grid gap-4 text-sm md:grid-cols-2">
+        <section className="grid gap-4 text-sm md:grid-cols-3">
+          <div>
+            <h2 className="mb-2 text-lg font-semibold">Alerts engine</h2>
+            <p>
+              {Object.entries(data.alertHealth.byStatus).map(([k, v]) => `${k} ${v}`).join(" · ") || "no alerts yet"}. Last run: {fmt(data.alertHealth.lastRun)}
+              {data.alertHealth.lastRunStatus ? ` (${data.alertHealth.lastRunStatus})` : ""}. Runs after every pipeline cycle and again at 07:30 IST, after quiet hours.{" "}
+              <a className="underline underline-offset-4" href="/alerts">
+                Alert inbox
+              </a>
+            </p>
+          </div>
           <div>
             <h2 className="mb-2 text-lg font-semibold">Backfill vs live</h2>
             <p>

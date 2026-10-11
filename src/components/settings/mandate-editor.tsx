@@ -219,7 +219,7 @@ export function MandateEditor({ profileId, initial, sectors, stages, triggerKeys
         </div>
       </Section>
 
-      <Section title="Alerts" hint="Alert delivery arrives in M9; thresholds are stored now and read by the alerts engine.">
+      <Section title="Alerts" hint="Alerts at or above the severity are emailed immediately (subject to quiet hours, the daily cap and the 24 h cooldown); lower ones are held for the next digest. Unticking a trigger suppresses it.">
         <div className="grid gap-3 text-sm sm:grid-cols-3">
           <label className="flex items-center gap-2">
             <input type="checkbox" checked={cfg.alerts.enabled} onChange={(e) => set({ alerts: { ...cfg.alerts, enabled: e.target.checked } })} /> Alerts enabled
@@ -255,7 +255,7 @@ export function MandateEditor({ profileId, initial, sectors, stages, triggerKeys
         <div className="flex flex-wrap gap-3 text-sm">
           {triggerKeys.map((k) => (
             <label key={k} className="flex items-center gap-1">
-              <input type="checkbox" checked={cfg.alerts.triggers_enabled[k] ?? false} onChange={(e) => set({ alerts: { ...cfg.alerts, triggers_enabled: { ...cfg.alerts.triggers_enabled, [k]: e.target.checked } } })} /> {k.replace(/_/g, " ")}
+              <input type="checkbox" checked={cfg.alerts.triggers_enabled[k] ?? true} onChange={(e) => set({ alerts: { ...cfg.alerts, triggers_enabled: { ...cfg.alerts.triggers_enabled, [k]: e.target.checked } } })} /> {k.replace(/_/g, " ")}
             </label>
           ))}
         </div>

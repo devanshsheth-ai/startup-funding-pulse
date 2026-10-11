@@ -8,6 +8,7 @@ import { WatchlistManager } from "@/components/settings/watchlist-manager";
 import { Card, Disclosure, Loading, Page, ProfileSwitcher } from "@/components/ui";
 import { getTracked, getWatchlist, getWatchSuggestions } from "@/db/queries/portfolio";
 import { getEnv } from "@/lib/env";
+import { TRIGGERS } from "@/pipeline/alerts/policy";
 import { ALL_STAGES, SECTORS } from "@/lib/taxonomy";
 import { param, resolveProfile, type SearchParams } from "@/lib/view";
 
@@ -39,7 +40,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
           initial={active.config}
           sectors={[...SECTORS]}
           stages={[...ALL_STAGES]}
-          triggerKeys={Object.keys(active.config.alerts.triggers_enabled)}
+          triggerKeys={Object.keys(TRIGGERS)}
           digestToOverride={!!getEnv().DIGEST_TO}
         />
       </section>

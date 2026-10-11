@@ -124,6 +124,19 @@ async function collectOne(source: SourceRow, runId: string): Promise<SourceOutco
   }
 }
 
+/**
+ * Per-source isolation: collectOne already records fetch/parse failures on the
+ * source row; anything that still escapes (a DB hiccup mid-source) becomes an
+ * error outcome for that source only, never an aborted collection run.
+ */
+export async function collectIsolated(source: Pick<SourceRow, "id" | "name">, fn: (s: SourceRow) => Promise<SourceOutcome>): Promise<SourceOutcome> {
+  try {
+    return await fn(source as SourceRow);
+  } catch (err) {
+    return { sourceId: source.id, name: source.name, status: "error", fetched: 0, tooOld: 0, inserted: 0, duplicates: 0, error: err instanceof Error ? err.message : String(err) };
+  }
+}
+
 export async function runCollect(opts: {
   runId: string;
   cursor: string | null;
@@ -151,7 +164,7 @@ export async function runCollect(opts: {
       stoppedEarly = true;
       break;
     }
-    const outcome = await collectOne(source, opts.runId);
+    const outcome = await collectIsolated(source, (src) => collectOne(src, opts.runId));
     outcomes.push(outcome);
     lastId = source.id;
     log.info("source collected", { ...outcome });
