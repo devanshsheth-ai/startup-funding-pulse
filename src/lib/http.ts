@@ -39,6 +39,8 @@ export interface FetchOptions {
   headers?: Record<string, string>;
   /** Skip robots.txt — only for APIs (not crawling), e.g. a news or FX API. */
   skipRobots?: boolean;
+  /** Give up rather than wait longer than this for the host's politeness slot. */
+  maxWaitMs?: number;
 }
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
@@ -49,12 +51,13 @@ const lastHit = new Map<string, number>();
 const hostSpacing = new Map<string, number>();
 const DEFAULT_SPACING_MS = 1000;
 
-async function politeWait(host: string): Promise<void> {
+async function politeWait(host: string, maxWaitMs = Infinity): Promise<void> {
   const spacing = hostSpacing.get(host) ?? DEFAULT_SPACING_MS;
   const prev = lastHit.get(host);
   const next = prev === undefined ? Date.now() : Math.max(Date.now(), prev + spacing);
-  lastHit.set(host, next);
   const wait = next - Date.now();
+  if (wait > maxWaitMs) throw new FetchError(`host busy: politeness wait ${wait}ms exceeds ${maxWaitMs}ms`, null, false);
+  lastHit.set(host, next);
   if (wait > 0) await sleep(wait);
 }
 
@@ -103,7 +106,7 @@ export async function assertRobotsAllowed(url: string): Promise<void> {
 }
 
 export async function fetchText(url: string, opts: FetchOptions = {}): Promise<{ text: string; finalUrl: string }> {
-  const { timeoutMs = 15_000, retries = 2, baseDelayMs = 800, headers = {}, skipRobots = false } = opts;
+  const { timeoutMs = 15_000, retries = 2, baseDelayMs = 800, headers = {}, skipRobots = false, maxWaitMs } = opts;
   if (!skipRobots) await assertRobotsAllowed(url);
   const host = new URL(url).host;
 
@@ -114,7 +117,7 @@ export async function fetchText(url: string, opts: FetchOptions = {}): Promise<{
   let lastError: FetchError | null = null;
   for (let attempt = 0; attempt <= maxAttempts; attempt++) {
     if (attempt > 0) await sleep(baseDelayMs * 2 ** (attempt - 1) + Math.floor(Math.random() * 250));
-    await politeWait(host);
+    await politeWait(host, maxWaitMs);
     try {
       const res = await rawFetch(url, timeoutMs, headers);
       if (res.ok) return { text: await res.text(), finalUrl: res.url || url };
