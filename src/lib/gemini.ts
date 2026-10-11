@@ -192,6 +192,12 @@ async function withRetry<T>(fn: () => Promise<T>, attempts = 4, baseMs = 2_000):
   throw new GeminiUnavailableError(`Gemini ${kind} (HTTP ${status ?? "n/a"}): ${msg.slice(0, 300)}`, status);
 }
 
+/** True when structured calls can be made (key + model configured). */
+export function geminiConfigured(): boolean {
+  const env = getEnv();
+  return !!env.GEMINI_API_KEY && !!env.GEMINI_MODEL;
+}
+
 function modelId(): string {
   return requireEnv("GEMINI_MODEL");
 }

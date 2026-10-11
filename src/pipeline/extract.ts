@@ -2,7 +2,7 @@ import { and, asc, eq, gt, inArray, isNull } from "drizzle-orm";
 import { PIPELINE } from "@/config/pipeline";
 import { getDb } from "@/db/client";
 import { extractedRecords, rawArticles, sources } from "@/db/schema";
-import { GeminiOutputError, GeminiUnavailableError, generateStructured, type PromptRef } from "@/lib/gemini";
+import { GeminiOutputError, GeminiUnavailableError, geminiConfigured, generateStructured, type PromptRef } from "@/lib/gemini";
 import { runLogger } from "@/lib/logger";
 import { sendToQuarantine, startStage, type StageRun } from "@/lib/run-log";
 import { SECTOR_HINTS, ALL_STAGES } from "@/lib/taxonomy";
@@ -132,6 +132,12 @@ export async function runExtract(opts: {
 }): Promise<StageResult> {
   const log = runLogger(opts.runId, "extract");
   const stage = await startStage(opts.runId, "extract");
+  if (!geminiConfigured()) {
+    // Without a key every call would fail; skip cleanly rather than quarantine articles.
+    await stage.finish("partial", { stopReason: "Gemini not configured (GEMINI_API_KEY / GEMINI_MODEL unset)" });
+    log.warn("gemini not configured; extract skipped");
+    return { processed: 0, next_cursor: null };
+  }
   const db = getDb();
   const mode = opts.ingestionMode ?? "live";
   const afterId = opts.cursor ? Number(opts.cursor) : 0;

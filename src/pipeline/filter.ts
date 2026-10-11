@@ -2,7 +2,7 @@ import { and, asc, eq, gt, inArray, sql } from "drizzle-orm";
 import { PIPELINE } from "@/config/pipeline";
 import { getDb } from "@/db/client";
 import { rawArticles } from "@/db/schema";
-import { GeminiOutputError, GeminiUnavailableError, generateStructured } from "@/lib/gemini";
+import { GeminiOutputError, GeminiUnavailableError, geminiConfigured, generateStructured } from "@/lib/gemini";
 import { runLogger } from "@/lib/logger";
 import { sendToQuarantine, startStage } from "@/lib/run-log";
 import type { StageResult } from "@/pipeline/ingest/collect";
@@ -44,6 +44,12 @@ export async function prefilter(): Promise<number> {
 export async function runFilter(opts: { runId: string; cursor: string | null; deadline: number }): Promise<StageResult> {
   const log = runLogger(opts.runId, "filter");
   const stage = await startStage(opts.runId, "filter");
+  if (!geminiConfigured()) {
+    // Without a key every call would fail; skip cleanly rather than quarantine articles.
+    await stage.finish("partial", { stopReason: "Gemini not configured (GEMINI_API_KEY / GEMINI_MODEL unset)" });
+    log.warn("gemini not configured; filter skipped");
+    return { processed: 0, next_cursor: null };
+  }
   const db = getDb();
   const batchSize = PIPELINE.filter.batchSize;
 
