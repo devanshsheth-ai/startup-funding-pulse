@@ -17,7 +17,7 @@ import { logger } from "@/lib/logger";
 
 export const metadata = { title: "Health · Startup Funding Pulse" };
 
-const CRON_UTC = { hour: 0, minute: 30 }; // mirrors vercel.json; ±59 min on Hobby
+const CRON_UTC = { hour: 1, minute: 0 }; // mirrors vercel.json (06:30 IST); up to +59 min on Hobby
 
 function nextCronRun(now = new Date()): Date {
   const next = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), CRON_UTC.hour, CRON_UTC.minute));

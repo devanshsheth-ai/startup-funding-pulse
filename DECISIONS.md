@@ -422,3 +422,45 @@ lack a key.
 the baseline weeks have only roundups. That raises counts for the newest week (33 deals vs a
 ≈ 22/week baseline), so momentum for the current week is biased upward until live history
 replaces backfill in the baseline. This is stated in the README limitations.
+
+---
+
+## M7 — Digest and email (2026-10-12)
+
+**D-055 · The cluster trigger uses announcement dates.** PRD §13.3 counts edges by
+`detected_at`, but backfilled deals are all "detected" on the day the backfill runs, which
+would make the cluster alert fire for July deals. → The trigger counts competitor and
+same-layer edges whose **deal was announced** within `cluster_window_days`, the question the
+brief actually asks ("raised within the same ten-day window"). It fired live for Even
+Healthcare: Kinetic Age (6 Oct) and Vytalyou (30 Sep).
+
+**D-056 · Digests store their full content.** `digests.content` keeps the exact assembled
+DigestContent, and `digests.rejected` keeps every narration paragraph or bullet that code
+rejected, with the reason. `/share/[token]` re-renders exactly what was emailed, and the
+evidence enforcement is auditable.
+
+**D-057 · The delivery recipient is overridden for the demo.** Resend's shared test sender
+(`onboarding@resend.dev`) only delivers to the Resend account owner, and the account's
+`kargo.com` domain is unverified. → `DIGEST_TO` (an env var, never committed, so no personal
+email lands in the public repo) overrides the profiles' placeholder recipients. Verifying a
+domain and setting `EMAIL_FROM` removes the need.
+
+**D-058 · Gmail clipping guard.** Gmail clips HTML emails above ~102 KB, hiding the footer and
+the required disclosure. The first weekly render was 110 KB. → Ranked deals are capped at 12
+(scorecard lines only for act-now/high), adjacency is grouped one card per deal (max 6), and
+sources are capped at 3 per card. `renderDigest` also trims progressively whenever the HTML
+exceeds 98 KB. The full lists stay on the dashboard.
+
+**D-059 · Cron at 01:00 UTC (06:30 IST).** The PRD's `30 0 * * *` is 06:00 IST, before
+Aarav's 06:30 send hour, so a once-a-day run would never find the weekly digest due. Hobby
+crons can fire up to 59 minutes late, so the digest arrives 06:30–07:29 IST, before work.
+
+**D-060 · Narration safeguards in code.** Beyond the PRD's evidence rule:
+- Evidence IDs not present in the input are stripped. A paragraph with none left is rejected.
+- Ownership claims about the simulated portfolio ("our portfolio", "we invested", "holds a
+  stake in …") are rejected.
+- TL;DR and LP bullets without a number are dropped.
+- A headline over 90 characters, or without a number, is replaced by a deterministic one.
+
+If Gemini is unavailable, the digest still sends with complete figures and is marked
+"narrative unavailable this run".
