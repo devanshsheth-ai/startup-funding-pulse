@@ -145,3 +145,12 @@ stage runs first in the chain, and a failure there never blocks collection.
 **D-022 · Shared HTTP lives in `src/lib`.** `http.ts` (polite fetch) and `robots.ts` are
 infrastructure used by ingestion and FX, so they sit in `lib` rather than in a pipeline
 stage's module.
+
+---
+
+## Deployment (2026-10-11)
+
+**D-033 · Functions run in `sin1` (Singapore).** Neon is in AWS ap-southeast-1 (Singapore).
+Vercel's default function region is `iad1` (US East). The first production probe measured
+a 1.3 s `SELECT 1` round trip across that distance, and every pipeline query pays it.
+→ `vercel.json` pins `"regions": ["sin1"]`, co-locating compute with the database.
