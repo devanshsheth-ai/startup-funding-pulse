@@ -535,3 +535,36 @@ neighbour with more shared rounds). It starts from the target's lead investor(s)
 of its investors when no lead is named, and stops at any watchlist investor. Watchlist entries
 are matched to investors by id, then normalised name, then aliases; unmatched entries are
 listed rather than silently ignored.
+
+**D-071 · Releasing quiet-hours alerts.** PRD §15.2 queues alerts inside quiet hours and releases
+them "at the window's end". The pipeline runs once a day at 06:30–07:29 IST, inside the default
+22:00–07:00 quiet hours, so a release in the same run would never happen. → A second daily cron,
+`0 2 * * *` (07:30–08:29 IST given Hobby's in-hour jitter), calls `/api/cron/alerts`. It releases
+queued alerts (subject to cooldown and the daily cap) and evaluates anything new. Profiles with
+other quiet hours are released on the next run after their window ends.
+
+**D-072 · Severity threshold.** The PRD default is `severity_threshold: "high"`, while §15.1 marks
+the medium `adjacency_cluster` trigger as immediate and the seeds enable it. Read literally, the
+cluster alert could never reach the user. → The threshold is the bar for *interrupting* the user:
+alerts below it still fire, are logged, and are folded into the next digest (`batched`). Only a
+profile with alerts off, or a trigger switched off, produces `suppressed`.
+
+**D-073 · Alert candidates.** Candidates come from deals and events announced in the last 7 days,
+so backfilled history never alerts. The dedupe key is sha256(profile | trigger | portfolio | deal);
+event-based triggers use the event id, and the momentum flip uses the ISO week. An adjacency
+cluster is keyed on the raise that crossed the threshold, so one cluster alerts once. "Momentum
+flip" means a tracked company's sector moves between accelerating (z ≥ +1) and cooling (z ≤ −1)
+across consecutive completed weeks. Batched alerts appear in the next digest's "Alerts held for this
+brief" section and become `digested` once that email is sent. Failed sends stay `pending` and are
+retried on the next run.
+
+**D-074 · Graceful degradation.** Isolation now exists at every level: per source (collect), per
+stage (the dispatcher logs a throwing stage and continues the chain), per profile (alerts and
+delivery), and per section (narration degrades, the statistics still render). `/brief/latest`
+redirects to the latest stored brief, preferring one that was emailed. It reads only stored
+content, so it keeps working when today's pipeline fails, and the route error boundary links to it.
+
+**D-075 · Dark mode.** Dark mode moved from a media query to a class (`.dark` on `<html>`) set by
+an inline script before first paint, so the header toggle (Auto / Light / Dark, remembered in
+localStorage) can override the OS setting without a flash. Every chart colour is a CSS token, so
+charts follow the theme.

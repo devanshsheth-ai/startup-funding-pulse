@@ -44,6 +44,9 @@ sources → raw_articles → A filter → B extract → C normalize → D dedupe
 | Email | Resend + React Email |
 | Validation | Zod at every boundary |
 
+The full component map, with the data flow diagram, the file for every PRD component and how
+each one degrades, is in [`docs/COMPONENTS.md`](docs/COMPONENTS.md).
+
 ### Repository layout
 
 ```
@@ -107,6 +110,7 @@ pgvector, with the database's cosine distance matching the value computed locall
 | `/` This period | 7 KPI tiles (change vs previous window, 12-week sparklines), capital + count chart, sector heat, stage mix, deal-size histogram, geography, concentration, investor leaderboard, watchlist hits, adjacency alerts, ranked deals with expandable scorecards. Profile switcher, window selector, **Regenerate brief**. |
 | `/trends` | Any metric (count, capital, median) over 8/12/26 weeks: sector × week heatmap, mandate vs ecosystem, silence tracker, stage velocity, pattern history with streaks. |
 | `/investors` | **Warm-path finder**, leaderboard, new-entrant log, co-investment graph; `/investors/[id]` profile pages. |
+| `/alerts` | The alert inbox: every alert (sent, queued, batched, digested, suppressed) with the hygiene rule that decided it. |
 | `/portfolio` | Non-dismissible simulated-portfolio disclosure, per tracked company: adjacency timeline, competitive pressure, sector momentum, related events; watchlist status. |
 | `/explorer` | Every deal and event; filters, table/card views, CSV of the current view, **natural-language search** (Gemini → validated filter object, never SQL). |
 | `/sectors/[sector]` | Trend, deals, investors, cheque evolution, nightly **market map** with tracked companies placed, exits, on-demand **deep-dive** (PDF via print). |
@@ -118,6 +122,24 @@ it in the tab's session storage only (D-064). Demo of S5: change a core sector i
 save, then **Regenerate brief** on `/` — the ranking reorders (verified: making Fintech the only
 core sector for the consumer syndicate moved two Fintech deals into its top six; restoring
 reverted it exactly).
+
+## Alerts
+
+The alerts engine (PRD §15) runs after scoring in every pipeline cycle and again from a second
+cron at 07:30 IST, after the default quiet hours. Ten triggers (competitor, watchlist, same-layer,
+tracked-company mention, adjacent acquisition or shutdown, adjacency cluster, sector momentum flip,
+supplier/customer, watchlist investor backing an adjacent company) pass through the hygiene rules:
+
+- **One alert per event:** a UNIQUE `sha256(profile|trigger|portfolio|deal)` key. Re-running the
+  engine on the same data creates zero rows (verified on live data).
+- **Quiet hours queue, the daily cap and the 24 h cooldown batch.** Batched alerts appear in the
+  next digest under "Alerts held for this brief".
+- **Severity below the profile's threshold is held for the digest, never dropped** (D-072).
+  Switching a trigger off suppresses it.
+
+Immediate alerts are emailed with a subject that says what happened (`🔴 Competitor alert: Kinetic
+Age raised $250K (stage undisclosed) — competes with Even Healthcare`). The body gives the
+adjacency rationale, the deal card with sources, and the last 30 days around that tracked company.
 
 ## Assumptions
 
@@ -149,7 +171,10 @@ reverted it exactly).
   Trust") where no alias links them; this splits their counts on investor pages and the graph.
 - Market-map totals are all-time per cluster; sectors with fewer than 6 embedded companies have
   no map yet.
-- Alert delivery (immediate alerts, quiet hours) is M9; settings store the thresholds now.
+- Alert emails, like digests, go to `DIGEST_TO` while the Resend test sender is in use.
+- Queued alerts are released once a day (07:30–08:29 IST), not the minute quiet hours end,
+  because Vercel Hobby crons run daily (D-071).
+- Alerts consider deals and events from the last 7 days; older history never alerts.
 
 ## Build status
 
@@ -164,6 +189,6 @@ reverted it exactly).
 | M6 Aggregates + patterns | Done: 12 three-gate detectors (5 fired, 5 quiet, 2 suppressed with reasons for W41); zero fires below gates under restricted history; Aggregates object with `n` everywhere |
 | M7 Digest + email | Done: weekly + daily React Email templates (375 px verified), evidence-enforced narration, preview routes, share links; real digest delivered via Resend; window advances only on success |
 | M8 Web application | Done: all PRD §18 screens and §22 endpoints; S5 verified end to end (mandate change → Regenerate → reorder); NL search, warm-path finder, nightly market maps, deep-dive, CSV in/out |
-| M9 | Not started |
+| M9 Alerts, hardening, polish | Done: alerts engine with all six hygiene rules (fires once per event — second run created 0 rows; cluster trigger fired for Even Healthcare and Snitch), per-source/stage/profile isolation with a degradation test, `/brief/latest` fallback, theme toggle and light/dark pass, Components Map |
 
 Implementation decisions are logged in [`DECISIONS.md`](DECISIONS.md).
