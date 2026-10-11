@@ -1,8 +1,8 @@
-import { eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
 import type { MandateConfig } from "@/config/profile";
 import { getDb } from "@/db/client";
-import { digests, profiles } from "@/db/schema";
+import { alerts, digests, profiles } from "@/db/schema";
 import { renderDigest } from "@/emails/render";
 import { getEnv, requireEnv } from "@/lib/env";
 import { runLogger } from "@/lib/logger";
@@ -64,7 +64,7 @@ export function recipientsFor(cfg: MandateConfig): string[] {
 
 type Weekday = MandateConfig["delivery"]["days"][number];
 
-function localParts(now: Date, timeZone: string): { weekday: string; hhmm: string; date: string } {
+export function localParts(now: Date, timeZone: string): { weekday: string; hhmm: string; date: string } {
   const fmt = new Intl.DateTimeFormat("en-GB", { timeZone, weekday: "long", hour: "2-digit", minute: "2-digit", hour12: false, year: "numeric", month: "2-digit", day: "2-digit" });
   const parts = Object.fromEntries(fmt.formatToParts(now).map((p) => [p.type, p.value]));
   return { weekday: String(parts.weekday).toLowerCase(), hhmm: `${parts.hour}:${parts.minute}`, date: `${parts.year}-${parts.month}-${parts.day}` };
@@ -120,6 +120,9 @@ export async function generateAndMaybeSend(profileId: string, mode: DigestMode, 
     await db.update(digests).set({ emailSentAt: new Date(), emailStatus: "sent", updatedAt: new Date() }).where(eq(digests.id, id));
     // Window advances only now, after a confirmed send.
     await db.update(profiles).set({ lastDigestSentAt: new Date(content.generatedAt), updatedAt: new Date() }).where(eq(profiles.id, profileId));
+    // Alerts folded into this digest are now delivered.
+    const heldIds = (content.heldAlerts ?? []).map((h) => h.id);
+    if (heldIds.length) await db.update(alerts).set({ status: "digested", sentAt: new Date(), suppressedReason: `included in digest #${id}`, updatedAt: new Date() }).where(and(inArray(alerts.id, heldIds), eq(alerts.status, "batched")));
     log.info("digest sent", { profile: profileId, mode, digest_id: id, provider_id: result.providerId, attempts: result.attempts });
     return { profileId, mode, digestId: id, status: "sent", reason: `sent after ${result.attempts} attempt(s)`, shareUrl };
   }
@@ -141,7 +144,13 @@ export async function runDeliver(opts: { runId: string; cursor: string | null; d
       continue;
     }
     if (Date.now() > opts.deadline) break;
-    outcomes.push(await generateAndMaybeSend(p.id, due.mode, { send: !!env.RESEND_API_KEY && !!env.EMAIL_FROM, runId: opts.runId, now }));
+    try {
+      outcomes.push(await generateAndMaybeSend(p.id, due.mode, { send: !!env.RESEND_API_KEY && !!env.EMAIL_FROM, runId: opts.runId, now }));
+    } catch (err) {
+      // One profile's failure never blocks the others; its window is not advanced, so the
+      // next run retries, and the last good digest stays servable at /brief/latest.
+      outcomes.push({ profileId: p.id, mode: due.mode, digestId: null, status: "failed", reason: err instanceof Error ? err.message.slice(0, 300) : String(err), shareUrl: null });
+    }
   }
   const failed = outcomes.filter((o) => o.status === "failed").length;
   stage.counters.itemsOut = outcomes.filter((o) => o.status === "sent").length;

@@ -1,6 +1,6 @@
 import { Body, Container, Head, Html, Preview, Section, Text } from "@react-email/components";
 import type { DigestContent } from "@/pipeline/digest";
-import { AdjacencySection, C, DealBlock, EventLine, Footer, S, SectionTitle, usd } from "./parts";
+import { AdjacencySection, HeldAlerts, C, DealBlock, EventLine, Footer, S, SectionTitle, usd } from "./parts";
 
 /**
  * Daily digest — PRD §16.2. Deliberately a different document: no Patterns,
@@ -46,6 +46,7 @@ export function DailyDigest({ c }: { c: DigestContent }) {
             </>
           ) : null}
           <AdjacencySection c={c} mode={mode} />
+          <HeldAlerts c={c} />
 
           {/* 4. Today's deals */}
           <SectionTitle>Today&apos;s deals</SectionTitle>

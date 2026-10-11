@@ -17,6 +17,7 @@ function trimmed(c: DigestContent, step: number): DigestContent | null {
     adjacency: c.adjacency.slice(0, Math.max(3, cap - 2)),
     patterns: c.patterns.map((p) => ({ ...p, evidence: p.evidence.slice(0, 3) })),
     sectorHeat: c.sectorHeat.slice(0, 8),
+    heldAlerts: (c.heldAlerts ?? []).slice(0, cap),
   };
 }
 

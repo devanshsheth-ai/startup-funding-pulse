@@ -48,7 +48,7 @@ export function Badges({ d }: { d: DealCard }) {
 }
 
 /** Deal card with provenance: company links to the primary (earliest) source. */
-export function DealBlock({ d, mode, compact = false, showScore = true }: { d: DealCard; mode: DigestMode; compact?: boolean; showScore?: boolean }) {
+export function DealBlock({ d, mode, compact = false, showScore = true }: { d: DealCard; mode: DigestMode | "alert"; compact?: boolean; showScore?: boolean }) {
   const primary = d.sources.find((s) => s.isPrimary) ?? d.sources[0];
   const comps = d.breakdown?.components;
   return (
@@ -177,6 +177,22 @@ export function AdjacencySection({ c, mode }: { c: DigestContent; mode: DigestMo
             <DealBlock d={g.deal} mode={mode} compact />
           </Section>
         ))}
+    </>
+  );
+}
+
+/** Alerts held back (daily cap, cooldown, delivery rule) and folded into the digest. */
+export function HeldAlerts({ c }: { c: DigestContent }) {
+  const held = c.heldAlerts ?? [];
+  if (held.length === 0) return null;
+  return (
+    <>
+      <SectionTitle>Alerts held for this brief</SectionTitle>
+      {held.map((h) => (
+        <Text key={h.id} style={S.small}>
+          <strong>{h.title}</strong> — {h.body}
+        </Text>
+      ))}
     </>
   );
 }

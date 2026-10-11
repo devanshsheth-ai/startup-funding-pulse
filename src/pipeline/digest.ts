@@ -131,6 +131,8 @@ export interface DigestContent {
   links: { dashboard: string; methodology: string; settings: string; share: string | null; health: string };
   disclosure: string;
   rejected: Rejection[];
+  /** Alerts held back by the daily cap, cooldown or delivery rule, folded into this digest (PRD §15.2). */
+  heldAlerts?: { id: number; severity: string; title: string; body: string }[];
 }
 
 // ─── Window ────────────────────────────────────────────────────────────────
@@ -147,7 +149,7 @@ export function appUrl(): string {
 }
 
 /** UTM-tag outbound links so clicks are attributable (PRD §17). */
-export function withUtm(url: string, mode: DigestMode): string {
+export function withUtm(url: string, mode: DigestMode | "alert"): string {
   try {
     const u = new URL(url);
     u.searchParams.set("utm_source", "fundingpulse");
@@ -161,7 +163,7 @@ export function withUtm(url: string, mode: DigestMode): string {
 
 // ─── Loaders ───────────────────────────────────────────────────────────────
 
-async function loadDealCards(profileId: string, dealIds: string[] | null, win: { start: string; end: string } | null): Promise<DealCard[]> {
+export async function loadDealCards(profileId: string, dealIds: string[] | null, win: { start: string; end: string } | null): Promise<DealCard[]> {
   const db = getDb();
   const where = dealIds
     ? and(eq(relevanceScores.profileId, profileId), inArray(deals.id, dealIds.length ? dealIds : ["-"]))
@@ -453,6 +455,10 @@ export async function buildDigest(profile: ProfileRow & { displayName: string },
     rejected = r.rejected;
   }
 
+  const held = (await db.execute(sql`
+    SELECT id, severity, title, body FROM alerts WHERE profile_id = ${profile.id} AND status = 'batched'
+    ORDER BY CASE severity WHEN 'critical' THEN 0 WHEN 'high' THEN 1 WHEN 'medium' THEN 2 ELSE 3 END, created_at DESC LIMIT 15`)).rows as { id: number; severity: string; title: string; body: string }[];
+
   const base = appUrl();
   return {
     version: 1,
@@ -496,6 +502,7 @@ export async function buildDigest(profile: ProfileRow & { displayName: string },
     links: { dashboard: `${base}/`, methodology: `${base}/methodology?profile=${profile.id}`, settings: `${base}/settings`, share: null, health: `${base}/health` },
     disclosure: SIMULATED_PORTFOLIO_FOOTER,
     rejected,
+    heldAlerts: held.map((h) => ({ id: Number(h.id), severity: h.severity, title: h.title, body: h.body })),
   };
 }
 
