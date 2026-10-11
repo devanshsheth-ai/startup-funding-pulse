@@ -22,6 +22,34 @@
       "when": 1791718910198,
       "tag": "0002_sources_config",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1791719479572,
+      "tag": "0003_staging_and_cache",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791719749245,
+      "tag": "0004_enable_pg_trgm",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791719749593,
+      "tag": "0005_deal_source_reports",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1791719902083,
+      "tag": "0006_event_subject_key",
+      "breakpoints": true
     }
   ]
 }

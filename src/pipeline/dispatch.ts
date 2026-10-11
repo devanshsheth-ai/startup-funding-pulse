@@ -2,6 +2,10 @@ import { PIPELINE } from "@/config/pipeline";
 import { refreshLatestFx } from "@/lib/fx";
 import { runLogger } from "@/lib/logger";
 import { startStage } from "@/lib/run-log";
+import { runDedupe } from "@/pipeline/dedupe";
+import { runEnrich } from "@/pipeline/enrich";
+import { runExtract } from "@/pipeline/extract";
+import { runFilter } from "@/pipeline/filter";
 import { runCollect, type StageResult } from "@/pipeline/ingest/collect";
 
 /**
@@ -10,7 +14,7 @@ import { runCollect, type StageResult } from "@/pipeline/ingest/collect";
  * calling it until the cursor is null or the invocation budget runs out. The
  * caller schedules a continuation with the returned position.
  *
- * Later milestones append stages (filter, extract, …) to STAGES.
+ * Later milestones append stages (score, aggregate, …) to STAGES.
  */
 
 export interface StageContext {
@@ -37,6 +41,10 @@ async function fxStage(ctx: StageContext): Promise<StageResult> {
 export const STAGES: ReadonlyArray<{ key: string; run: StageRunner }> = [
   { key: "fx", run: fxStage },
   { key: "collect", run: (ctx) => runCollect(ctx) },
+  { key: "filter", run: (ctx) => runFilter(ctx) },
+  { key: "extract", run: (ctx) => runExtract(ctx) },
+  { key: "dedupe", run: (ctx) => runDedupe(ctx) },
+  { key: "enrich", run: (ctx) => runEnrich(ctx) },
 ];
 
 export interface DispatchPosition {
