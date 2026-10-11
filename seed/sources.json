@@ -1,0 +1,216 @@
+{
+  "$comment": "Source registry (PRD §9.1). Configuration only — no articles. Verified live 2026-10-11; see DECISIONS.md D-014..D-018.",
+  "sources": [
+    {
+      "name": "Entrackr",
+      "type": "rss",
+      "url": "https://entrackr.com/rss",
+      "tier": 1,
+      "parser": "rss",
+      "enabled": true
+    },
+    {
+      "name": "Inc42",
+      "type": "rss",
+      "url": "https://inc42.com/feed/",
+      "tier": 1,
+      "parser": "rss",
+      "enabled": true
+    },
+    {
+      "name": "YourStory",
+      "type": "rss",
+      "url": "https://yourstory.com/feed",
+      "tier": 1,
+      "parser": "rss",
+      "enabled": true
+    },
+    {
+      "name": "Economic Times Tech — Startups",
+      "type": "rss",
+      "url": "https://economictimes.indiatimes.com/tech/startups/rssfeeds/78570540.cms",
+      "tier": 1,
+      "parser": "rss",
+      "enabled": true
+    },
+    {
+      "name": "Economic Times Tech — Funding",
+      "type": "rss",
+      "url": "https://economictimes.indiatimes.com/tech/funding/rssfeeds/78570550.cms",
+      "tier": 1,
+      "parser": "rss",
+      "enabled": true
+    },
+    {
+      "name": "VCCircle",
+      "type": "html",
+      "url": "https://www.vccircle.com/",
+      "tier": 1,
+      "parser": "html_listing",
+      "enabled": true,
+      "config": {
+        "linkPattern": "^/[a-z0-9]+(?:-[a-z0-9]+){3,}$",
+        "minHeadlineLength": 25,
+        "maxItems": 60
+      },
+      "note": "No working RSS feed (HTTP 500); homepage listing parsed. robots.txt Crawl-delay 20s honoured."
+    },
+    {
+      "name": "Moneycontrol — Business",
+      "type": "rss",
+      "url": "https://www.moneycontrol.com/rss/business.xml",
+      "tier": 1,
+      "parser": "rss",
+      "enabled": true,
+      "note": "Intermittently returns 'Access Denied' to automated clients; failures are reported, not worked around."
+    },
+    {
+      "name": "Mint — Companies",
+      "type": "rss",
+      "url": "https://www.livemint.com/rss/companies",
+      "tier": 1,
+      "parser": "rss",
+      "enabled": true
+    },
+    {
+      "name": "BusinessLine — Companies",
+      "type": "rss",
+      "url": "https://www.thehindubusinessline.com/companies/feeder/default.rss",
+      "tier": 1,
+      "parser": "rss",
+      "enabled": true
+    },
+    {
+      "name": "TechCrunch — India",
+      "type": "rss",
+      "url": "https://techcrunch.com/tag/india/feed/",
+      "tier": 1,
+      "parser": "rss",
+      "enabled": true
+    },
+    {
+      "name": "Business Standard — Companies",
+      "type": "rss",
+      "url": "https://www.business-standard.com/rss/companies-101.rss",
+      "tier": 1,
+      "parser": "rss",
+      "enabled": false,
+      "note": "Returns HTTP 403 to identified bots. Disabled rather than spoofing a browser user-agent."
+    },
+    {
+      "name": "Techcircle",
+      "type": "html",
+      "url": "https://www.techcircle.in/",
+      "tier": 1,
+      "parser": "html_listing",
+      "enabled": false,
+      "note": "No RSS; listing pages show only 2021–2023 articles as of 2026-10-11, so the site appears unmaintained."
+    },
+    {
+      "name": "The CapTable",
+      "type": "rss",
+      "url": "https://www.thecaptable.com/feed",
+      "tier": 1,
+      "parser": "rss",
+      "enabled": false,
+      "note": "Connection fails (no response) as of 2026-10-11."
+    },
+    {
+      "name": "MediaNama",
+      "type": "rss",
+      "url": "https://www.medianama.com/feed/",
+      "tier": 1,
+      "parser": "rss",
+      "enabled": false,
+      "note": "robots.txt disallows */feed/* for all agents."
+    },
+    {
+      "name": "GNews: India startup raises funding",
+      "type": "newsapi",
+      "url": "https://gnews.io/api/v4/search?q=India+startup+raises+funding&lang=en&country=in&max=10&sortby=publishedAt",
+      "tier": 2,
+      "parser": "gnews",
+      "enabled": true
+    },
+    {
+      "name": "GNews: Series A / Series B",
+      "type": "newsapi",
+      "url": "https://gnews.io/api/v4/search?q=Indian+startup+%28%22Series+A%22+OR+%22Series+B%22%29+raises&lang=en&country=in&max=10&sortby=publishedAt",
+      "tier": 2,
+      "parser": "gnews",
+      "enabled": true
+    },
+    {
+      "name": "GNews: Seed round",
+      "type": "newsapi",
+      "url": "https://gnews.io/api/v4/search?q=India+startup+%22seed+round%22+million&lang=en&country=in&max=10&sortby=publishedAt",
+      "tier": 2,
+      "parser": "gnews",
+      "enabled": true
+    },
+    {
+      "name": "GNews: Fintech",
+      "type": "newsapi",
+      "url": "https://gnews.io/api/v4/search?q=India+fintech+startup+raises&lang=en&country=in&max=10&sortby=publishedAt",
+      "tier": 2,
+      "parser": "gnews",
+      "enabled": true
+    },
+    {
+      "name": "GNews: B2B SaaS",
+      "type": "newsapi",
+      "url": "https://gnews.io/api/v4/search?q=India+SaaS+startup+funding&lang=en&country=in&max=10&sortby=publishedAt",
+      "tier": 2,
+      "parser": "gnews",
+      "enabled": true
+    },
+    {
+      "name": "GNews: Supply chain & logistics",
+      "type": "newsapi",
+      "url": "https://gnews.io/api/v4/search?q=India+logistics+OR+%22supply+chain%22+startup+raises+funding&lang=en&country=in&max=10&sortby=publishedAt",
+      "tier": 2,
+      "parser": "gnews",
+      "enabled": true
+    },
+    {
+      "name": "GNews: Healthtech",
+      "type": "newsapi",
+      "url": "https://gnews.io/api/v4/search?q=India+healthtech+startup+raises&lang=en&country=in&max=10&sortby=publishedAt",
+      "tier": 2,
+      "parser": "gnews",
+      "enabled": true
+    },
+    {
+      "name": "GNews: AI applications",
+      "type": "newsapi",
+      "url": "https://gnews.io/api/v4/search?q=India+AI+startup+raises+funding&lang=en&country=in&max=10&sortby=publishedAt",
+      "tier": 2,
+      "parser": "gnews",
+      "enabled": true
+    },
+    {
+      "name": "GNews: Consumer & D2C",
+      "type": "newsapi",
+      "url": "https://gnews.io/api/v4/search?q=India+D2C+brand+raises+funding&lang=en&country=in&max=10&sortby=publishedAt",
+      "tier": 2,
+      "parser": "gnews",
+      "enabled": true
+    },
+    {
+      "name": "GNews: Acquisitions",
+      "type": "newsapi",
+      "url": "https://gnews.io/api/v4/search?q=India+startup+acquires+OR+acquisition&lang=en&country=in&max=10&sortby=publishedAt",
+      "tier": 2,
+      "parser": "gnews",
+      "enabled": true
+    },
+    {
+      "name": "GNews: Fund closes",
+      "type": "newsapi",
+      "url": "https://gnews.io/api/v4/search?q=India+venture+fund+%22final+close%22+OR+%22first+close%22+OR+%22new+fund%22&lang=en&country=in&max=10&sortby=publishedAt",
+      "tier": 2,
+      "parser": "gnews",
+      "enabled": true
+    }
+  ]
+}
