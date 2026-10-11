@@ -367,6 +367,10 @@ export const digests = pgTable("digests", {
   tldr: jsonb("tldr").notNull(),
   narrative: jsonb("narrative").notNull(),
   aggregates: jsonb("aggregates").notNull(),
+  /** Full rendered content, so web/share views re-render exactly what was sent (D-056). */
+  content: jsonb("content"),
+  /** Narration paragraphs/bullets rejected in code, with reasons (evidence enforcement audit). */
+  rejected: jsonb("rejected"),
   shareToken: text("share_token").unique(),
   emailSentAt: timestamp("email_sent_at", tz),
   emailStatus: text("email_status"),

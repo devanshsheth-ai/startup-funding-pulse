@@ -29,6 +29,8 @@ const envSchema = z.object({
   GEMINI_RPM: optionalString,
   RESEND_API_KEY: optionalString,
   EMAIL_FROM: optionalString,
+  /** Demo override: deliver every digest here (Resend without a verified domain). */
+  DIGEST_TO: optionalString,
   CRON_SECRET: optionalString,
   ADMIN_SECRET: optionalString,
   NEWS_API_KEY: optionalString,
