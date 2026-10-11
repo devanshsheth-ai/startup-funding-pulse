@@ -103,8 +103,8 @@ export async function generateAndMaybeSend(profileId: string, mode: DigestMode, 
   if (!profile) return { profileId, mode, digestId: null, status: "skipped", reason: "unknown profile", shareUrl: null };
   const content = await buildDigest(profile, mode, now);
 
-  // Never send an empty email (PRD §16.2).
-  if (content.counts.aggregatesN < profile.config.delivery.min_deals_to_send) {
+  // Never send an empty email (PRD §16.2). Generating without sending (Regenerate) is always allowed.
+  if (opts.send && content.counts.aggregatesN < profile.config.delivery.min_deals_to_send) {
     log.info("digest skipped: below min_deals_to_send", { profile: profileId, mode, deals: content.counts.aggregatesN });
     return { profileId, mode, digestId: null, status: "skipped", reason: `${content.counts.aggregatesN} deals < min ${profile.config.delivery.min_deals_to_send}`, shareUrl: null };
   }
