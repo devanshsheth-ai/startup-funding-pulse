@@ -1,6 +1,6 @@
 import { asc, desc, sql } from "drizzle-orm";
 import { getDb } from "@/db/client";
-import { rawArticles, runLogs, sources } from "@/db/schema";
+import { deals, events, extractedRecords, quarantine, rawArticles, runLogs, sources } from "@/db/schema";
 
 /** Read models for /health: per-source status, article totals, run log tail. */
 
@@ -111,4 +111,85 @@ export async function getLastSuccessfulCollect(): Promise<Date | null> {
     .from(runLogs)
     .where(sql`${runLogs.stage} = 'collect' and ${runLogs.status} in ('ok', 'partial')`);
   return row?.at ? new Date(row.at) : null;
+}
+
+export interface PipelineFunnel {
+  articles: number;
+  relevant: number;
+  fundingArticles: number;
+  candidateDeals: number;
+  rejectedCandidates: number;
+  uniqueDeals: number;
+  /** 1 − unique/candidates; null when there are no candidates (n = 0). */
+  dedupeReduction: number | null;
+  multiSourceDeals: number;
+  events: number;
+  dealsByMode: { mode: string; n: number }[];
+  eventsByMode: { mode: string; n: number }[];
+  quarantineByStage: { stage: string; n: number }[];
+  gemini24h: { calls: number; tokens: number };
+  dealWeeks: number;
+  earliestDeal: string | null;
+  latestDeal: string | null;
+}
+
+export async function getPipelineFunnel(): Promise<PipelineFunnel> {
+  const db = getDb();
+  const one = async <T>(q: Promise<T[]>): Promise<T | undefined> => (await q)[0];
+  const [art, cand, dl, ev, gem] = await Promise.all([
+    one(
+      db.select({
+        articles: sql<number>`count(*)::int`,
+        relevant: sql<number>`count(*) filter (where filter_verdict = 'relevant')::int`,
+        funding: sql<number>`count(*) filter (where filter_verdict = 'relevant' and event_type_guess = 'funding')::int`,
+      }).from(rawArticles),
+    ),
+    one(
+      db.select({
+        candidates: sql<number>`count(*) filter (where kind = 'funding')::int`,
+        rejected: sql<number>`count(*) filter (where kind = 'funding' and status = 'rejected')::int`,
+      }).from(extractedRecords),
+    ),
+    one(
+      db.select({
+        n: sql<number>`count(*)::int`,
+        multi: sql<number>`count(*) filter (where corroboration_count >= 2)::int`,
+        weeks: sql<number>`count(distinct iso_week)::int`,
+        earliest: sql<string | null>`min(announced_date)::text`,
+        latest: sql<string | null>`max(announced_date)::text`,
+      }).from(deals),
+    ),
+    one(db.select({ n: sql<number>`count(*)::int` }).from(events)),
+    one(
+      db.select({
+        calls: sql<number>`coalesce(sum(gemini_calls), 0)::int`,
+        tokens: sql<number>`coalesce(sum(gemini_tokens), 0)::int`,
+      }).from(runLogs).where(sql`${runLogs.startedAt} > now() - interval '24 hours'`),
+    ),
+  ]);
+  const [dealsByMode, eventsByMode, quarantineByStage] = await Promise.all([
+    db.select({ mode: deals.ingestionMode, n: sql<number>`count(*)::int` }).from(deals).groupBy(deals.ingestionMode),
+    db.select({ mode: events.ingestionMode, n: sql<number>`count(*)::int` }).from(events).groupBy(events.ingestionMode),
+    db.select({ stage: quarantine.stage, n: sql<number>`count(*)::int` }).from(quarantine).groupBy(quarantine.stage),
+  ]);
+  const candidates = (cand?.candidates ?? 0) - (cand?.rejected ?? 0);
+  const unique = dl?.n ?? 0;
+  return {
+    articles: art?.articles ?? 0,
+    relevant: art?.relevant ?? 0,
+    fundingArticles: art?.funding ?? 0,
+    candidateDeals: candidates,
+    rejectedCandidates: cand?.rejected ?? 0,
+    uniqueDeals: unique,
+    dedupeReduction: candidates > 0 ? 1 - unique / candidates : null,
+    multiSourceDeals: dl?.multi ?? 0,
+    events: ev?.n ?? 0,
+    dealsByMode,
+    eventsByMode,
+    quarantineByStage,
+    gemini24h: { calls: gem?.calls ?? 0, tokens: gem?.tokens ?? 0 },
+    dealWeeks: dl?.weeks ?? 0,
+    earliestDeal: dl?.earliest ?? null,
+    latestDeal: dl?.latest ?? null,
+  };
 }

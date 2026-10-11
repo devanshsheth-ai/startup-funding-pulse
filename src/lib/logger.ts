@@ -20,7 +20,9 @@ export interface Logger {
   child(fields: LogFields): Logger;
 }
 
-const SECRET_KEY_PATTERN = /(secret|password|passwd|token|api[_-]?key|authorization|cookie|database_url)/i;
+// "token" alone would also hide usage counts such as `tokens` / `gemini_tokens`;
+// match credential-style token keys only.
+const SECRET_KEY_PATTERN = /(secret|password|passwd|api[_-]?key|authorization|cookie|database_url|(^|[_-])token$|access[_-]?token|refresh[_-]?token|auth[_-]?token)/i;
 const SECRET_ENV_KEYS = [
   "DATABASE_URL",
   "GEMINI_API_KEY",

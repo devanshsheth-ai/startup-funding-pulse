@@ -1,6 +1,7 @@
 import { connection } from "next/server";
 import { Suspense } from "react";
 import {
+  getPipelineFunnel,
   getArticleTotals,
   getLastSuccessfulCollect,
   getRunLogTail,
@@ -51,14 +52,15 @@ function statusClass(s: string | null): string {
 
 async function loadHealth() {
   try {
-    const [sources, totals, lastCollect, runs] = await Promise.all([
+    const [sources, totals, lastCollect, runs, funnel] = await Promise.all([
       getSourceHealth(),
       getArticleTotals(),
       getLastSuccessfulCollect(),
       getRunLogTail(20),
+      getPipelineFunnel(),
     ]);
     const live24h = lastCollect !== null && Date.now() - lastCollect.getTime() < 24 * 3_600_000;
-    return { sources, totals, lastCollect, runs, live24h, nextRun: nextCronRun() };
+    return { sources, totals, lastCollect, runs, funnel, live24h, nextRun: nextCronRun() };
   } catch (err) {
     logger.error("health page query failed", { error: err instanceof Error ? err : String(err) });
     return null;
@@ -76,7 +78,7 @@ async function HealthContent() {
       </p>
     );
   }
-  const { sources, totals, lastCollect, runs, live24h, nextRun } = data;
+  const { sources, totals, lastCollect, runs, funnel, live24h, nextRun } = data;
   {
     const enabled = sources.filter((s) => s.enabled);
     return (
@@ -102,6 +104,47 @@ async function HealthContent() {
           <p className="opacity-70">
             Article publish dates span {fmt(totals.oldestPublished)} → {fmt(totals.newestPublished)}.
           </p>
+        </section>
+
+        <section>
+          <h2 className="mb-2 text-lg font-semibold">Pipeline funnel</h2>
+          <ol className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+            <Stat label="Articles collected" value={funnel.articles.toLocaleString("en-IN")} />
+            <Stat label="Relevant (Stage A)" value={funnel.relevant.toLocaleString("en-IN")} />
+            <Stat label="Funding candidates (Stage B)" value={funnel.candidateDeals.toLocaleString("en-IN")} />
+            <Stat label="Unique deals (after dedupe)" value={funnel.uniqueDeals.toLocaleString("en-IN")} />
+            <Stat
+              label="Dedupe reduction"
+              value={funnel.dedupeReduction === null ? "— (n = 0)" : `${Math.round(funnel.dedupeReduction * 100)}%`}
+            />
+          </ol>
+          <div className="mt-3 grid gap-1 text-sm">
+            <p>
+              Deals reported by 2+ publications: <strong>{funnel.multiSourceDeals}</strong> · Events (M&amp;A, fund closes,
+              people moves…): <strong>{funnel.events}</strong> · Rejected candidates: {funnel.rejectedCandidates}
+            </p>
+            <p>
+              Deal history: <strong>{funnel.dealWeeks}</strong> ISO weeks ({funnel.earliestDeal ?? "—"} →{" "}
+              {funnel.latestDeal ?? "—"})
+            </p>
+            <p>
+              Ingestion mode, deals:{" "}
+              {funnel.dealsByMode.length === 0
+                ? "none yet"
+                : funnel.dealsByMode.map((m) => `${m.mode} ${m.n}`).join(" · ")}
+              {" "}· events:{" "}
+              {funnel.eventsByMode.length === 0
+                ? "none yet"
+                : funnel.eventsByMode.map((m) => `${m.mode} ${m.n}`).join(" · ")}
+            </p>
+            <p>
+              Gemini, last 24h: {funnel.gemini24h.calls} calls · {funnel.gemini24h.tokens.toLocaleString("en-IN")} tokens ·
+              Quarantine:{" "}
+              {funnel.quarantineByStage.length === 0
+                ? "empty"
+                : funnel.quarantineByStage.map((q) => `${q.stage} ${q.n}`).join(" · ")}
+            </p>
+          </div>
         </section>
 
         <section>

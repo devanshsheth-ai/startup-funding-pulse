@@ -167,6 +167,14 @@ export const dealSources = pgTable("deal_sources", {
   headline: text("headline"),
   publishedAt: timestamp("published_at", tz),
   isPrimary: boolean("is_primary").notNull().default(false),
+  // What this source reported — powers merge rules and field-level badges (D-026).
+  extractedRecordId: integer("extracted_record_id"),
+  reportedStage: text("reported_stage"),
+  reportedAmountUsd: numeric("reported_amount_usd"),
+  reportedAmountRaw: text("reported_amount_raw"),
+  reportedAmountConfidence: text("reported_amount_confidence"),
+  reportedInvestorsLead: text("reported_investors_lead").array(),
+  extractionConfidence: numeric("extraction_confidence"),
   ...timestamps,
 }, (t) => [primaryKey({ columns: [t.dealId, t.rawArticleId] })]);
 
@@ -185,6 +193,7 @@ export const dealInvestors = pgTable("deal_investors", {
 export const events = pgTable("events", {
   id: text("id").primaryKey(),
   eventType: text("event_type").notNull(), // ma | shutdown | ipo_filing | layoff | people_move | fund_close | financial_result
+  subjectKey: text("subject_key"), // normalised subject for cross-week dedupe (D-027)
   companyId: integer("company_id").references(() => companies.id),
   counterpartyCompanyId: integer("counterparty_company_id").references(() => companies.id),
   headline: text("headline").notNull(),
@@ -209,6 +218,7 @@ export const events = pgTable("events", {
 }, (t) => [
   index("events_type_date_idx").on(t.eventType, t.eventDate.desc()),
   index("events_iso_week_idx").on(t.isoWeek),
+  index("events_type_subject_idx").on(t.eventType, t.subjectKey),
 ]);
 
 export const eventSources = pgTable("event_sources", {
@@ -406,5 +416,42 @@ export const fxRates = pgTable("fx_rates", {
   date: date("date").primaryKey(),
   usdInr: numeric("usd_inr").notNull(),
   source: text("source").notNull(),
+  ...timestamps,
+});
+
+// ─── Pipeline staging and caches (not in PRD §7; see DECISIONS D-023, D-024) ─
+
+/**
+ * Stage B output, before normalisation and dedupe: one row per candidate
+ * record extracted from an article. The "candidate records" step of the
+ * dedupe funnel (PRD §10 Stage D).
+ */
+export const extractedRecords = pgTable("extracted_records", {
+  id: serial("id").primaryKey(),
+  rawArticleId: integer("raw_article_id").notNull().references(() => rawArticles.id),
+  kind: text("kind").notNull(), // funding | event
+  recordIndex: integer("record_index").notNull().default(0),
+  payload: jsonb("payload").notNull(), // Zod-validated extraction
+  promptVersion: text("prompt_version").notNull(),
+  ingestionMode: text("ingestion_mode").notNull(), // live | backfill | manual
+  status: text("status").notNull().default("pending"), // pending | merged | rejected
+  rejectReason: text("reject_reason"),
+  dealId: text("deal_id").references(() => deals.id),
+  eventId: text("event_id").references(() => events.id),
+  runId: text("run_id"),
+  ...timestamps,
+}, (t) => [
+  unique("extracted_records_article_kind_index_version_unique").on(t.rawArticleId, t.kind, t.recordIndex, t.promptVersion),
+  index("extracted_records_status_idx").on(t.status),
+]);
+
+/** Gemini response cache keyed by sha256(model | prompt version | input). */
+export const geminiCache = pgTable("gemini_cache", {
+  key: text("key").primaryKey(),
+  task: text("task").notNull(),
+  model: text("model").notNull(),
+  promptVersion: text("prompt_version").notNull(),
+  response: jsonb("response").notNull(),
+  tokens: integer("tokens"),
   ...timestamps,
 });

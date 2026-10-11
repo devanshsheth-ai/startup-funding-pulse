@@ -148,9 +148,105 @@ stage's module.
 
 ---
 
+## M2 / M3 — Extraction, normalisation, dedupe, enrich (2026-10-11)
+
+**D-023 · `extracted_records` staging table.** PRD §10 Stage B says output goes "to a staging
+state" but defines no table. → `extracted_records` holds one Zod-validated payload per
+candidate record, with its prompt version, ingestion mode and status (`pending` → `merged` or
+`rejected`, with a reason). It is the "candidate records" step of the dedupe funnel on
+`/health`, and it lets a prompt change be replayed against stored articles.
+
+**D-024 · `gemini_cache` table.** CLAUDE.md §4 asks for caching by content hash. → The key is
+sha256(model | prompt id | rendered prompt). A prompt-version bump changes the key, so an
+edited prompt is never answered from a stale cache.
+
+**D-025 · A null sector maps to `Other`.** `deals.sector_primary` is NOT NULL, and the
+extractor is told to return null rather than guess. → An unclassifiable deal goes to `Other`,
+the taxonomy's explicit bucket, which is visible and countable. It is never assigned a
+guessed sector.
+
+**D-026 · Per-source reports and recompute-on-merge.** PRD §6.10 requires field-level badges
+(corroborated, single-source, disputed). → Each `deal_sources` row stores what that source
+reported (stage, amount and its confidence, lead investors). The deal row is always recomputed
+from all of its sources by the pure `mergeReports()`. That makes merging idempotent and
+order-independent, and the PRD merge rules are unit-tested. `Undisclosed` is treated as
+compatible with any named stage when matching, and defers to the named stage when merging,
+because one outlet often omits the round name another prints.
+
+**D-027 · `events.subject_key`.** Event identity needs a stable subject: the target for M&A,
+the fund name for fund closes, `person@company` for people moves. → It is stored and indexed,
+so the same event reported in two different ISO weeks within ±14 days still merges.
+
+**D-028 · Round pairs come from existing columns.** Stage E.4 asks to "write prior round back
+onto company history". → No new table. Detector 7's round pairs are derived from
+`deals.prior_round_stage` / `prior_round_date` (extracted from "has raised X to date"
+sentences) plus consecutive observed rounds for the same company.
+
+**D-029 · Structured output uses `responseJsonSchema`, generated from Zod.** CLAUDE.md §4
+names `responseSchema`. In `@google/genai`, `responseJsonSchema` is the documented field for
+standard JSON Schema. → Each output contract is one Zod schema that is both sent to Gemini
+(via `z.toJSONSchema`, with `$schema` and safe-integer bounds stripped) and used to validate
+the reply. The contract and the check cannot drift apart. Temperature ceilings (≤ 0.2 for
+classify, extract and adjudicate; ≤ 0.4 for narrate) are enforced in code.
+
+**D-030 · Gemini pacing.** Free-tier limits change and are per-model. → `GEMINI_RPM`
+(default 10) spaces calls. 429 and 5xx errors retry with exponential backoff. If quota is
+exhausted, the stage pauses cleanly and records `partial` with the reason, and the next
+daily run resumes the backlog. Nothing is marked processed that wasn't.
+
+**D-031 · Body fetching is bounded.** Article pages are fetched (robots-checked) only for
+relevant articles whose feed text is under 600 characters, one at a time per host, and are
+skipped if the host's politeness wait exceeds 3 s. VCCircle's 20 s Crawl-delay therefore
+means its articles are extracted from headline and lead. Text comes from JSON-LD
+`articleBody` when present, otherwise from the densest `<p>` block.
+
+**D-032 · Layer 3/4 candidates.** Layer 3 compares the candidate's embedding with existing
+companies' embeddings, within the same window and a compatible stage. Layer 4 sends up to 3
+of the nearest candidates to Gemini: cosine 0.78–0.88, or pg_trgm name similarity above 0.7
+(the pg_trgm extension is enabled in migration 0004). Adjudication needs `same_event` with
+confidence ≥ 0.7. Until the Gemini key is configured, only layers 1–2 run, and `/health`
+reports that.
 ## Deployment (2026-10-11)
 
 **D-033 · Functions run in `sin1` (Singapore).** Neon is in AWS ap-southeast-1 (Singapore).
 Vercel's default function region is `iad1` (US East). The first production probe measured
 a 1.3 s `SELECT 1` round trip across that distance, and every pipeline query pays it.
 → `vercel.json` pins `"regions": ["sin1"]`, co-locating compute with the database.
+
+---
+
+## M2 / M3 — live verification fixes (2026-10-11)
+
+**D-034 · Migrations run in a transaction.** The Neon HTTP migrator is not transactional: a
+failed run left migration 0003's tables created but unrecorded. → `src/scripts/migrate.ts`
+uses Neon's WebSocket `Pool` with the `neon-serverless` migrator, so pending migrations apply
+atomically. This is a local CLI script only; serverless routes stay on the HTTP driver. The two
+half-created tables were verified empty before they were dropped and re-applied.
+
+**D-035 · The Gemini schema is a keyword allowlist.** The live API rejected the extraction
+schemas with INVALID_ARGUMENT. Bisecting showed two causes: keywords outside Gemini's subset
+(`pattern`, `exclusiveMinimum`, string lengths), and nested `minItems`/`maxItems`, which blow
+up the constrained-decoding grammar. → `toGeminiSchema` keeps only the documented keywords
+and drops array-length limits. Zod still enforces every original rule on each reply, so
+validation is unchanged. Each Gemini request has a 60 s timeout. A 4xx other than 429 is
+logged as "rejected the request", not "unavailable", and pauses the stage instead of
+quarantining every article.
+
+**D-036 · Undated listing items use their first-seen date.** VCCircle's homepage listing
+carries no dates, and its 20 s Crawl-delay prevents most article-page fetches. → When neither
+the article nor the feed gives a date, `fetched_at` (when we first saw it on the live listing)
+is the announced-date fallback. It is accurate to within days for a homepage listing, and
+better than discarding the deal.
+
+**D-037 · Layer 3 needs name agreement to auto-merge.** PRD §10 calls a cosine > 0.88 pair a
+*candidate*. The first build auto-merged on it, and the M2 spot-check caught three false
+merges: Beyond Appliances was attached to both Lorazzo and EDT, and Ultraviolette to Simple
+Energy (same niche, same week, both stage "Undisclosed"). → Layer 3 auto-merges only when
+cosine ≥ 0.88 **and** pg_trgm name similarity ≥ 0.5. All other near matches go to Gemini
+adjudication. Repair: the three erroneous `deal_sources` link rows were removed (the articles
+and extractions were kept), the records re-processed, and the affected deals recomputed.
+A post-repair audit found 0 sources naming a different company from their deal.
+
+**D-038 · Log redaction keeps usage counts.** The secret-key pattern matched any key
+containing "token", which hid Gemini token counts in logs. → It now matches credential-style
+keys only (`token`, `access_token`, `auth_token`, …), not `tokens` / `gemini_tokens`.

@@ -1,0 +1,237 @@
+{
+  "$comment": "Canonical sector taxonomy (PRD \u00a79.3). Gemini must map into these names verbatim; anything else is rejected at validation. Sub-sector hints guide classification only.",
+  "sectors": [
+    {
+      "name": "Fintech",
+      "hints": [
+        "lending",
+        "SME lending",
+        "embedded finance",
+        "payments",
+        "B2B payments",
+        "wealthtech",
+        "insurtech",
+        "neobank",
+        "credit",
+        "BNPL",
+        "regtech"
+      ]
+    },
+    {
+      "name": "B2B SaaS",
+      "hints": [
+        "vertical SaaS",
+        "devtools",
+        "revenue ops",
+        "compliance tech",
+        "HR software",
+        "accounting software",
+        "ERP",
+        "cybersecurity",
+        "martech"
+      ]
+    },
+    {
+      "name": "Consumer Internet",
+      "hints": [
+        "social",
+        "marketplace (consumer)",
+        "travel",
+        "dating",
+        "consumer apps",
+        "creator economy",
+        "community"
+      ]
+    },
+    {
+      "name": "D2C & Commerce",
+      "hints": [
+        "D2C brand",
+        "personal care",
+        "beauty",
+        "fashion",
+        "premium F&B",
+        "packaged food",
+        "e-commerce",
+        "home goods"
+      ]
+    },
+    {
+      "name": "Quick Commerce",
+      "hints": [
+        "10-minute delivery",
+        "dark stores",
+        "instant delivery",
+        "q-commerce"
+      ]
+    },
+    {
+      "name": "Supply Chain & Logistics",
+      "hints": [
+        "B2B commerce",
+        "freight",
+        "trucking",
+        "warehousing",
+        "procurement",
+        "cross-border trade",
+        "last-mile",
+        "fleet"
+      ]
+    },
+    {
+      "name": "Healthtech",
+      "hints": [
+        "diagnostics",
+        "care delivery",
+        "health SaaS",
+        "mental health",
+        "pharma supply",
+        "telemedicine",
+        "medtech",
+        "health insurance"
+      ]
+    },
+    {
+      "name": "Edtech",
+      "hints": [
+        "K-12",
+        "test prep",
+        "upskilling",
+        "higher education",
+        "language learning"
+      ]
+    },
+    {
+      "name": "AI Applications",
+      "hints": [
+        "applied AI",
+        "AI agents",
+        "vernacular AI",
+        "document AI",
+        "voice AI",
+        "copilots",
+        "generative AI apps"
+      ]
+    },
+    {
+      "name": "AI Infrastructure",
+      "hints": [
+        "foundation models",
+        "LLM tooling",
+        "GPU cloud",
+        "MLOps",
+        "vector databases",
+        "AI chips (software)"
+      ]
+    },
+    {
+      "name": "Deeptech",
+      "hints": [
+        "semiconductors",
+        "robotics",
+        "quantum",
+        "advanced materials",
+        "biotech",
+        "drones",
+        "defence tech"
+      ]
+    },
+    {
+      "name": "Spacetech",
+      "hints": [
+        "launch vehicles",
+        "satellites",
+        "earth observation",
+        "space components"
+      ]
+    },
+    {
+      "name": "Climate & Energy",
+      "hints": [
+        "renewables",
+        "energy storage",
+        "carbon",
+        "circular economy",
+        "water",
+        "sustainability"
+      ]
+    },
+    {
+      "name": "Agritech",
+      "hints": [
+        "farm inputs",
+        "agri marketplace",
+        "agri fintech",
+        "precision farming",
+        "food supply chain",
+        "dairy"
+      ]
+    },
+    {
+      "name": "Mobility & EV",
+      "hints": [
+        "electric vehicles",
+        "EV charging",
+        "ride-hailing",
+        "two-wheelers",
+        "battery swapping",
+        "auto tech"
+      ]
+    },
+    {
+      "name": "Real Estate & Proptech",
+      "hints": [
+        "proptech",
+        "co-living",
+        "co-working",
+        "construction tech",
+        "home services"
+      ]
+    },
+    {
+      "name": "HR Tech",
+      "hints": [
+        "recruitment",
+        "staffing",
+        "payroll",
+        "workforce management",
+        "gig work"
+      ]
+    },
+    {
+      "name": "Gaming",
+      "hints": [
+        "casual gaming",
+        "esports",
+        "game studios",
+        "real-money gaming"
+      ]
+    },
+    {
+      "name": "Media & Content",
+      "hints": [
+        "OTT",
+        "digital media",
+        "audio",
+        "publishing",
+        "entertainment"
+      ]
+    },
+    {
+      "name": "Enterprise Services",
+      "hints": [
+        "IT services",
+        "consulting",
+        "BPO",
+        "engineering services",
+        "facility management"
+      ]
+    },
+    {
+      "name": "Other",
+      "hints": [
+        "does not fit any other sector"
+      ]
+    }
+  ]
+}
