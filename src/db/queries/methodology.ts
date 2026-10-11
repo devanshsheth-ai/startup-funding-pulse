@@ -79,7 +79,7 @@ export async function getProvenance() {
     .select({
       live: sql<number>`count(*) filter (where ${sources.enabled})::int`,
       backfill: sql<number>`count(*) filter (where ${sources.lastStatus} = 'backfill_only')::int`,
-      disabled: sql<number>`count(*) filter (where not ${sources.enabled} and coalesce(${sources.lastStatus}, '') <> 'backfill_only')::int`,
+      disabled: sql<number>`count(*) filter (where not ${sources.enabled} and coalesce(${sources.lastStatus}, '') not in ('backfill_only', 'manual'))::int`,
     })
     .from(sources);
   const modes = await db.select({ mode: deals.ingestionMode, n: sql<number>`count(*)::int` }).from(deals).groupBy(deals.ingestionMode);
