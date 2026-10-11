@@ -212,3 +212,41 @@ reports that.
 Vercel's default function region is `iad1` (US East). The first production probe measured
 a 1.3 s `SELECT 1` round trip across that distance, and every pipeline query pays it.
 → `vercel.json` pins `"regions": ["sin1"]`, co-locating compute with the database.
+
+---
+
+## M2 / M3 — live verification fixes (2026-10-11)
+
+**D-034 · Migrations run in a transaction.** The Neon HTTP migrator is not transactional: a
+failed run left migration 0003's tables created but unrecorded. → `src/scripts/migrate.ts`
+uses Neon's WebSocket `Pool` with the `neon-serverless` migrator, so pending migrations apply
+atomically. This is a local CLI script only; serverless routes stay on the HTTP driver. The two
+half-created tables were verified empty before they were dropped and re-applied.
+
+**D-035 · The Gemini schema is a keyword allowlist.** The live API rejected the extraction
+schemas with INVALID_ARGUMENT. Bisecting showed two causes: keywords outside Gemini's subset
+(`pattern`, `exclusiveMinimum`, string lengths), and nested `minItems`/`maxItems`, which blow
+up the constrained-decoding grammar. → `toGeminiSchema` keeps only the documented keywords
+and drops array-length limits. Zod still enforces every original rule on each reply, so
+validation is unchanged. Each Gemini request has a 60 s timeout. A 4xx other than 429 is
+logged as "rejected the request", not "unavailable", and pauses the stage instead of
+quarantining every article.
+
+**D-036 · Undated listing items use their first-seen date.** VCCircle's homepage listing
+carries no dates, and its 20 s Crawl-delay prevents most article-page fetches. → When neither
+the article nor the feed gives a date, `fetched_at` (when we first saw it on the live listing)
+is the announced-date fallback. It is accurate to within days for a homepage listing, and
+better than discarding the deal.
+
+**D-037 · Layer 3 needs name agreement to auto-merge.** PRD §10 calls a cosine > 0.88 pair a
+*candidate*. The first build auto-merged on it, and the M2 spot-check caught three false
+merges: Beyond Appliances was attached to both Lorazzo and EDT, and Ultraviolette to Simple
+Energy (same niche, same week, both stage "Undisclosed"). → Layer 3 auto-merges only when
+cosine ≥ 0.88 **and** pg_trgm name similarity ≥ 0.5. All other near matches go to Gemini
+adjudication. Repair: the three erroneous `deal_sources` link rows were removed (the articles
+and extractions were kept), the records re-processed, and the affected deals recomputed.
+A post-repair audit found 0 sources naming a different company from their deal.
+
+**D-038 · Log redaction keeps usage counts.** The secret-key pattern matched any key
+containing "token", which hid Gemini token counts in logs. → It now matches credential-style
+keys only (`token`, `access_token`, `auth_token`, …), not `tokens` / `gemini_tokens`.

@@ -49,6 +49,16 @@ describe("logger redaction", () => {
     expect(out).toEqual({ msg: "failed with key [redacted] at postgresql://[redacted]@ep-x.neon.tech/db" });
   });
 
+  it("keeps usage counts but hides credential tokens", () => {
+    expect(redact({ tokens: 112, gemini_tokens: 9, token: "t", access_token: "a", authToken: "b" }, [])).toEqual({
+      tokens: 112,
+      gemini_tokens: 9,
+      token: "[redacted]",
+      access_token: "[redacted]",
+      authToken: "[redacted]",
+    });
+  });
+
   it("serialises errors without stacks", () => {
     expect(redact(new Error("boom"), [])).toEqual({ name: "Error", message: "boom" });
   });
