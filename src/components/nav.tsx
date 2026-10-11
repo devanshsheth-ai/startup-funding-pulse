@@ -8,6 +8,7 @@ const LINKS = [
   { href: "/trends", label: "Trends" },
   { href: "/investors", label: "Investors" },
   { href: "/portfolio", label: "Portfolio" },
+  { href: "/alerts", label: "Alerts" },
   { href: "/explorer", label: "Explorer" },
   { href: "/sectors", label: "Sectors" },
   { href: "/digests", label: "Digests" },

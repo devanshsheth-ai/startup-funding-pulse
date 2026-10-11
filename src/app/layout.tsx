@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Nav } from "@/components/nav";
+import { ThemeToggle } from "@/components/theme-toggle";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -20,9 +21,15 @@ export const metadata: Metadata = {
   description: "Weekly Indian startup funding intelligence: ranked deals, statistically gated patterns, and portfolio adjacency alerts.",
 };
 
+// Runs before first paint: stored theme, else the OS preference. Static string, no user input.
+const THEME_SCRIPT = `try{var t=localStorage.getItem("fp_theme");var d=t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);if(d)document.documentElement.classList.add("dark")}catch(e){}`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="flex min-h-full flex-col">
         <header className="border-b border-line bg-card">
           <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
@@ -32,6 +39,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <Suspense fallback={<div className="h-7" />}>
               <Nav />
             </Suspense>
+            <div className="ml-auto">
+              <ThemeToggle />
+            </div>
           </div>
         </header>
         <div className="flex flex-1 flex-col">{children}</div>
