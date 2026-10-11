@@ -1,4 +1,4 @@
-import { and, asc, eq, inArray, isNotNull, isNull, sql } from "drizzle-orm";
+import { and, asc, eq, inArray, isNotNull, isNull, ne, sql } from "drizzle-orm";
 import { z } from "zod";
 import { mandateConfigSchema, type MandateConfig } from "@/config/profile";
 import { PIPELINE } from "@/config/pipeline";
@@ -301,7 +301,7 @@ export async function scoreProfile(p: ProfileRow, data: Awaited<ReturnType<typeo
         .where(and(eq(sectorFit.profileId, p.id), eq(sectorFit.mandateHash, hash)))
     ).map((f) => [`${f.sector}|${f.key}`, { fit: Number(f.fit), reason: f.reason }]),
   );
-  const wl = await db.select({ type: watchlist.watchType, value: watchlist.value, norm: watchlist.normalizedValue, aliases: watchlist.aliases }).from(watchlist).where(eq(watchlist.profileId, p.id));
+  const wl = await db.select({ type: watchlist.watchType, value: watchlist.value, norm: watchlist.normalizedValue, aliases: watchlist.aliases }).from(watchlist).where(and(eq(watchlist.profileId, p.id), ne(watchlist.status, "removed")));
   const watchedInvestors = new Map(wl.filter((w) => w.type === "investor").map((w) => [w.norm, w.value]));
   const watchedCompanies = new Map<string, string>();
   for (const w of wl.filter((x) => x.type === "company")) {
@@ -467,6 +467,46 @@ export async function loadScoringData() {
     S.chequeBucketMin,
   );
   return { deals: rows, investorsByDeal, investorTierByDeal, cheque };
+}
+
+/**
+ * Rescore one profile end to end (dashboard Regenerate, settings save). Same
+ * code path as the nightly stage; sector fits and adjudications are cached,
+ * so only a changed mandate or portfolio triggers new Gemini calls.
+ */
+export async function rescoreProfile(profileId: string, opts: { runId: string; deadline: number }): Promise<{ ok: boolean; scored: number; reason: string | null }> {
+  const stage = await startStage(opts.runId, "score");
+  if (!geminiConfigured()) {
+    await stage.finish("partial", { stopReason: "Gemini not configured", profile: profileId });
+    return { ok: false, scored: 0, reason: "Gemini is not configured" };
+  }
+  try {
+    const p = (await loadProfiles()).find((x) => x.id === profileId);
+    if (!p) {
+      await stage.finish("error", { profile: profileId }, "unknown profile");
+      return { ok: false, scored: 0, reason: "unknown profile" };
+    }
+    await embedPortfolio(stage.counters);
+    const data = await loadScoringData();
+    const fitsDone = await ensureSectorFits(p, data.deals.map((d) => ({ sector: d.sector, sub: d.subSector })), stage.counters, opts.deadline);
+    const adj = fitsDone ? await detectAdjacency(p, stage.counters, opts.deadline) : { done: false, stats: null };
+    if (!fitsDone || !adj.done) {
+      await stage.finish("partial", { profile: profileId, adjacency: adj.stats, stopReason: "time budget" });
+      return { ok: false, scored: 0, reason: "Ran out of time; the nightly run will finish it. Try again in a minute (results are cached)." };
+    }
+    const r = await scoreProfile(p, data, new Date());
+    stage.counters.itemsIn = data.deals.length;
+    stage.counters.itemsOut = r.scored;
+    await stage.finish("ok", { profile: profileId, adjacency: adj.stats, scores: r, trigger: "manual" });
+    return { ok: true, scored: r.scored, reason: null };
+  } catch (err) {
+    if (err instanceof GeminiUnavailableError) {
+      await stage.finish("partial", { profile: profileId, stopReason: err.message });
+      return { ok: false, scored: 0, reason: "Gemini is unavailable right now" };
+    }
+    await stage.finish("error", { profile: profileId }, err instanceof Error ? err.message : String(err));
+    throw err;
+  }
 }
 
 export async function runScore(opts: { runId: string; cursor: string | null; deadline: number }): Promise<StageResult> {

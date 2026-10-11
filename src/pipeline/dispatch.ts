@@ -9,6 +9,7 @@ import { runFilter } from "@/pipeline/filter";
 import { runDeliver } from "@/pipeline/deliver";
 import { runDetect } from "@/pipeline/detect/run";
 import { runScore } from "@/pipeline/score";
+import { runMarketMaps } from "@/pipeline/market-map";
 import { runCollect, type StageResult } from "@/pipeline/ingest/collect";
 
 /**
@@ -52,6 +53,8 @@ export const STAGES: ReadonlyArray<{ key: string; run: StageRunner }> = [
   { key: "detect", run: (ctx) => runDetect(ctx) },
   { key: "score", run: (ctx) => runScore(ctx) },
   { key: "deliver", run: (ctx) => runDeliver(ctx) },
+  // After delivery so ~20 labelling calls never delay the 06:30 send; pages read the latest map.
+  { key: "mapclusters", run: (ctx) => runMarketMaps(ctx) },
 ];
 
 export interface DispatchPosition {

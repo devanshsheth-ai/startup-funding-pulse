@@ -44,18 +44,20 @@ sources → raw_articles → A filter → B extract → C normalize → D dedupe
 | Email | Resend + React Email |
 | Validation | Zod at every boundary |
 
-### Repository layout (so far)
+### Repository layout
 
 ```
 docs/PRD.md               specification
-drizzle/                  SQL migrations (0000 enables pgvector, 0001 creates schema)
-src/app/api/health/db     M0 infrastructure probe
+drizzle/                  SQL migrations
+prompts/                  every Gemini prompt, versioned (extract, adjudicate, narrate, nl-filter, deep-dive, …)
+src/app/                  pages (/, /trends, /investors, /portfolio, /explorer, /sectors, /digests,
+                          /methodology, /settings, /health, /share/[token]) and API routes (PRD §22)
+src/components/           shared UI: charts (Recharts), deal lists, KPI tiles, settings editors
 src/db/schema.ts          full data model (PRD §7)
-src/db/client.ts          Neon HTTP + Drizzle client
-src/db/queries/           named query functions, one file per family
-src/lib/env.ts            Zod-validated environment
-src/lib/logger.ts         structured JSON logs with run_id + secret redaction
-src/scripts/migrate.ts    migration runner
+src/db/queries/           named SQL query functions, one file per family
+src/pipeline/             one module per stage (collect → … → deliver → mapclusters), digest, deep-dive, NL search
+src/lib/                  env, logger, auth, Gemini wrapper, filters, formatting
+src/scripts/              migrate, seed, pipeline, backfill, rescore, detect, mapclusters
 tests/                    Vitest suites
 ```
 
@@ -98,6 +100,25 @@ pgvector, with the database's cosine distance matching the value computed locall
 
 ---
 
+## Using the web app
+
+| Screen | What it shows |
+|---|---|
+| `/` This period | 7 KPI tiles (change vs previous window, 12-week sparklines), capital + count chart, sector heat, stage mix, deal-size histogram, geography, concentration, investor leaderboard, watchlist hits, adjacency alerts, ranked deals with expandable scorecards. Profile switcher, window selector, **Regenerate brief**. |
+| `/trends` | Any metric (count, capital, median) over 8/12/26 weeks: sector × week heatmap, mandate vs ecosystem, silence tracker, stage velocity, pattern history with streaks. |
+| `/investors` | **Warm-path finder**, leaderboard, new-entrant log, co-investment graph; `/investors/[id]` profile pages. |
+| `/portfolio` | Non-dismissible simulated-portfolio disclosure, per tracked company: adjacency timeline, competitive pressure, sector momentum, related events; watchlist status. |
+| `/explorer` | Every deal and event; filters, table/card views, CSV of the current view, **natural-language search** (Gemini → validated filter object, never SQL). |
+| `/sectors/[sector]` | Trend, deals, investors, cheque evolution, nightly **market map** with tracked companies placed, exits, on-demand **deep-dive** (PDF via print). |
+| `/digests` | Archive of every brief, with web view, PDF and JSON, plus live template previews. |
+| `/settings` | Mandate editor with **Tune weights**, watchlist (alias suggestions, bulk paste, CSV import/export, suggestions), tracked companies with keyword guidance, manual article submission. |
+
+Reading is public. Saving anything (settings, Regenerate) asks once for `ADMIN_SECRET` and keeps
+it in the tab's session storage only (D-064). Demo of S5: change a core sector in `/settings`,
+save, then **Regenerate brief** on `/` — the ranking reorders (verified: making Fintech the only
+core sector for the consumer syndicate moved two Fintech deals into its top six; restoring
+reverted it exactly).
+
 ## Assumptions
 
 - Aarav's sectors, stages, cheque size, portfolio and watchlist are not in the problem
@@ -122,8 +143,13 @@ pgvector, with the database's cosine distance matching the value computed locall
 - Vercel Hobby cron can fire up to 59 minutes late, so the 06:30 IST brief lands 06:30–07:29.
 - VCCircle's 20 s Crawl-delay limits article-page fetches, so its deals are extracted from
   headlines and leads, dated by first sighting (D-036).
-- Vercel Hobby cron fires once a day with up to ±59 minutes of jitter, so the "06:30 IST"
-  delivery time is approximate.
+- Regenerate after a mandate change takes up to ~90 s (new sector-fit calls at the free-tier
+  rate limit, then narration); with cached fits it takes ~45 s. The sector deep-dive takes 20–60 s.
+- Some investors still appear under two names (e.g. "Mirabilis" and "Mirabilis Investment
+  Trust") where no alias links them; this splits their counts on investor pages and the graph.
+- Market-map totals are all-time per cluster; sectors with fewer than 6 embedded companies have
+  no map yet.
+- Alert delivery (immediate alerts, quiet hours) is M9; settings store the thresholds now.
 
 ## Build status
 
@@ -137,6 +163,7 @@ pgvector, with the database's cosine distance matching the value computed locall
 | M5 Scoring + adjacency | Done: 882 scorecards (294 deals × 3 profiles), 45 adjacency edges with rationales, distinct top-10s per profile; live `/methodology` |
 | M6 Aggregates + patterns | Done: 12 three-gate detectors (5 fired, 5 quiet, 2 suppressed with reasons for W41); zero fires below gates under restricted history; Aggregates object with `n` everywhere |
 | M7 Digest + email | Done: weekly + daily React Email templates (375 px verified), evidence-enforced narration, preview routes, share links; real digest delivered via Resend; window advances only on success |
-| M8–M9 | Not started |
+| M8 Web application | Done: all PRD §18 screens and §22 endpoints; S5 verified end to end (mandate change → Regenerate → reorder); NL search, warm-path finder, nightly market maps, deep-dive, CSV in/out |
+| M9 | Not started |
 
 Implementation decisions are logged in [`DECISIONS.md`](DECISIONS.md).

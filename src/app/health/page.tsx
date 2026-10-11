@@ -7,6 +7,8 @@ import {
   getRunLogTail,
   getSourceHealth,
 } from "@/db/queries/ingestion";
+import { getDetectorStatus, getProvenance, listProfiles } from "@/db/queries/methodology";
+import { DETECTORS, type DetectorKey } from "@/config/detectors";
 import { logger } from "@/lib/logger";
 
 /**
@@ -52,15 +54,18 @@ function statusClass(s: string | null): string {
 
 async function loadHealth() {
   try {
-    const [sources, totals, lastCollect, runs, funnel] = await Promise.all([
+    const [sources, totals, lastCollect, runs, funnel, prov, profiles] = await Promise.all([
       getSourceHealth(),
       getArticleTotals(),
       getLastSuccessfulCollect(),
       getRunLogTail(20),
       getPipelineFunnel(),
+      getProvenance(),
+      listProfiles(),
     ]);
+    const detectors = profiles[0] ? { profile: profiles[0].displayName, ...(await getDetectorStatus(profiles[0].id)) } : null;
     const live24h = lastCollect !== null && Date.now() - lastCollect.getTime() < 24 * 3_600_000;
-    return { sources, totals, lastCollect, runs, funnel, live24h, nextRun: nextCronRun() };
+    return { sources, totals, lastCollect, runs, funnel, prov, detectors, live24h, nextRun: nextCronRun() };
   } catch (err) {
     logger.error("health page query failed", { error: err instanceof Error ? err : String(err) });
     return null;
@@ -147,6 +152,34 @@ async function HealthContent() {
           </div>
         </section>
 
+        <section className="grid gap-4 text-sm md:grid-cols-2">
+          <div>
+            <h2 className="mb-2 text-lg font-semibold">Backfill vs live</h2>
+            <p>
+              Deals by ingestion mode: {data.prov.modes.map((m) => `${m.mode} ${m.n}`).join(" · ") || "none"}. Backfill comes from weekly funding roundups; live comes from the
+              daily feeds. {data.prov.scored.n} scorecards across {data.prov.scored.profiles} profiles.
+            </p>
+          </div>
+          <div>
+            <h2 className="mb-2 text-lg font-semibold">Detector status{data.detectors?.week ? ` (${data.detectors.week}, ${data.detectors.profile})` : ""}</h2>
+            {data.detectors && data.detectors.rows.length ? (
+              <ul className="space-y-0.5">
+                {data.detectors.rows.map((r) => (
+                  <li key={r.key}>
+                    <span className={r.status === "fired" ? "text-emerald-700 dark:text-emerald-400" : r.status === "suppressed" ? "text-amber-700 dark:text-amber-400" : "opacity-70"}>
+                      {r.status === "fired" ? "active" : r.status}
+                    </span>{" "}
+                    · {DETECTORS[r.key as DetectorKey]?.label ?? r.key}
+                    {r.status === "suppressed" ? <span className="opacity-70"> — {r.reason}</span> : null}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="opacity-70">No detector run recorded yet.</p>
+            )}
+          </div>
+        </section>
+
         <section>
           <h2 className="mb-2 text-lg font-semibold">Sources</h2>
           <div className="overflow-x-auto rounded border border-black/10 dark:border-white/15">
@@ -171,7 +204,7 @@ async function HealthContent() {
                     </td>
                     <td className="px-3 py-2">{s.tier}</td>
                     <td className={`px-3 py-2 ${statusClass(s.enabled ? s.lastStatus : "disabled")}`}>
-                      {s.enabled ? (s.lastStatus ?? "not yet run") : s.lastStatus === "backfill_only" ? "backfill source" : "disabled"}
+                      {s.enabled ? (s.lastStatus ?? "not yet run") : s.lastStatus === "backfill_only" ? "backfill source" : s.lastStatus === "manual" ? "manual submissions" : "disabled"}
                     </td>
                     <td className="px-3 py-2">
                       {pct(s.successRate)} <span className="opacity-60">({s.attempts})</span>

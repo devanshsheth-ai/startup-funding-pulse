@@ -483,3 +483,55 @@ the dispatcher after collection and scoring, so a slow narration could be killed
 maximum). Chunked pipeline stages still stop at their 50 s work budget and continue in a new
 invocation; only the single digest step uses the headroom. The Gemini call has its own 60 s
 timeout, so no invocation can approach 300 s.
+
+**D-063 · Dashboard default window.** The PRD's brief window is `last_digest_sent_at → now`.
+Right after a Monday send that window is hours long, so the dashboard would open nearly empty.
+→ `/` opens on "Last 7 days". "Since last brief" (the exact digest window), 30 and 90 days
+are one click away, and the page always prints the window and comparison span it uses.
+Digests themselves still use the digest window (CLAUDE.md §7.1).
+
+**D-064 · Admin secret in the browser.** Every mutation needs ADMIN_SECRET (CLAUDE.md §6). The
+UI has no accounts. → Reading is public. On the first save the page asks for the secret,
+keeps it in `sessionStorage` for that tab only, sends it as `x-admin-secret`, and forgets it on
+a 401 or on "Lock". It is never put in a URL, cookie or local storage. Regenerate rescores and
+writes a digest row, so it needs the secret too.
+
+**D-065 · Deep-dive endpoint without a secret.** The sector deep-dive writes no product data,
+only the Gemini response cache, and an identical request is answered from that cache.
+→ `POST /api/sectors/:sector/deep-dive` is public like the other reads. It takes ~20–60 s, so
+it is a button, never run on page load. PDF export is the browser's print-to-PDF with print
+CSS (no server-side PDF dependency). Digests use the same mechanism via `/share/[token]?print=1`.
+
+**D-066 · Editor validation for tracked companies.** The seed requires 6–8 adjacency keywords.
+The editor accepts 3–10 so a user can add a company before the list is perfect. It still
+rejects bare sector names and one-word generic terms, and warns below 6. Changing the
+description or keywords clears the embedding, so the next rescore re-embeds and re-shortlists.
+
+**D-067 · Soft deletes in settings.** CLAUDE.md §2 forbids destructive deletes.
+→ Removing a watchlist entry sets `status = 'removed'` and turns alerts off; every reader
+(scoring, warm path, watchlist views) excludes removed rows, and re-adding restores it.
+Removing a tracked company sets `is_active = false`; its adjacency edges stop surfacing because
+every edge query already filters on active portfolio rows. Market-map runs insert new rows and
+pages read the latest `computed_at`, so older maps are kept.
+
+**D-068 · Market maps.** PRD §18.6 allows k-means or HDBSCAN. → Deterministic k-means++ (seed
+= hash of the sector) over the existing company embeddings. Sectors need at least 6 companies
+with embeddings. k = clamp(round(√(n/2)), 2, 6). One Gemini call per sector names all its
+clusters, falling back to the commonest sub-sector. It runs as the `mapclusters` stage after
+`deliver`, so ~11 labelling calls never delay the 06:30 send. On the sector page a tracked
+company is placed in its nearest cluster by one pgvector `<=>` lookup per company; nothing is
+clustered at request time.
+
+**D-069 · Manual deals.** PRD §22 lists `POST /api/manual-deal`, but CLAUDE.md §0.2 requires
+every record to trace to a fetched source. → The endpoint takes only an article URL. It fetches
+the page (robots.txt respected) and queues it as a raw article under a disabled "Manual
+submissions" source. The normal classify → extract → dedupe stages then create the deal, and
+extraction marks records from that source `ingestion_mode = manual`. Nobody types deal fields
+by hand.
+
+**D-070 · Warm-path graph.** "Co-investment graph" edges join investors named on the same
+round, in any role. The warm-path search is an unweighted BFS (≤ 4 hops; ties go to the
+neighbour with more shared rounds). It starts from the target's lead investor(s), or from all
+of its investors when no lead is named, and stops at any watchlist investor. Watchlist entries
+are matched to investors by id, then normalised name, then aliases; unmatched entries are
+listed rather than silently ignored.

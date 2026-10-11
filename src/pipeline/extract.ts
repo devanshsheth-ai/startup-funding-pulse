@@ -30,6 +30,7 @@ interface ArticleRow {
   publishedAt: Date | null;
   eventTypeGuess: string | null;
   sourceName: string | null;
+  sourceType: string | null;
 }
 
 export function sectorList(): string {
@@ -109,7 +110,8 @@ async function persist(kind: Kind, articles: ArticleRow[], result: Awaited<Retur
             recordIndex: i,
             payload: payload as object,
             promptVersion: result.version,
-            ingestionMode: mode,
+            // Articles submitted through POST /api/manual-deal keep ingestion_mode = manual.
+            ingestionMode: a.sourceType === "manual" ? "manual" : mode,
             runId,
           })),
         )
@@ -151,6 +153,7 @@ export async function runExtract(opts: {
       publishedAt: rawArticles.publishedAt,
       eventTypeGuess: rawArticles.eventTypeGuess,
       sourceName: sources.name,
+      sourceType: sources.type,
     })
     .from(rawArticles)
     .leftJoin(sources, eq(sources.id, rawArticles.sourceId))

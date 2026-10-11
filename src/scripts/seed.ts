@@ -7,7 +7,7 @@ import { getDb } from "@/db/client";
 import { portfolio, profiles, sources, watchlist } from "@/db/schema";
 import { profileSeedSchema, type ProfileSeed } from "@/config/profile";
 import { logger, newRunId } from "@/lib/logger";
-import { normalizeCompanyName, normalizeInvestorKey } from "@/pipeline/normalize";
+import { normalizeCompanyName, watchKey } from "@/pipeline/normalize";
 
 /**
  * Idempotent configuration seed (PRD §20). Upserts by natural key; never
@@ -73,9 +73,6 @@ async function seedSources(): Promise<number> {
 
 const PROFILE_FILES = ["profile-aarav.json", "profile-fintech-seed-fund.json", "profile-consumer-syndicate.json"];
 
-export function watchKey(type: string, value: string): string {
-  return type === "investor" ? normalizeInvestorKey(value) : normalizeCompanyName(value);
-}
 
 /** Portfolio and watchlist must not overlap (PRD §8.1). Throws on violation. */
 export function assertNoOverlap(p: ProfileSeed): void {
