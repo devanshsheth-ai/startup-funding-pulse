@@ -464,3 +464,14 @@ crons can fire up to 59 minutes late, so the digest arrives 06:30–07:29 IST, b
 
 If Gemini is unavailable, the digest still sends with complete figures and is marked
 "narrative unavailable this run".
+
+**D-061 · GNews queries (measured on the free tier, 2026-10-12).** On the free plan (12-hour
+delay, "up to 10 per request"), the 11 seeded queries from PRD §9.1 together returned 3
+articles. Every sector-specific or operator query ("India fintech startup raises", "Indian
+startup \"Series A\" OR \"Series B\" raises", "India startup acquires OR acquisition") returned
+0, and the `from` date filter returns nothing on this plan. Broad queries return results.
+→ Six broad queries with `country=in` replace them: "startup funding", "startup funding
+India", "Indian startups funding", "startup raises crore", "seed funding Indian startup",
+"venture capital fund India". The first live run fetched 31 articles (22 new). Stage A filters
+the off-topic ones cheaply. The 11 originals stay in the registry, disabled with this reason,
+and quota use drops from 11 to 6 of the 100 daily calls.
