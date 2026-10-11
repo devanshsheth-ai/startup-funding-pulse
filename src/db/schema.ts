@@ -55,6 +55,7 @@ export const sources = pgTable("sources", {
   url: text("url").notNull(),
   tier: integer("tier").notNull(),
   parser: text("parser").notNull(),
+  config: jsonb("config"), // parser-specific options, e.g. html link pattern (D-016)
   enabled: boolean("enabled").notNull().default(true),
   lastFetchedAt: timestamp("last_fetched_at", tz),
   lastStatus: text("last_status"), // ok | error | empty
