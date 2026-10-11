@@ -174,8 +174,12 @@ export async function findMatch(
     .orderBy(sql`greatest(${simExpr}, ${trgmExpr}) DESC`)
     .limit(W.maxAdjudicationsPerCandidate);
 
-  const strong = near.find((n) => Number(n.sim) >= W.vectorSame);
-  if (strong) return { dealId: strong.id, layer: 3, detail: `cosine ${Number(strong.sim).toFixed(3)}` };
+  // Layer 3 makes a *candidate*; it auto-merges only when the names agree too.
+  // Embeddings alone conflate different companies in the same niche (D-037).
+  const strong = near.find((n) => Number(n.sim) >= W.vectorSame && Number(n.trgm) >= W.layer3MinNameSimilarity);
+  if (strong) {
+    return { dealId: strong.id, layer: 3, detail: `cosine ${Number(strong.sim).toFixed(3)}, name trigram ${Number(strong.trgm).toFixed(2)}` };
+  }
 
   if (near.length && getEnv().GEMINI_API_KEY && getEnv().GEMINI_MODEL) {
     const recordB = {
@@ -277,7 +281,9 @@ export async function resolveCompany(
       hqCity: sql`coalesce(${companies.hqCity}, ${c.hqCity ?? null})`,
       foundedYear: sql`coalesce(${companies.foundedYear}, ${c.foundedYear ?? null})`,
       embedding: embedding ? sql`coalesce(${companies.embedding}, ${vec(embedding)}::vector)` : companies.embedding,
-      aliases: sql`(SELECT array_agg(DISTINCT a) FROM unnest(coalesce(${companies.aliases}, '{}') || ${c.aliases ?? []}::text[]) a)`,
+      // One JSON parameter: Drizzle would expand a JS array into "(p1, p2)",
+      // which is invalid SQL for an empty list.
+      aliases: sql`(SELECT array_agg(DISTINCT a) FROM unnest(coalesce(${companies.aliases}, '{}') || ARRAY(SELECT jsonb_array_elements_text(${JSON.stringify(c.aliases ?? [])}::jsonb))) a)`,
       firstSeenAt: sql`least(${companies.firstSeenAt}, ${seen})`,
       lastEventAt: sql`greatest(${companies.lastEventAt}, ${seen})`,
       updatedAt: new Date(),
@@ -327,6 +333,26 @@ async function linkInvestors(id: string, c: DealCandidate): Promise<void> {
       }
       await db.insert(dealInvestors).values({ dealId: id, investorId, role }).onConflictDoNothing();
     }
+  }
+}
+
+/** Rebuild a deal's investor links from the extractions still attached to it. */
+export async function relinkDealInvestors(id: string): Promise<void> {
+  const db = getDb();
+  await db.delete(dealInvestors).where(eq(dealInvestors.dealId, id));
+  const recs = await db
+    .select({ payload: extractedRecords.payload, publishedAt: rawArticles.publishedAt, fetchedAt: rawArticles.fetchedAt })
+    .from(extractedRecords)
+    .innerJoin(rawArticles, eq(rawArticles.id, extractedRecords.rawArticleId))
+    .where(and(eq(extractedRecords.dealId, id), eq(extractedRecords.status, "merged")));
+  const today = toIsoDate(new Date());
+  for (const r of recs) {
+    const parsed = extractedDealSchema.safeParse(r.payload);
+    if (!parsed.success) continue;
+    const date = resolveAnnouncedDate(parsed.data.announced_date, r.publishedAt ?? r.fetchedAt, new Date());
+    if (!date) continue;
+    const built = buildDealCandidate(parsed.data, { announcedDate: date, fx: null, today });
+    if (built.ok) await linkInvestors(id, built.value);
   }
 }
 
@@ -592,6 +618,7 @@ export async function runDedupe(opts: { runId: string; cursor: string | null; de
       url: rawArticles.url,
       headline: rawArticles.headline,
       publishedAt: rawArticles.publishedAt,
+      fetchedAt: rawArticles.fetchedAt,
       publication: sources.name,
     })
     .from(extractedRecords)
@@ -600,6 +627,40 @@ export async function runDedupe(opts: { runId: string; cursor: string | null; de
     .where(eq(extractedRecords.status, "pending"))
     .orderBy(asc(extractedRecords.id))
     .limit(W.recordsPerInvocation);
+
+  // Embed every funding candidate in this chunk with one batched call rather
+  // than one paced call per record.
+  const embeddingByRecord = new Map<number, number[]>();
+  if (canEmbed) {
+    const texts: { id: number; text: string }[] = [];
+    for (const rec of pending) {
+      if (rec.kind !== "funding") continue;
+      const p = extractedDealSchema.safeParse(rec.payload);
+      if (!p.success || !p.data.company_description) continue;
+      texts.push({
+        id: rec.id,
+        text: companyEmbeddingText({
+          companyName: p.data.company_name,
+          description: p.data.company_description,
+          subSector: p.data.sub_sector,
+          businessModel: p.data.business_model,
+          sectorPrimary: p.data.sector_primary ?? "Other",
+        }),
+      });
+    }
+    if (texts.length) {
+      try {
+        const vectors = await embedTexts(texts.map((t) => t.text), { dimensions: EMBEDDING_DIMENSIONS, counters: stage.counters });
+        texts.forEach((t, i) => {
+          const v = vectors[i];
+          if (v) embeddingByRecord.set(t.id, v);
+        });
+      } catch (err) {
+        if (err instanceof GeminiUnavailableError) log.warn("embedding batch failed; layers 3-4 limited this chunk", { error: err.message });
+        else throw err;
+      }
+    }
+  }
 
   for (const rec of pending) {
     if (Date.now() > opts.deadline) break;
@@ -619,7 +680,7 @@ export async function runDedupe(opts: { runId: string; cursor: string | null; de
           funnel.rejected++;
           continue;
         }
-        const date = resolveAnnouncedDate(parsed.data.announced_date, rec.publishedAt, new Date());
+        const date = resolveAnnouncedDate(parsed.data.announced_date, rec.publishedAt ?? rec.fetchedAt, new Date());
         if (!date) {
           await reject(rec.id, "no usable announced or published date");
           funnel.rejected++;
@@ -632,10 +693,7 @@ export async function runDedupe(opts: { runId: string; cursor: string | null; de
           continue;
         }
         const c = built.value;
-        let embedding: number[] | null = null;
-        if (canEmbed && c.description) {
-          embedding = (await embedTexts([companyEmbeddingText(c)], { dimensions: EMBEDDING_DIMENSIONS, counters: stage.counters }))[0] ?? null;
-        }
+        const embedding = embeddingByRecord.get(rec.id) ?? null;
         const match = await findMatch(c, embedding, stage.counters);
         const { dealId, created } = await attachDeal(
           c,
@@ -657,7 +715,7 @@ export async function runDedupe(opts: { runId: string; cursor: string | null; de
           funnel.rejected++;
           continue;
         }
-        const date = resolveAnnouncedDate(parsed.data.event_date, rec.publishedAt, new Date());
+        const date = resolveAnnouncedDate(parsed.data.event_date, rec.publishedAt ?? rec.fetchedAt, new Date());
         if (!date) {
           await reject(rec.id, "no usable event or published date");
           funnel.rejected++;

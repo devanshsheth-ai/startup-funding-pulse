@@ -36,6 +36,8 @@ export const PIPELINE = {
     windowDays: 14,
     /** Layer 3: cosine similarity at or above this (with stage + window) → same deal. */
     vectorSame: 0.88,
+    /** Layer 3 auto-merges only if pg_trgm name similarity also reaches this. */
+    layer3MinNameSimilarity: 0.5,
     /** Layer 4: similarity in [vectorLow, vectorSame) is sent to Gemini adjudication. */
     vectorLow: 0.78,
     /** Layer 4: pg_trgm name similarity above this is also adjudicated. */
