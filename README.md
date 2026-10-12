@@ -1,4 +1,6 @@
-# Startup Funding Pulse
+# Dealscope
+
+**Startup funding intelligence for India.** Built for MESA C4 Problem Statement 14, *Startup Funding Pulse* (see `docs/PRD.md`).
 
 A weekly intelligence digest of Indian startup funding activity for an early-stage
 venture scout. It turns scattered funding announcements into a ranked, deduplicated,

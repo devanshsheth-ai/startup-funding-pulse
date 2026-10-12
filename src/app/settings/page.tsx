@@ -18,7 +18,7 @@ import { param, resolveProfile, type SearchParams } from "@/lib/view";
  * endpoint that requires ADMIN_SECRET.
  */
 
-export const metadata = { title: "Settings · Startup Funding Pulse" };
+export const metadata = { title: "Settings · Dealscope" };
 
 async function Content({ searchParams }: { searchParams: SearchParams }) {
   await connection();

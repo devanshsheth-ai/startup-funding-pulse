@@ -16,7 +16,7 @@ import { appUrl, type DigestContent } from "@/pipeline/digest";
  * generated. `?print=1` opens the print dialog (PDF, PRD §23).
  */
 
-export const metadata: Metadata = { title: "Brief · Startup Funding Pulse", robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: "Brief · Dealscope", robots: { index: false, follow: false } };
 
 async function Content({ params, searchParams }: { params: Promise<{ token: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   await connection();

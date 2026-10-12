@@ -24,7 +24,7 @@ import { toIsoDate } from "@/pipeline/normalize";
 
 // Next.js requires page components to be default exports (DECISIONS.md D-008).
 
-export const metadata = { title: "Overview · Startup Funding Pulse" };
+export const metadata = { title: "Overview · Dealscope" };
 
 async function load(sp: Record<string, string | string[] | undefined>) {
   const now = new Date();

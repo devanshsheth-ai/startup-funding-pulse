@@ -11,7 +11,7 @@ import { toIsoDate } from "@/pipeline/normalize";
 
 /** /investors (PRD §18.3): warm-path finder, leaderboard, new entrants, co-investment graph. */
 
-export const metadata = { title: "Investors · Startup Funding Pulse" };
+export const metadata = { title: "Investors · Dealscope" };
 
 function WarmPath({ r, query, profileId }: { r: WarmPathResult; query: string; profileId: string }) {
   if (!r.target) return <p className="text-sm text-muted">No company matching “{query}” has a funding round in the database.</p>;

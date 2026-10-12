@@ -27,7 +27,7 @@ export async function GET(req: NextRequest): Promise<Response> {
     return new Response(toCsv(DEALS_CSV_HEADER, rows.slice(0, CAP)), {
       headers: {
         "Content-Type": "text/csv; charset=utf-8",
-        "Content-Disposition": `attachment; filename="funding-pulse-deals-${stamp}.csv"`,
+        "Content-Disposition": `attachment; filename="dealscope-deals-${stamp}.csv"`,
         "Cache-Control": "no-store",
       },
     });

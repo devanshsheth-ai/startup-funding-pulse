@@ -12,7 +12,7 @@ import { TRIGGERS, type TriggerKey } from "@/pipeline/alerts/policy";
  * produced, sent or not, with the hygiene rule that decided its fate.
  */
 
-export const metadata = { title: "Alerts · Startup Funding Pulse" };
+export const metadata = { title: "Alerts · Dealscope" };
 
 const STATUSES = ["sent", "pending", "queued", "batched", "digested", "suppressed"] as const;
 const STATUS_TONE: Record<string, "good" | "warn" | "neutral" | "accent" | "bad"> = { sent: "good", digested: "good", pending: "accent", queued: "warn", batched: "neutral", suppressed: "neutral" };

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import Link from "next/link";
 import { Suspense } from "react";
+import { BRAND, LogoGlyph, Splash, Wordmark } from "@/components/logo";
 import { Nav } from "@/components/nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import "./globals.css";
@@ -12,8 +13,9 @@ const body = Inter({ variable: "--font-body", subsets: ["latin"] });
 const mono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Startup Funding Pulse",
-  description: "Weekly Indian startup funding intelligence: ranked deals, statistically gated patterns, and portfolio adjacency alerts.",
+  title: `${BRAND.name} — ${BRAND.tagline}`,
+  description: "Dealscope: weekly Indian startup funding intelligence with ranked deals, statistically gated patterns, and portfolio adjacency alerts.",
+  applicationName: BRAND.name,
 };
 
 // Runs before first paint. Light by default; dark only when the user chose it. Static string, no user input.
@@ -26,17 +28,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
       <body className="flex min-h-full flex-col">
+        <Splash />
         <header className="no-print sticky top-0 z-30 border-b border-line/70 bg-card/75 backdrop-blur-xl">
           <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-4 py-2.5">
-            <Link href="/" className="group flex shrink-0 items-center gap-2.5" aria-label="Funding Pulse home">
-              <span className="bg-grad grid h-9 w-9 place-items-center rounded-xl text-white shadow-[0_6px_16px_-6px_rgb(99_102_241/0.7)] transition-transform duration-300 group-hover:rotate-6 group-hover:scale-105">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                  <path d="M3 12h4l3-8 4 16 3-8h4" />
-                </svg>
+            <Link href="/" className="ds-hover group flex shrink-0 items-center gap-2.5" aria-label={`${BRAND.name} home`}>
+              <span className="bg-grad grid h-9 w-9 place-items-center rounded-xl text-white shadow-[0_6px_16px_-6px_rgb(99_102_241/0.7)] transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105">
+                <LogoGlyph size={21} />
               </span>
               <span className="hidden leading-tight sm:block">
-                <span className="block font-[family-name:var(--font-heading)] text-[15px] font-extrabold tracking-tight">Funding Pulse</span>
-                <span className="block text-[11px] text-muted">India startup intelligence</span>
+                <Wordmark className="block text-[16px]" />
+                <span className="block text-[11px] text-muted">{BRAND.tagline}</span>
               </span>
             </Link>
             <div className="min-w-0 flex-1">
@@ -51,7 +52,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <footer className="no-print mt-8 border-t border-line/70 bg-card/60 backdrop-blur">
           <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-5 text-xs text-muted">
             <span className="flex items-center gap-2">
-              <span className="live-dot" aria-hidden /> Live data from Indian startup publications · statistics in SQL · narration by Gemini with cited evidence
+              <span className="live-dot" aria-hidden /> <span className="font-semibold text-foreground">{BRAND.name}</span> · Live data from Indian startup publications · statistics in SQL · narration by Gemini with cited evidence
             </span>
             <span className="flex gap-4">
               <Link className="hover:text-accent" href="/methodology">

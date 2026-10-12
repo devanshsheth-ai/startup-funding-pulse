@@ -17,7 +17,7 @@ import { DEEP_DIVE_DAYS } from "@/pipeline/deep-dive";
 
 /** /sectors/[sector] (PRD §18.6): trend, deals, investors, cheque evolution, market map, exits, deep-dive. */
 
-export const metadata = { title: "Sector · Startup Funding Pulse" };
+export const metadata = { title: "Sector · Dealscope" };
 
 async function Content({ params, searchParams }: { params: Promise<{ sector: string }>; searchParams: SearchParams }) {
   await connection();

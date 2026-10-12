@@ -41,7 +41,7 @@ export function AlertEmail({ a }: { a: AlertEmailData }) {
       <Preview>{a.title}</Preview>
       <Body style={S.body}>
         <Container style={S.container}>
-          <Text style={S.small}>Funding Pulse alert · {a.severity}</Text>
+          <Text style={S.small}>Dealscope alert · {a.severity}</Text>
           <Text style={{ ...S.h1, fontSize: "19px", lineHeight: "26px" }}>{a.title}</Text>
 
           <Section style={{ ...S.alert, borderLeftColor: COLOR[a.severity] ?? C.red }}>

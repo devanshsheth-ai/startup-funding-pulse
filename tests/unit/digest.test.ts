@@ -87,7 +87,7 @@ describe("scheduling (isDue)", () => {
 describe("UTM tagging", () => {
   it("tags outbound links and keeps existing params", () => {
     const u = new URL(withUtm("https://inc42.com/buzz/x/?id=3", "weekly"));
-    expect(u.searchParams.get("utm_source")).toBe("fundingpulse");
+    expect(u.searchParams.get("utm_source")).toBe("dealscope");
     expect(u.searchParams.get("utm_campaign")).toBe("digest-weekly");
     expect(u.searchParams.get("id")).toBe("3");
   });

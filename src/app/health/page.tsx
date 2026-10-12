@@ -18,7 +18,7 @@ import { logger } from "@/lib/logger";
  * sources show "—" rather than 0%, and errors never render a stack trace.
  */
 
-export const metadata = { title: "Health · Startup Funding Pulse" };
+export const metadata = { title: "Health · Dealscope" };
 
 const CRON_UTC = { hour: 1, minute: 0 }; // mirrors vercel.json (06:30 IST); up to +59 min on Hobby
 

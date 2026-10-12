@@ -18,7 +18,7 @@ import { appUrl, buildDigest, loadProfileWithName, type DigestContent } from "@/
  * current window without saving or emailing it.
  */
 
-export const metadata = { title: "Brief · Startup Funding Pulse" };
+export const metadata = { title: "Brief · Dealscope" };
 // A live preview runs narration (~30–60 s).
 export const maxDuration = 300;
 

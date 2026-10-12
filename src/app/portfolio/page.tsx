@@ -16,7 +16,7 @@ import { toIsoDate } from "@/pipeline/normalize";
  * the stage label is always "Assumed stage held" (PRD §8.2).
  */
 
-export const metadata = { title: "Portfolio · Startup Funding Pulse" };
+export const metadata = { title: "Portfolio · Dealscope" };
 
 async function Content({ searchParams }: { searchParams: SearchParams }) {
   await connection();

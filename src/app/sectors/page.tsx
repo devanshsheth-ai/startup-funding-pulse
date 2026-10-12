@@ -10,7 +10,7 @@ import { param, resolveProfile, type SearchParams } from "@/lib/view";
 
 /** /sectors — index of sector pages. */
 
-export const metadata = { title: "Sectors · Startup Funding Pulse" };
+export const metadata = { title: "Sectors · Dealscope" };
 
 async function Content({ searchParams }: { searchParams: SearchParams }) {
   await connection();
