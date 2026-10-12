@@ -3,6 +3,7 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { Badge, Card, Empty, Loading, Page, ProfileSwitcher, Table, td, WindowSelector, Icon } from "@/components/ui";
 import { findWarmPath, getLeaderboard, getWatchedInvestors, getNewEntrants, layoutGraph, loadCoInvestGraph, topNetwork, type WarmPathResult } from "@/db/queries/investors";
+import { BarList } from "@/components/deals";
 import { SERIES } from "@/lib/chart-colors";
 import { shortDate, usd } from "@/lib/format";
 import { param, resolveProfile, resolveWindow, type SearchParams } from "@/lib/view";
@@ -76,6 +77,9 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
     target ? findWarmPath(active.id, target) : Promise.resolve(null),
   ]);
   const net = topNetwork(graph, 32, 1);
+  const sectorCounts = new Map<string, number>();
+  for (const e of entrants) for (const sct of e.sectors) sectorCounts.set(sct, (sectorCounts.get(sct) ?? 0) + 1);
+  const entrantSectors = [...sectorCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
   const size = 640;
   const pos = layoutGraph(net.nodes, net.edges, size);
   const watchedIds = new Set((warm?.watchedInvestors ?? (await getWatchedInvestors(active.id)).watched).map((w) => w.id));
@@ -147,6 +151,12 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
               ))}
             </ul>
           )}
+          {entrantSectors.length ? (
+            <>
+              <p className="mb-3 mt-5 border-t border-line/70 pt-4 text-xs font-semibold uppercase tracking-wide text-muted">Where new investors are writing cheques</p>
+              <BarList spread rows={entrantSectors.map(([sector, n]) => ({ key: sector, label: sector, value: n, display: `${n} new investor${n === 1 ? "" : "s"}`, highlight: true }))} />
+            </>
+          ) : null}
         </Card>
       </div>
 

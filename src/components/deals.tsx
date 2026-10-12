@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { usd, shortDate, TIER_LABELS } from "@/lib/format";
+import { usd, shortDate, TIER_HELP, TIER_LABELS } from "@/lib/format";
 import type { Scorecard } from "@/pipeline/rubric";
+import { Tip } from "./tip";
 import { Badge } from "./ui";
 
 /**
@@ -77,15 +78,15 @@ export function Provenance({ d }: { d: Pick<DealListItem, "isVerified" | "corrob
           disputed: {d.disputed.join(", ")}
         </Badge>
       ) : d.isVerified ? (
-        <Badge tone="good" title={`${d.corroboration} publications agree`}>
+        <Badge tone="good" title={`Verified: ${d.corroboration} independent publications reported this round and agree on the key facts.`}>
           ✓ {d.corroboration} sources
         </Badge>
       ) : (
-        <Badge tone="warn" title="Reported by one publication only">
+        <Badge tone="warn" title="Only one publication has reported this round so far. Treat the numbers as provisional until a second source confirms.">
           single source
         </Badge>
       )}
-      {d.ingestionMode && d.ingestionMode !== "live" ? <Badge title="How this record entered the database">{d.ingestionMode}</Badge> : null}
+      {d.ingestionMode && d.ingestionMode !== "live" ? <Badge title={d.ingestionMode === "backfill" ? "Backfill: collected from historical articles to build the baseline, not from the live daily run." : "Manual: entered by an admin with a source URL."}>{d.ingestionMode}</Badge> : null}
     </span>
   );
 }
@@ -114,8 +115,10 @@ export function ScorecardView({ card }: { card: Scorecard }) {
             if (!c) return null;
             const pct = c.max ? Math.round((100 * c.points) / c.max) : 0;
             return (
-              <div key={k} className="grid grid-cols-[8.5rem_1fr_3.5rem] items-center gap-3 text-xs" title={c.detail}>
-                <span className="text-muted">{COMPONENT_LABELS[k]}</span>
+              <div key={k} className="grid grid-cols-[8.5rem_1fr_3.5rem] items-center gap-3 text-xs">
+                <Tip text={c.detail} className="cursor-help text-muted underline decoration-dotted decoration-muted/50 underline-offset-2">
+                  {COMPONENT_LABELS[k]}
+                </Tip>
                 <span className="h-2 overflow-hidden rounded-full bg-line/70">
                   <span className="animate-grow block h-2 rounded-full bg-grad" style={{ width: `${Math.max(pct ? 4 : 0, pct)}%` }} />
                 </span>
@@ -133,9 +136,9 @@ export function ScorecardView({ card }: { card: Scorecard }) {
         </div>
       ))}
       <div className="flex items-center justify-between border-t border-line/70 pt-1.5 text-xs">
-        <span className="text-muted">
+        <Tip text="Points from the rows above, multiplied by how sure we are of the facts (fewer sources or disputed fields lower it), then capped at 100." className="cursor-help text-muted underline decoration-dotted decoration-muted/50 underline-offset-2">
           Raw {card.raw_total} × confidence {card.confidence_multiplier}
-        </span>
+        </Tip>
         <span className="font-bold">Score {card.clamped_total}</span>
       </div>
     </div>
@@ -156,7 +159,8 @@ export function ScoreRing({ score, tier }: { score: number | null; tier: string 
   const c = 2 * Math.PI * 16;
   const color = TIER_RING[tier ?? "context"] ?? "#94a3b8";
   return (
-    <span className="relative grid h-11 w-11 shrink-0 place-items-center" title="Relevance score (0–100)">
+    <Tip text={`Relevance ${score === null ? "not scored" : `${Math.round(score)}/100`} for this profile. ${TIER_HELP[tier ?? ""] ?? ""} Open the row for the breakdown.`}>
+      <span className="relative grid h-11 w-11 shrink-0 place-items-center">
       <svg viewBox="0 0 40 40" className="absolute inset-0 -rotate-90">
         <circle cx="20" cy="20" r="16" fill="none" stroke="var(--grid)" strokeWidth="4" />
         <circle cx="20" cy="20" r="16" fill="none" stroke={color} strokeWidth="4" strokeLinecap="round" strokeDasharray={`${(c * v) / 100} ${c}`}>
@@ -164,7 +168,8 @@ export function ScoreRing({ score, tier }: { score: number | null; tier: string 
         </circle>
       </svg>
       <span className="num text-[13px] font-extrabold">{score === null ? "—" : Math.round(score)}</span>
-    </span>
+      </span>
+    </Tip>
   );
 }
 
@@ -186,7 +191,7 @@ export function DealList({ deals, showScore = true, extra }: { deals: DealListIt
               <span className="min-w-0 flex-1">
                 <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
                   <span className="font-semibold">{d.company}</span>
-                  {d.tier && showScore ? <Badge tone={TIER_TONE[d.tier] ?? "neutral"}>{TIER_LABELS[d.tier] ?? d.tier}</Badge> : null}
+                  {d.tier && showScore ? <Badge tone={TIER_TONE[d.tier] ?? "neutral"} title={TIER_HELP[d.tier]}>{TIER_LABELS[d.tier] ?? d.tier}</Badge> : null}
                 </span>
                 <span className="mt-0.5 flex flex-wrap gap-x-2 text-xs text-muted">
                   <span className="font-semibold text-foreground">{usd(d.amountUsd)}</span>
@@ -230,12 +235,15 @@ export function DealList({ deals, showScore = true, extra }: { deals: DealListIt
 /** Horizontal ranked bars in plain HTML (sector heat, geography, leaderboards), animated on load. */
 export function BarList({
   rows,
+  spread = false,
 }: {
   rows: { key: string; label: ReactNode; value: number; display: ReactNode; highlight?: boolean; indicator?: ReactNode; href?: string }[];
+  /** Spread rows over the card's spare height instead of leaving a blank strip below them. */
+  spread?: boolean;
 }) {
   const max = Math.max(1, ...rows.map((r) => r.value));
   return (
-    <ul className="space-y-2.5">
+    <ul className={spread ? "flex flex-1 flex-col justify-between gap-2.5" : "space-y-2.5"}>
       {rows.map((r, i) => (
         <li key={r.key} className="group">
           <div className="mb-1 flex items-center justify-between gap-2 text-[13px]">

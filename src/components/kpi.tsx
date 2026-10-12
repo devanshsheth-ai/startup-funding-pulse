@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Tip } from "./tip";
 
 /** KPI tile: animated value, change vs the previous window, and a 12-week gradient sparkline (pure SVG). */
 
@@ -77,17 +78,21 @@ export function KpiTile({
         : "bg-rose-50 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300";
   const p = PALETTE[color];
   return (
-    <div className="card card-hover group relative flex flex-col justify-between gap-3 overflow-hidden p-4" title={hint}>
+    <div className="card card-hover group relative flex flex-col justify-between gap-3 p-4 hover:z-20 focus-within:z-20">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-semibold text-muted">{label}</span>
+        <Tip text={hint} side="bottom" className="cursor-help text-xs font-semibold text-muted underline decoration-dotted decoration-muted/50 underline-offset-4">
+          {label}
+        </Tip>
         {icon ? <span className={`grid h-8 w-8 place-items-center rounded-xl transition-transform duration-300 group-hover:scale-110 ${p.chip}`}>{icon}</span> : null}
       </div>
       <div className="num text-[1.7rem] font-extrabold leading-none">{value}</div>
       <div className="flex items-end justify-between gap-2">
-        <span className={`rounded-full px-2 py-0.5 text-[11px] font-bold tabular-nums ${tone}`} title="Change vs the previous window of equal length">
-          {delta ? delta.text : "—"}
-        </span>
-        <Sparkline values={spark} color={p.stroke} />
+        <Tip text={delta ? "Change versus the previous window of the same length. Green = moving the good way, red = the bad way, grey = neutral." : "No earlier window to compare with yet."}>
+          <span className={`rounded-full px-2 py-0.5 text-[11px] font-bold tabular-nums ${tone}`}>{delta ? delta.text : "—"}</span>
+        </Tip>
+        <Tip text="Last 12 weeks, one point per ISO week. The dashed end is the current, unfinished week.">
+          <Sparkline values={spark} color={p.stroke} />
+        </Tip>
       </div>
     </div>
   );
@@ -99,9 +104,13 @@ export function StatChip({ label, value, delta, icon, color = "indigo", hint, go
   const tone =
     !delta || delta.dir === "flat" || goodWhenUp === null ? "text-muted" : (delta.dir === "up") === goodWhenUp ? "text-up" : "text-down";
   return (
-    <div className="card card-hover flex items-center gap-3 px-4 py-3" title={hint}>
+    <div className="card card-hover flex items-center gap-3 px-4 py-3 hover:z-20 focus-within:z-20">
       {icon ? <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${p.chip}`}>{icon}</span> : null}
-      <span className="min-w-0 flex-1 text-[13px] font-medium text-muted">{label}</span>
+      <span className="min-w-0 flex-1">
+        <Tip text={hint} className="cursor-help text-[13px] font-medium text-muted underline decoration-dotted decoration-muted/50 underline-offset-4">
+          {label}
+        </Tip>
+      </span>
       <span className="num text-xl font-extrabold">{value}</span>
       <span className={`w-14 text-right text-xs font-semibold tabular-nums ${tone}`}>{delta ? delta.text : ""}</span>
     </div>

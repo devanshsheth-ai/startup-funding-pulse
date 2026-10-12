@@ -3,6 +3,9 @@ import type { ReactNode } from "react";
 import { SIMULATED_PORTFOLIO_DISCLOSURE } from "@/lib/copy";
 import type { ViewProfile, ViewWindow } from "@/lib/view";
 import { hrefWith, WINDOW_OPTIONS } from "@/lib/view";
+import { Tip } from "./tip";
+
+export { Tip };
 
 /**
  * Design-system building blocks (server components). Cards are white,
@@ -80,7 +83,7 @@ export function Card({
 }) {
   const hasInfo = note !== undefined || n !== undefined;
   return (
-    <section id={id} className={`card card-hover animate-in p-6 ${className}`}>
+    <section id={id} className={`card card-hover animate-in flex flex-col p-6 ${className}`}>
       {title ? (
         <div className="mb-5 flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-start gap-3">
@@ -103,17 +106,36 @@ export function Card({
       ) : null}
       {children}
       {!title && note ? <p className="mt-3 text-xs text-muted">{note}</p> : null}
-      {footer ? <div className="mt-4 border-t border-line/70 pt-3 text-xs text-muted">{footer}</div> : null}
+      {footer ? (
+        <div className="mt-auto pt-4">
+          <div className="border-t border-line/70 pt-3 text-xs text-muted">{footer}</div>
+        </div>
+      ) : null}
     </section>
   );
 }
 
+/**
+ * A scroll box that takes the card's spare height (at least `min` px) instead of
+ * setting it: long tables stop stretching a row and leaving its neighbours half empty.
+ */
+export function FillScroll({ min, children }: { min: number; children: ReactNode }) {
+  return (
+    <div className="relative flex-1" style={{ minHeight: min }}>
+      <div className="absolute inset-0 overflow-y-auto pr-1">{children}</div>
+    </div>
+  );
+}
+
 /** A labelled band that groups related cards on long pages. */
-export function SectionHeading({ title, subtitle, action }: { title: string; subtitle?: string; action?: ReactNode }) {
+export function SectionHeading({ title, subtitle, action, info }: { title: string; subtitle?: string; action?: ReactNode; info?: ReactNode }) {
   return (
     <div className="animate-in flex flex-wrap items-end justify-between gap-3 pt-4">
       <div>
-        <h2 className="text-xl font-extrabold tracking-tight">{title}</h2>
+        <h2 className="flex items-center gap-1 text-xl font-extrabold tracking-tight">
+          {title}
+          {info ? <InfoTip label={`About ${title}`}>{info}</InfoTip> : null}
+        </h2>
         {subtitle ? <p className="mt-0.5 text-sm text-muted">{subtitle}</p> : null}
       </div>
       {action}
@@ -123,7 +145,7 @@ export function SectionHeading({ title, subtitle, action }: { title: string; sub
 
 export function Empty({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-col items-center gap-3 rounded-2xl bg-card-2 px-6 py-10 text-center text-sm text-muted ring-1 ring-line/60">
+    <div className="flex flex-1 flex-col items-center justify-center gap-3 rounded-2xl bg-card-2 px-6 py-10 text-center text-sm text-muted ring-1 ring-line/60">
       <svg width="88" height="64" viewBox="0 0 88 64" fill="none" aria-hidden>
         <defs>
           <linearGradient id="emptyGrad" x1="0" y1="0" x2="1" y2="1">
@@ -152,38 +174,61 @@ const TONES = {
 } as const;
 
 export function Badge({ children, tone = "neutral", title }: { children: ReactNode; tone?: keyof typeof TONES; title?: string }) {
-  return (
-    <span title={title} className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold leading-4 ring-1 ring-inset ${TONES[tone]}`}>
-      {children}
-    </span>
-  );
+  const el = <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold leading-4 ring-1 ring-inset ${TONES[tone]}`}>{children}</span>;
+  return title ? <Tip text={title}>{el}</Tip> : el;
 }
 
-export function Pills({ items, label }: { items: { href: string; label: string; active: boolean }[]; label: string }) {
+export function Pills({ items, label }: { items: { href: string; label: string; active: boolean; hint?: string }[]; label: string }) {
   return (
     <nav aria-label={label} className="no-print inline-flex max-w-full flex-wrap gap-1 rounded-2xl bg-card p-1 shadow-sm ring-1 ring-line">
-      {items.map((i) => (
-        <Link
-          key={i.href + i.label}
-          href={i.href}
-          className={`rounded-xl px-3 py-1.5 text-xs font-semibold transition-all duration-200 ${
-            i.active ? "bg-grad text-white shadow-[0_4px_12px_-4px_rgb(99_102_241/0.55)]" : "text-muted hover:bg-accent-soft hover:text-accent"
-          }`}
-          aria-current={i.active ? "true" : undefined}
-        >
-          {i.label}
-        </Link>
-      ))}
+      {items.map((i) => {
+        const link = (
+          <Link
+            key={i.href + i.label}
+            href={i.href}
+            className={`rounded-xl px-3 py-1.5 text-xs font-semibold transition-all duration-200 ${
+              i.active ? "bg-grad text-white shadow-[0_4px_12px_-4px_rgb(99_102_241/0.55)]" : "text-muted hover:bg-accent-soft hover:text-accent"
+            }`}
+            aria-current={i.active ? "true" : undefined}
+          >
+            {i.label}
+          </Link>
+        );
+        return i.hint ? (
+          <Tip key={i.href + i.label} text={i.hint} side="bottom">
+            {link}
+          </Tip>
+        ) : (
+          link
+        );
+      })}
     </nav>
   );
 }
 
 export function ProfileSwitcher({ path, sp, profiles, active }: { path: string; sp: Record<string, string | string[] | undefined>; profiles: ViewProfile[]; active: ViewProfile }) {
-  return <Pills label="Profile" items={profiles.map((p) => ({ href: hrefWith(path, sp, { profile: p.id, cursor: null }), label: p.displayName, active: p.id === active.id }))} />;
+  return (
+    <Pills
+      label="Profile"
+      items={profiles.map((p) => ({
+        href: hrefWith(path, sp, { profile: p.id, cursor: null }),
+        label: p.displayName,
+        active: p.id === active.id,
+        hint: `Rank deals for this investor: core sectors ${p.config.sectors_core.map((c) => c.name).join(", ")}; stages ${p.config.mandate.stages.join(", ")}. Market totals stay the same; scores, alerts and the brief change.`,
+      }))}
+    />
+  );
 }
 
+const WINDOW_HINTS: Record<string, string> = {
+  digest: "From the moment the last brief was sent until now: exactly what the next brief will cover.",
+  "7d": "The last 7 days, compared with the 7 days before.",
+  "30d": "The last 30 days, compared with the 30 days before.",
+  "90d": "The last 90 days, compared with the 90 days before.",
+};
+
 export function WindowSelector({ path, sp, win }: { path: string; sp: Record<string, string | string[] | undefined>; win: ViewWindow }) {
-  return <Pills label="Window" items={WINDOW_OPTIONS.map((o) => ({ href: hrefWith(path, sp, { window: o.key }), label: o.label, active: o.key === win.key }))} />;
+  return <Pills label="Window" items={WINDOW_OPTIONS.map((o) => ({ href: hrefWith(path, sp, { window: o.key }), label: o.label, active: o.key === win.key, hint: WINDOW_HINTS[o.key] }))} />;
 }
 
 export function Disclosure() {

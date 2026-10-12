@@ -9,7 +9,7 @@ import { CountUp } from "@/components/count-up";
 import { Gauge, ZBars } from "@/components/gauge";
 import { BarList, DealList } from "@/components/deals";
 import { KpiTile } from "@/components/kpi";
-import { Badge, Card, Empty, Icon, InfoTip, Loading, Page, ProfileSwitcher, SectionHeading, Unavailable, WindowSelector } from "@/components/ui";
+import { Badge, Card, Empty, Icon, InfoTip, Loading, Page, ProfileSwitcher, SectionHeading, Tip, Unavailable, WindowSelector } from "@/components/ui";
 import { getAggregates } from "@/db/queries/aggregates";
 import { bucketOf, getDealSizes, getProfileWeekly, getWeeklySeries, getWindowAlerts, getWindowStats, histogram, STAGE_GROUP_ORDER, STAGE_GROUPS } from "@/db/queries/dashboard";
 import { getDealsByIds, queryDeals, queryEvents } from "@/db/queries/deals";
@@ -17,7 +17,7 @@ import { getTracked, getWatchlist } from "@/db/queries/portfolio";
 import { getPatternHistory } from "@/db/queries/trends";
 import { getLeaderboard } from "@/db/queries/investors";
 import { dealFiltersSchema, parseEventFilters } from "@/lib/deal-filters";
-import { delta, pct, RELATIONSHIP_TEXT, shortDate, usd } from "@/lib/format";
+import { delta, EVENT_HELP, pct, RELATIONSHIP_HELP, RELATIONSHIP_TEXT, shortDate, usd } from "@/lib/format";
 import { logger } from "@/lib/logger";
 import { param, resolveProfile, resolveWindow, type SearchParams } from "@/lib/view";
 import { toIsoDate } from "@/pipeline/normalize";
@@ -110,8 +110,11 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
     }))
     .sort((x, y) => y.items.length - x.items.length)
     .slice(0, 4);
-  const top = ranked.rows.slice(0, 10);
-  const watchedCompanies = watch.filter((w) => w.type === "company").sort((a, b) => (b.lastEvent ?? "").localeCompare(a.lastEvent ?? "")).slice(0, 6);
+  const top = ranked.rows.slice(0, 12);
+  const watchedCompanies = watch.filter((w) => w.type === "company").sort((a, b) => (b.lastEvent ?? "").localeCompare(a.lastEvent ?? "")).slice(0, 12);
+  const watchedInvestors = watch.filter((w) => w.type === "investor").sort((a, b) => (b.lastEvent ?? "").localeCompare(a.lastEvent ?? "")).slice(0, 10);
+  const primaryCities = new Set(cfg.mandate.geographies_primary);
+  const primaryShare = agg.cities.rows.filter((c) => primaryCities.has(c.city)).reduce((s, c) => s + c.share_pct, 0);
 
   return (
     <>
@@ -125,7 +128,17 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
               <span className="live-dot" aria-hidden /> {win.label} · {active.displayName}
             </p>
             <h2 className="mt-3 text-3xl font-extrabold leading-tight sm:text-[2.6rem]">
-              <span className="num">{stats.n}</span> deals · <span className="num">{usd(stats.capital, { undisclosed: "$0" })}</span> raised
+              <Tip text="Unique funding rounds announced in this window, after merging duplicate reports of the same round." side="bottom">
+                <span className="cursor-help">
+                  <span className="num">{stats.n}</span> deals
+                </span>
+              </Tip>{" "}
+              ·{" "}
+              <Tip text={`Sum of the amounts that were disclosed. ${agg.totals.undisclosed_n} rounds did not say how much they raised and add nothing here.`} side="bottom">
+                <span className="cursor-help">
+                  <span className="num">{usd(stats.capital, { undisclosed: "$0" })}</span> raised
+                </span>
+              </Tip>
             </h2>
             <p className="mt-3 text-[15px] leading-relaxed text-white/85">
               {hitDeals.length} watchlist {hitDeals.length === 1 ? "hit" : "hits"} · {alerts.adjacency.length} adjacent {alerts.adjacency.length === 1 ? "raise" : "raises"} around your tracked companies · market temperature {agg.temperature.value}/100
@@ -160,22 +173,22 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
       </div>
 
       {/* ── Market pulse ─────────────────────────────────────────────── */}
-      <SectionHeading title="Market pulse" subtitle="How Indian startup funding moved in this window" />
+      <SectionHeading title="Market pulse" subtitle="How Indian startup funding moved in this window" info="Market-wide numbers: the same for every profile. Hover any label for what it measures; ▲/▼ compare with the previous window of the same length." />
       <div className="stagger grid grid-cols-2 gap-5 lg:grid-cols-4">
-        <KpiTile label="Deals" color="indigo" icon={Icon.list} value={<CountUp value={stats.n} />} delta={delta(stats.n, statsPrev.n)} spark={weekly.map((w) => w.n)} hint="Unique deduplicated deals announced in the window" />
-        <KpiTile label="Total capital" color="violet" icon={Icon.chart} value={<CountUp value={stats.capital} format="usd" />} delta={delta(stats.capital, statsPrev.capital)} spark={weekly.map((w) => w.capital)} hint={`Sum of disclosed amounts; ${agg.totals.undisclosed_n} undisclosed deals excluded`} />
-        <KpiTile label="Median cheque" color="cyan" icon={Icon.layers} value={stats.median === null ? "—" : <CountUp value={stats.median} format="usd" />} delta={stats.median !== null && statsPrev.median !== null ? delta(stats.median, statsPrev.median) : null} spark={weekly.map((w) => w.median)} hint={`Median of ${agg.totals.priced_n} priced deals`} goodWhenUp={null} />
-        <KpiTile label="Market temperature" color="amber" icon={Icon.flame} value={<CountUp value={agg.temperature.value} suffix="/100" />} delta={delta(agg.temperature.value, aggPrev.temperature.value, "abs")} spark={weekly.map((w) => w.temperature)} hint="Weighted z-scores of deal count, capital, early-stage share and breadth vs the trailing 8 weeks (50 = normal)" goodWhenUp={null} />
+        <KpiTile label="Deals" color="indigo" icon={Icon.list} value={<CountUp value={stats.n} />} delta={delta(stats.n, statsPrev.n)} spark={weekly.map((w) => w.n)} hint="Unique funding rounds announced in the window. Several articles about one round count once." />
+        <KpiTile label="Total capital" color="violet" icon={Icon.chart} value={<CountUp value={stats.capital} format="usd" />} delta={delta(stats.capital, statsPrev.capital)} spark={weekly.map((w) => w.capital)} hint={`Sum of disclosed round sizes in US dollars (rupee amounts converted at that day's rate). ${agg.totals.undisclosed_n} undisclosed rounds are not counted.`} />
+        <KpiTile label="Median cheque" color="cyan" icon={Icon.layers} value={stats.median === null ? "—" : <CountUp value={stats.median} format="usd" />} delta={stats.median !== null && statsPrev.median !== null ? delta(stats.median, statsPrev.median) : null} spark={weekly.map((w) => w.median)} hint={`The middle round size of the ${agg.totals.priced_n} deals with a disclosed amount. Less distorted by one mega-round than the average.`} goodWhenUp={null} />
+        <KpiTile label="Market temperature" color="amber" icon={Icon.flame} value={<CountUp value={agg.temperature.value} suffix="/100" />} delta={delta(agg.temperature.value, aggPrev.temperature.value, "abs")} spark={weekly.map((w) => w.temperature)} hint="One number for how busy the market is versus the last 8 weeks: 50 = normal, above 60 = hot, below 40 = cool. Built from deal count, capital, early-stage share and breadth." goodWhenUp={null} />
       </div>
       <div className="stagger grid gap-5 sm:grid-cols-3">
-        <KpiTile label="Watchlist hits" color="rose" icon={Icon.star} value={<CountUp value={stats.watchlistHits} />} delta={delta(stats.watchlistHits, statsPrev.watchlistHits, "abs")} spark={profileWeekly.map((w) => w.hits)} hint="Deals involving a company on this profile's watchlist" goodWhenUp={null} />
-        <KpiTile label="Adjacency alerts" color="pink" icon={Icon.bell} value={<CountUp value={stats.adjacency} />} delta={delta(stats.adjacency, statsPrev.adjacency, "abs")} spark={profileWeekly.map((w) => w.adjacency)} hint="Raises adjacent to a tracked (simulated) portfolio company" goodWhenUp={null} />
-        <KpiTile label="Active investors" color="emerald" icon={Icon.users} value={<CountUp value={stats.investors} />} delta={delta(stats.investors, statsPrev.investors)} spark={weekly.map((w) => w.investors)} hint="Distinct investors on deals in the window" />
+        <KpiTile label="Watchlist hits" color="rose" icon={Icon.star} value={<CountUp value={stats.watchlistHits} />} delta={delta(stats.watchlistHits, statsPrev.watchlistHits, "abs")} spark={profileWeekly.map((w) => w.hits)} hint="Rounds raised by companies on this profile's watchlist. Each one also triggers an alert." goodWhenUp={null} />
+        <KpiTile label="Adjacency alerts" color="pink" icon={Icon.bell} value={<CountUp value={stats.adjacency} />} delta={delta(stats.adjacency, statsPrev.adjacency, "abs")} spark={profileWeekly.map((w) => w.adjacency)} hint="Startups that raised and were judged related to one of your tracked (simulated) companies: competitors, same-layer players, suppliers, customers or complements." goodWhenUp={null} />
+        <KpiTile label="Active investors" color="emerald" icon={Icon.users} value={<CountUp value={stats.investors} />} delta={delta(stats.investors, statsPrev.investors)} spark={weekly.map((w) => w.investors)} hint="Distinct investors (funds, angels, corporates) that joined at least one round in the window." />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2" icon={Icon.chart} title="Capital and deal count" subtitle="Last 12 weeks · bars = disclosed capital, line = deals · * = current partial week" n={weekly.reduce((s, w) => s + w.n, 0)} note="Weekly totals use ISO weeks. Capital counts disclosed amounts only; rounds without an amount still count as deals.">
-          <CapitalCountChart data={weekly.map((w) => ({ week: w.week, capital: w.capital, n: w.n, partial: w.partial }))} />
+          <CapitalCountChart fill height={280} data={weekly.map((w) => ({ week: w.week, capital: w.capital, n: w.n, partial: w.partial }))} />
         </Card>
         <Card icon={Icon.gauge} title="Market temperature" subtitle="This window vs the trailing 8 weeks · 50 = normal" n={agg.temperature.n} note="Deal count and capital weigh 35% each; early-stage share and breadth (1 − top-3 share) 15% each. Each driver is a z-score against the previous 8 weeks.">
           <Gauge value={agg.temperature.value} label="Market temperature" />
@@ -183,10 +196,10 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
             <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted">What&apos;s driving it</p>
             <ZBars
               rows={[
-                { label: "Deal count", z: agg.temperature.components.deal_count.z },
-                { label: "Capital", z: agg.temperature.components.total_capital.z },
-                { label: "Early-stage share", z: agg.temperature.components.early_stage_share.z },
-                { label: "Breadth", z: agg.temperature.components.breadth.z, detail: "How evenly capital is spread across rounds" },
+                { label: "Deal count", z: agg.temperature.components.deal_count.z, detail: "Number of rounds versus the 8-week norm. +1σ = one standard deviation busier than usual. Weight 35%." },
+                { label: "Capital", z: agg.temperature.components.total_capital.z, detail: "Disclosed capital versus the 8-week norm. Weight 35%." },
+                { label: "Early-stage share", z: agg.temperature.components.early_stage_share.z, detail: "Share of rounds that are angel to pre-Series A, versus the norm. Weight 15%." },
+                { label: "Breadth", z: agg.temperature.components.breadth.z, detail: "How evenly capital is spread across rounds (1 − top-3 share). Higher = less dominated by a few big rounds. Weight 15%." },
               ]}
             />
           </div>
@@ -195,13 +208,14 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2" icon={Icon.grid} title="Where capital went" subtitle="Box size = disclosed capital · green = more deals than last window, red = fewer, grey = flat · outlined = your core sectors" n={agg.sectors.n} note="Sectors with only undisclosed rounds get a small box so they stay visible. Click any sector for its page.">
-          {treemap.length === 0 ? <Empty>No deals in this window.</Empty> : <SectorTreemap data={treemap} />}
+          {treemap.length === 0 ? <Empty>No deals in this window.</Empty> : <SectorTreemap fill height={320} data={treemap} />}
         </Card>
         <Card icon={Icon.flame} title="Sector heat" subtitle="Ranked by capital · ▲/▼ deal count vs last window" n={agg.sectors.n} note="Gradient bars are your core mandate sectors.">
           {sectorRows.length === 0 ? (
             <Empty>No deals in this window.</Empty>
           ) : (
             <BarList
+              spread
               rows={sectorRows.slice(0, 9).map((r) => ({
                 key: r.sector,
                 label: r.sector,
@@ -237,12 +251,13 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
         </Card>
         <Card icon={Icon.layers} title="Stage mix over time" subtitle="Share of disclosed capital by stage, last 8 weeks" n={last8.reduce((s, w) => s + w.n, 0)} note="Shows capital moving between early and late rounds week by week.">
           <StageMixChart
+            fill
             keys={[...STAGE_GROUP_ORDER]}
             data={last8.map((w) => ({ label: w.week.slice(5) + (w.partial ? "*" : ""), ...Object.fromEntries(STAGE_GROUP_ORDER.map((g) => [g, w.stageCapital[g] ?? 0])) }))}
           />
         </Card>
         <Card icon={Icon.grid} title="Deal sizes" subtitle={`Distribution this window · median ${usd(sizes.median, { undisclosed: "n/a" })}`} n={sizes.amounts.length} note={`${sizes.undisclosed} undisclosed deals are not shown. The dashed line marks the median bucket.`}>
-          {sizes.amounts.length === 0 ? <Empty>No priced deals in this window.</Empty> : <HistogramChart data={histogram(sizes.amounts)} medianLabel={bucketOf(sizes.median)} />}
+          {sizes.amounts.length === 0 ? <Empty>No priced deals in this window.</Empty> : <HistogramChart fill data={histogram(sizes.amounts)} medianLabel={bucketOf(sizes.median)} />}
         </Card>
       </div>
 
@@ -251,7 +266,15 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
           {agg.cities.rows.length === 0 ? (
             <Empty>No cities reported.</Empty>
           ) : (
-            <BarList rows={agg.cities.rows.slice(0, 8).map((c) => ({ key: c.city, label: c.city, value: c.n, display: `${c.n} · ${pct(c.share_pct)}`, highlight: cfg.mandate.geographies_primary.includes(c.city) }))} />
+            <>
+            <div className="mb-4 flex items-baseline gap-2">
+              <Tip text={`Share of this window's deals (with a reported city) based in your primary cities: ${cfg.mandate.geographies_primary.join(", ")}.`}>
+                <span className="num text-gradient cursor-help text-3xl font-extrabold">{pct(primaryShare)}</span>
+              </Tip>
+              <span className="text-xs text-muted">of deals in your primary cities</span>
+            </div>
+            <BarList spread rows={agg.cities.rows.slice(0, 10).map((c) => ({ key: c.city, label: c.city, value: c.n, display: `${c.n} · ${pct(c.share_pct)}`, highlight: cfg.mandate.geographies_primary.includes(c.city) }))} />
+            </>
           )}
         </Card>
         <Card icon={Icon.pie} title="Capital concentration" subtitle="Share of capital taken by the 3 largest rounds" n={agg.concentration.n} note="When one mega-round dominates, averages mislead. Dashed line: 8-week baseline.">
@@ -259,7 +282,7 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
             <p className="num text-gradient text-4xl font-extrabold">{pct(agg.concentration.top3_share * 100)}</p>
             <p className="text-xs text-muted">vs {pct(agg.concentration.baseline_top3_share * 100)} baseline</p>
           </div>
-          <ShareLine data={weekly.map((w) => ({ week: w.week, value: w.top3Share }))} label="Top-3 share" baseline={agg.concentration.baseline_top3_share} />
+          <ShareLine fill height={170} data={weekly.map((w) => ({ week: w.week, value: w.top3Share }))} label="Top-3 share" baseline={agg.concentration.baseline_top3_share} />
         </Card>
         <Card
           icon={Icon.star}
@@ -278,13 +301,15 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
           ) : (
             <ul className="space-y-2.5">
               {patterns.slice(0, 6).map((p) => (
-                <li key={p.id} className="rounded-xl bg-card-2 p-3 ring-1 ring-line/60" title={p.statement}>
+                <li key={p.id} className="rounded-xl bg-card-2 p-3 ring-1 ring-line/60">
+                  <Tip block text={`${p.statement} Confidence: ${p.confidence.replace("_", " ")}${p.consecutiveWeeks > 1 ? `; ${p.consecutiveWeeks} weeks in a row` : ""}.`}>
                   <div className="flex items-center gap-2">
                     <span className={`h-2 w-2 shrink-0 rounded-full ${p.confidence === "strong" ? "bg-emerald-500" : p.confidence === "emerging" ? "bg-indigo-500" : "bg-slate-400"}`} />
                     <span className="min-w-0 flex-1 truncate text-[13px] font-semibold">{p.title}</span>
                     {p.consecutiveWeeks > 1 ? <span className="shrink-0 text-[11px] font-semibold text-amber-600">×{p.consecutiveWeeks}</span> : null}
                   </div>
                   <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted">{p.statement}</p>
+                  </Tip>
                 </li>
               ))}
             </ul>
@@ -296,6 +321,7 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
       <SectionHeading
         title="Your portfolio"
         subtitle="Raises around your tracked companies and on your watchlist"
+        info="Tracked companies are a simulated portfolio of real startups, used to test adjacency detection; no ownership is implied. The watchlist is companies and investors you asked us to follow."
         action={
           <Link className="btn btn-secondary btn-sm" href={`/portfolio?profile=${active.id}`}>
             Portfolio view →
@@ -309,13 +335,15 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
           ) : (
             <>
               <AdjacencyMap groups={groups} />
-              <ul className="mt-5 divide-y divide-line/60 border-t border-line/70">
-                {alerts.adjacency.slice(0, 6).map((a) => {
+              <ul className="mt-5 flex flex-1 flex-col justify-between divide-y divide-line/60 border-t border-line/70">
+                {alerts.adjacency.slice(0, 8).map((a) => {
                   const d = byId.get(a.dealId);
                   const tone = a.relationship === "competitor" ? "bad" : a.relationship === "same_layer" ? "warn" : "accent";
                   return (
                     <li key={`${a.portfolioId}-${a.dealId}`} className="flex items-start gap-3 py-3 text-sm">
-                      <Badge tone={tone}>{RELATIONSHIP_TEXT[a.relationship] ?? a.relationship}</Badge>
+                      <Badge tone={tone} title={RELATIONSHIP_HELP[a.relationship]}>
+                        {RELATIONSHIP_TEXT[a.relationship] ?? a.relationship}
+                      </Badge>
                       <div className="min-w-0 flex-1">
                         <p>
                           <span className="font-semibold">{d?.company ?? a.dealId}</span> <span className="text-muted">→ {a.portfolio}</span>
@@ -335,7 +363,7 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
             </>
           )}
         </Card>
-        <div className="space-y-6 lg:col-span-2">
+        <div className="flex flex-col gap-6 lg:col-span-2">
         <Card icon={Icon.layers} title="Tracked companies at a glance" subtitle="Adjacent raises this window, per tracked company" n={tracked.length} note="Competitor = same product for the same customer; same layer = different product competing for the same budget. Tracked companies are a simulated portfolio.">
           {tracked.length === 0 ? (
             <Empty>No tracked companies yet.</Empty>
@@ -363,14 +391,14 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
             </ul>
           )}
         </Card>
-        <Card icon={Icon.star} title="Watchlist" subtitle={hitDeals.length ? "Companies you watch that raised in this window" : "No watchlist company raised in this window"} n={hitDeals.length}>
+        <Card className="flex-1" icon={Icon.star} title="Watchlist" subtitle={hitDeals.length ? "Companies you watch that raised in this window" : "No watchlist company raised in this window"} n={hitDeals.length}>
           {hitDeals.length ? <DealList deals={hitDeals.slice(0, 5)} /> : null}
-          <div className={hitDeals.length ? "mt-5 border-t border-line/70 pt-4" : ""}>
+          <div className={`flex flex-1 flex-col ${hitDeals.length ? "mt-5 border-t border-line/70 pt-4" : ""}`}>
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">Latest activity on your watchlist</p>
             {watchedCompanies.length === 0 ? (
               <p className="text-sm text-muted">The watchlist is empty. Add companies in settings.</p>
             ) : (
-              <ul className="space-y-2">
+              <ul className="flex flex-1 flex-col justify-between gap-2">
                 {watchedCompanies.map((w) => (
                   <li key={w.id} className="flex items-center justify-between gap-2 rounded-xl bg-card-2 px-3 py-2 text-sm ring-1 ring-line/60">
                     <span className="min-w-0 truncate font-medium">{w.value}</span>
@@ -379,10 +407,22 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
                 ))}
               </ul>
             )}
-            <Link className="link mt-3 inline-block text-xs" href={`/settings?profile=${active.id}#watchlist`}>
-              Manage watchlist →
-            </Link>
+            {watchedInvestors.length ? (
+              <>
+                <p className="mb-2 mt-5 text-xs font-semibold uppercase tracking-wide text-muted">Investors you watch</p>
+                <div className="flex flex-wrap gap-2">
+                  {watchedInvestors.map((w) => (
+                    <Tip key={w.id} text={w.lastEvent ? `Last seen on a round ${shortDate(w.lastEvent)}${w.lastEventLabel ? ` (${w.lastEventLabel})` : ""}.` : "Not seen on a round in our data yet."}>
+                      <span className={`cursor-help rounded-full px-3 py-1 text-xs font-semibold ring-1 ${w.lastEvent ? "bg-accent-soft text-accent ring-indigo-200 dark:ring-indigo-500/30" : "bg-card-2 text-muted ring-line"}`}>{w.value}</span>
+                    </Tip>
+                  ))}
+                </div>
+              </>
+            ) : null}
           </div>
+          <Link className="link mt-auto inline-block pt-4 text-xs" href={`/settings?profile=${active.id}#watchlist`}>
+            Manage watchlist →
+          </Link>
         </Card>
         </div>
       </div>
@@ -391,6 +431,7 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
       <SectionHeading
         title="Deals"
         subtitle={`Ranked against ${active.displayName}'s mandate`}
+        info="Every deal gets a 0–100 relevance score for the selected profile. Hover a score ring for its tier; open a row for the full scorecard and sources."
         action={
           <Link className="btn btn-secondary btn-sm" href={`/methodology?profile=${active.id}`}>
             How scores work
@@ -400,15 +441,18 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2" icon={Icon.list} title="Top deals" subtitle="Highest-scoring rounds · click any deal for its full scorecard" n={ranked.total} note="Scores run 0–100: sector, stage, cheque size, tracked investors, geography, recency and ecosystem significance, plus overrides for watchlist and adjacency.">
           {top.length === 0 ? <Empty>No scored deals in this window.</Empty> : <DealList deals={top} />}
-          {ranked.total > top.length ? (
-            <div className="mt-5 text-center">
+          {top.length ? (
+            <div className="mt-5 flex flex-1 flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-indigo-200 bg-accent-soft/50 p-5 text-center dark:border-indigo-500/30">
+              <p className="text-sm text-muted">
+                {ranked.total > top.length ? `Showing the top ${top.length} of ${ranked.total} scored deals.` : `All ${ranked.total} scored deals are shown.`} Explorer has every deal in this window with filters, sorting and CSV export.
+              </p>
               <Link className="btn btn-primary" href={`/explorer?profile=${active.id}&from=${win.start}&to=${win.end}&sort=score`}>
-                Show all {ranked.total} deals →
+                See all {ranked.total} deals →
               </Link>
             </div>
           ) : null}
         </Card>
-        <div className="space-y-6">
+        <div className="flex flex-col gap-6">
           <Card icon={Icon.users} title="Investor leaderboard" subtitle="Most active this window" n={leaders.length}>
             {leaders.length === 0 ? (
               <Empty>No investor data in this window.</Empty>
@@ -442,15 +486,15 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
               </Link>
             </div>
           </Card>
-          <Card icon={Icon.layers} title="Exits, fund closes and people" subtitle="Events reported in this window" n={events.total}>
+          <Card className="flex-1" icon={Icon.layers} title="Exits, fund closes and people" subtitle="Events reported in this window" n={events.total}>
             {events.rows.length === 0 ? (
               <Empty>No events reported in this window.</Empty>
             ) : (
               <ul className="space-y-2.5">
-                {events.rows.slice(0, 6).map((e) => (
+                {events.rows.slice(0, 8).map((e) => (
                   <li key={e.id} className="text-sm">
                     <div className="flex items-center gap-2">
-                      <Badge tone={e.type === "fund_close" ? "good" : e.type === "ma" ? "accent" : e.type === "shutdown" || e.type === "layoff" ? "bad" : "neutral"}>{e.type.replace("_", " ")}</Badge>
+                      <Badge tone={e.type === "fund_close" ? "good" : e.type === "ma" ? "accent" : e.type === "shutdown" || e.type === "layoff" ? "bad" : "neutral"} title={EVENT_HELP[e.type]}>{e.type.replace("_", " ")}</Badge>
                       <span className="text-xs text-muted">{shortDate(e.date)}</span>
                     </div>
                     <p className="mt-1 line-clamp-2 text-[13px] leading-snug">
@@ -466,7 +510,7 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
                 ))}
               </ul>
             )}
-            <Link className="link mt-3 inline-block text-xs" href={`/explorer?tab=events&from=${win.start}&to=${win.end}`}>
+            <Link className="link mt-auto inline-block pt-3 text-xs" href={`/explorer?tab=events&from=${win.start}&to=${win.end}`}>
               All events →
             </Link>
           </Card>

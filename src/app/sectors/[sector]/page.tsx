@@ -9,7 +9,7 @@ import { Badge, Card, Empty, Loading, ProfileSwitcher, Table, td, Icon } from "@
 import { queryDeals } from "@/db/queries/deals";
 import { getMarketMap, getSectorSummary } from "@/db/queries/sectors";
 import { dealFiltersSchema } from "@/lib/deal-filters";
-import { delta, shortDate, usd } from "@/lib/format";
+import { delta, EVENT_HELP, shortDate, usd } from "@/lib/format";
 import { SECTORS } from "@/lib/taxonomy";
 import { param, resolveProfile, type SearchParams } from "@/lib/view";
 import { toIsoDate } from "@/pipeline/normalize";
@@ -47,8 +47,8 @@ async function Content({ params, searchParams }: { params: Promise<{ sector: str
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2" icon={Icon.chart} subtitle="Deals per week (top) and disclosed capital (bottom)" title="Trend over time" n={s.weekly.reduce((a, w) => a + w.n, 0)} note="Deals per ISO week (left) and disclosed capital (right chart).">
-          <WeekLines data={s.weekly.map((w) => ({ label: w.week.slice(5), deals: w.n }))} series={[{ key: "deals", label: "Deals" }]} height={180} />
-          <WeekLines data={s.weekly.map((w) => ({ label: w.week.slice(5), capital: w.capital }))} series={[{ key: "capital", label: "Capital" }]} money height={160} />
+          <WeekLines data={s.weekly.map((w) => ({ label: w.week.slice(5), deals: w.n }))} series={[{ key: "deals", label: "Deals" }]} height={180} fill />
+          <WeekLines data={s.weekly.map((w) => ({ label: w.week.slice(5), capital: w.capital }))} series={[{ key: "capital", label: "Capital" }]} money height={160} fill />
         </Card>
         <Card icon={Icon.users} subtitle={`Last ${DEEP_DIVE_DAYS} days · bar = deals, label = rounds led`} title="Active investors" n={s.investors.length} note={`Window: last ${DEEP_DIVE_DAYS} days. Bar = deals; label shows rounds led.`}>
           {s.investors.length === 0 ? (
@@ -114,9 +114,20 @@ async function Content({ params, searchParams }: { params: Promise<{ sector: str
               })}
             </Table>
           )}
+          {s.chequeByStage.some((c) => c.median !== null) ? (
+            <>
+              <p className="mb-3 mt-5 border-t border-line/70 pt-4 text-xs font-semibold uppercase tracking-wide text-muted">Median round size by stage</p>
+              <BarList
+                spread
+                rows={s.chequeByStage
+                  .filter((c) => c.median !== null)
+                  .map((c) => ({ key: c.stage, label: c.stage, value: c.median ?? 0, display: `${usd(c.median)} · n=${c.n}`, highlight: true }))}
+              />
+            </>
+          ) : null}
         </Card>
         <Card icon={Icon.pie} subtitle="Deals and capital by sub-sector" title="Sub-sectors" n={s.subSectors.reduce((a, x) => a + x.n, 0)}>
-          {s.subSectors.length === 0 ? <Empty>No deals in this window.</Empty> : <BarList rows={s.subSectors.map((x) => ({ key: x.sub, label: x.sub, value: x.n, display: `${x.n} · ${usd(x.capital, { undisclosed: "$0" })}` }))} />}
+          {s.subSectors.length === 0 ? <Empty>No deals in this window.</Empty> : <BarList spread rows={s.subSectors.map((x) => ({ key: x.sub, label: x.sub, value: x.n, display: `${x.n} · ${usd(x.capital, { undisclosed: "$0" })}` }))} />}
         </Card>
       </div>
 
@@ -127,7 +138,7 @@ async function Content({ params, searchParams }: { params: Promise<{ sector: str
           <ul className="space-y-1 text-sm">
             {s.exits.map((e) => (
               <li key={e.id}>
-                <span className="text-xs text-muted">{shortDate(e.date)}</span> <Badge>{e.type.replace("_", " ")}</Badge> {e.headline}{" "}
+                <span className="text-xs text-muted">{shortDate(e.date)}</span> <Badge title={EVENT_HELP[e.type]}>{e.type.replace("_", " ")}</Badge> {e.headline}{" "}
                 {e.url ? (
                   <a className="link text-xs" href={e.url} target="_blank" rel="noopener noreferrer">
                     ↗

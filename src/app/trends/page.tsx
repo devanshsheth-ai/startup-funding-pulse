@@ -3,7 +3,7 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { WeekLines } from "@/components/charts";
 import { BarList } from "@/components/deals";
-import { Badge, Card, Empty, Loading, Page, Pills, ProfileSwitcher, Table, td, Icon } from "@/components/ui";
+import { Badge, Card, Empty, Loading, Page, Pills, ProfileSwitcher, Table, td, Icon, FillScroll } from "@/components/ui";
 import { addWeeks, weekOf, weeksBetween } from "@/db/queries/detection";
 import { getLastDealBySector, getPatternHistory, getSectorWeekGrid, getStageVelocity, type GridCell, type TrendMetric } from "@/db/queries/trends";
 import { shortDate, usd } from "@/lib/format";
@@ -145,13 +145,14 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
           {velocity.length === 0 ? (
             <Empty>Too few deals report a prior round date.</Empty>
           ) : (
-            <BarList rows={velocity.map((v) => ({ key: v.sector, label: v.sector, value: v.medianMonths, display: `${v.medianMonths.toFixed(1)} mo · n=${v.n}`, highlight: coreSet.has(v.sector) }))} />
+            <BarList spread rows={velocity.map((v) => ({ key: v.sector, label: v.sector, value: v.medianMonths, display: `${v.medianMonths.toFixed(1)} mo · n=${v.n}`, highlight: coreSet.has(v.sector) }))} />
           )}
         </Card>
         <Card className="lg:col-span-2" icon={Icon.star} subtitle="Every pattern that passed all three gates · ×N = weeks running" title="Pattern history" n={patterns.length} note={<>Every pattern that passed all three gates, newest first. “×N” = consecutive weeks it has fired. <Link className="link" href={`/methodology?profile=${active.id}`}>Detector gates</Link></>}>
           {patterns.length === 0 ? (
             <Empty>No patterns have fired yet.</Empty>
           ) : (
+            <FillScroll min={460}>
             <Table head={["Week", "Pattern", "Confidence", "n", "Streak"]} minWidth={560}>
               {patterns.map((p) => (
                 <tr key={p.id}>
@@ -168,6 +169,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
                 </tr>
               ))}
             </Table>
+            </FillScroll>
           )}
         </Card>
       </div>

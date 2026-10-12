@@ -1,3 +1,5 @@
+import { Tip } from "./tip";
+
 /** Semicircular gauge (pure SVG, server-rendered) with a gradient arc and an animated sweep. */
 export function Gauge({ value, max = 100, label, caption }: { value: number; max?: number; label: string; caption?: string }) {
   const v = Math.max(0, Math.min(max, value));
@@ -62,9 +64,15 @@ export function ZBars({ rows }: { rows: { label: string; z: number; detail?: str
         const w = (Math.abs(z) / 2.5) * 50;
         const up = z >= 0;
         return (
-          <li key={r.label} title={r.detail}>
+          <li key={r.label}>
             <div className="mb-1 flex justify-between text-xs">
-              <span className="font-medium">{r.label}</span>
+              {r.detail ? (
+                <Tip text={r.detail} className="cursor-help font-medium underline decoration-dotted decoration-muted/50 underline-offset-2">
+                  {r.label}
+                </Tip>
+              ) : (
+                <span className="font-medium">{r.label}</span>
+              )}
               <span className={`font-semibold tabular-nums ${up ? "text-up" : "text-down"}`}>
                 {up ? "+" : ""}
                 {r.z.toFixed(1)}σ

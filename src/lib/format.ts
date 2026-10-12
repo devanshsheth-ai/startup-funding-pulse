@@ -32,12 +32,41 @@ export const TIER_LABELS: Record<string, string> = {
   archive: "Archive",
 };
 
+/** One-line meaning of each relevance tier, for hover explanations (default thresholds; editable in Settings). */
+export const TIER_HELP: Record<string, string> = {
+  act_now: "Act now: scores 80+ (or forced up by a watchlist or adjacency override). Worth a look this week.",
+  high: "High: scores 60–79. A strong fit with this mandate.",
+  relevant: "Relevant: scores 40–59. A partial fit; worth a skim.",
+  context: "Context: scores 20–39. Market background, not a mandate fit.",
+  archive: "Archive: scores under 20, or removed by a hard filter such as an excluded sector.",
+};
+
 export const RELATIONSHIP_TEXT: Record<string, string> = {
   competitor: "Competitor",
   same_layer: "Same layer",
   supplier: "Supplier",
   customer: "Customer",
   complement: "Complement",
+};
+
+/** What each adjacency relationship means, for hover explanations. */
+export const RELATIONSHIP_HELP: Record<string, string> = {
+  competitor: "Competitor: the same product for the same customer. The most direct threat.",
+  same_layer: "Same layer: a different product competing for the same budget or position in the stack.",
+  supplier: "Supplier: sells something the tracked company buys or depends on.",
+  customer: "Customer: could buy from the tracked company.",
+  complement: "Complement: works alongside the tracked company; a possible partner.",
+};
+
+/** What each event type means, for hover explanations. */
+export const EVENT_HELP: Record<string, string> = {
+  ma: "M&A: an acquisition or merger, often an exit for the investors.",
+  shutdown: "Shutdown: the company has closed or wound down.",
+  ipo_filing: "IPO filing: draft papers filed for a public listing.",
+  layoff: "Layoff: a reported reduction in staff.",
+  people_move: "People move: a founder or senior executive joined or left.",
+  fund_close: "Fund close: a VC fund raised new capital it will now invest.",
+  financial_result: "Financial result: reported revenue or profit figures.",
 };
 
 export function shortDate(iso: string | null | undefined): string {
