@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { mergeReports, stagesCompatible, type SourceReport } from "@/pipeline/merge";
+import { conventionalAmount, mergeReports, stagesCompatible, type SourceReport } from "@/pipeline/merge";
 
 const r = (over: Partial<SourceReport>): SourceReport => ({
   publication: "Inc42",
@@ -13,6 +13,22 @@ const r = (over: Partial<SourceReport>): SourceReport => ({
 });
 
 describe("mergeReports", () => {
+  it("a rupee figure written in millions loses a disagreement to a conventional one (D-087)", () => {
+    // Entrackr printed "Rev.Dev raised Rs 11.3 million"; Inc42 reported the same Series A as $11.3 Mn.
+    const typo = r({ publication: "Entrackr", publishedAt: new Date("2026-07-11T12:00:00Z"), amountUsd: 118_523, amountRaw: "Rs 11.3 million" });
+    const usd = r({ publication: "Inc42", publishedAt: new Date("2026-07-18T04:00:00Z"), amountUsd: 11_300_000, amountRaw: "$11.3 Mn" });
+    for (const order of [[typo, usd], [usd, typo]]) {
+      const m = mergeReports(order);
+      expect(m.amountUsd).toBe(11_300_000);
+      expect(m.disputedFields).toContain("amount");
+    }
+    expect(conventionalAmount("Rs 43 crore")).toBe(true);
+    expect(conventionalAmount("₹5 lakh")).toBe(true);
+    expect(conventionalAmount("$5.1 Mn")).toBe(true);
+    expect(conventionalAmount("Rs 11.3 million")).toBe(false);
+    expect(conventionalAmount("INR 2 bn")).toBe(false);
+  });
+
   it("single source: unverified, single-source badges", () => {
     const m = mergeReports([r({})]);
     expect(m.corroborationCount).toBe(1);

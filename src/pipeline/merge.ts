@@ -38,6 +38,17 @@ export function amountsAgree(a: number, b: number): boolean {
   return hi === 0 || Math.abs(a - b) / hi <= AMOUNT_TOLERANCE;
 }
 
+/**
+ * Indian outlets state rupee amounts in crore or lakh. "Rs 11.3 million" is almost always a dollar
+ * figure with the wrong symbol (seen in an Entrackr roundup; D-087), so when sources disagree
+ * such a report loses to a conventionally written one.
+ */
+export function conventionalAmount(raw: string | null): boolean {
+  if (!raw) return true;
+  const r = raw.toLowerCase();
+  return !(/₹|\brs\.?|\binr\b|rupee/.test(r) && /\d\s*(million|mn|billion|bn)\b/.test(r));
+}
+
 /** Order-independent tie-break: earlier publication first, then publication name, then amount. */
 function tieKey(r: SourceReport): string {
   const t = r.publishedAt?.getTime() ?? Number.MAX_SAFE_INTEGER;
@@ -79,7 +90,8 @@ export function mergeReports(reports: SourceReport[]): MergedDeal {
     const support = (v: number) => withAmount.filter((x) => amountsAgree(x.r.amountUsd, v)).length;
     const exact = (v: number) => withAmount.filter((x) => x.r.amountUsd === v).length;
     // Most corroborated (within 10%), then the figure most sources state exactly, then the earliest report.
-    const chosen = [...top].sort((a, b) => support(b.r.amountUsd) - support(a.r.amountUsd) || exact(b.r.amountUsd) - exact(a.r.amountUsd) || tieKey(a.r).localeCompare(tieKey(b.r)))[0];
+    const conv = (x: { r: SourceReport }) => (conventionalAmount(x.r.amountRaw) ? 1 : 0);
+    const chosen = [...top].sort((a, b) => support(b.r.amountUsd) - support(a.r.amountUsd) || exact(b.r.amountUsd) - exact(a.r.amountUsd) || conv(b) - conv(a) || tieKey(a.r).localeCompare(tieKey(b.r)))[0];
     if (chosen) {
       amountUsd = chosen.r.amountUsd;
       amountRaw = chosen.r.amountRaw;

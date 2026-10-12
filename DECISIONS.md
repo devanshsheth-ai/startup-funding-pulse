@@ -708,3 +708,24 @@ profiles, and everything about them, to be removed. The product now runs for Aar
 - **The switcher hides itself** when only one profile is active. The multi-profile
   architecture is unchanged, so adding a profile back means one seed file and
   `is_active = true`.
+
+**D-087 · Rupee figures written in millions.** A full data audit on 12 Oct 2026 checked:
+- 357 of 357 extracted amounts appear verbatim in their article;
+- FX rates are within 0.17% of an independent provider (fawazahmed0 currency-api) on sampled
+  dates;
+- the live 7-day totals (30 deals, $210.5M) recompute exactly in SQL;
+- 79 of 83 multi-publication deals agree within 5%.
+
+One of the four that did not was wrong. Entrackr printed "Rev.Dev raised Rs 11.3 million" for
+Reo.Dev's Series A, which Inc42 reported as $11.3 Mn. Extraction copied the typo faithfully
+($119K), and the earliest-publication tie-break chose it.
+- **Fix:** Indian outlets write rupees in crore or lakh, so a rupee amount stated in
+  millions or billions is treated as unconventional. When sources disagree, it now loses
+  before the publication-date tie-break (`conventionalAmount` in `merge.ts`).
+- **Effect:** `recompute-deals` changed exactly one deal (Reo.Dev: $118,523 → $11.3M; it
+  stays flagged *disputed*). A rescore moved it from High (69.6) to Act now (84.6) for Aarav.
+- **The other three disagreements are left as they are:**
+  - Lickicious and Scrubsy are a 5–6% gap between a crore figure and a rounded dollar
+    figure.
+  - DheyaTech is a real disagreement: two of three sources say Rs 43 crore, and it is
+    shown as disputed.
