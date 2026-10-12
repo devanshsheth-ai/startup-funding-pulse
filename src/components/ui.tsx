@@ -207,7 +207,7 @@ export function Unavailable({ what }: { what: string }) {
         /health
       </Link>
       , and the{" "}
-      <Link className="link" href="/brief/latest">
+      <Link className="link" href="/brief">
         latest brief
       </Link>{" "}
       is always available.

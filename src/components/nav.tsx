@@ -5,13 +5,13 @@ import { usePathname, useSearchParams } from "next/navigation";
 
 const LINKS = [
   { href: "/", label: "Overview" },
+  { href: "/brief", label: "Brief" },
   { href: "/trends", label: "Trends" },
   { href: "/investors", label: "Investors" },
   { href: "/portfolio", label: "Portfolio" },
   { href: "/alerts", label: "Alerts" },
   { href: "/explorer", label: "Explorer" },
   { href: "/sectors", label: "Sectors" },
-  { href: "/digests", label: "Briefs" },
   { href: "/methodology", label: "Methodology" },
   { href: "/settings", label: "Settings" },
   { href: "/health", label: "Health" },

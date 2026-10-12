@@ -90,7 +90,7 @@ function EventRow({ e }: { e: EventItem }) {
 
 const asItems = (ds: DealCard[]): DealListItem[] => ds as unknown as DealListItem[];
 
-export function BriefView({ c, shareUrl, emailUrl }: { c: DigestContent; shareUrl: string; emailUrl: string }) {
+export function BriefView({ c, shareUrl, actions }: { c: DigestContent; shareUrl: string; actions?: ReactNode }) {
   const weekly = c.mode === "weekly";
   const k = c.kpis;
   const dDeals = delta(k.deals, k.prevDeals);
@@ -140,7 +140,7 @@ export function BriefView({ c, shareUrl, emailUrl }: { c: DigestContent; shareUr
   ];
 
   return (
-    <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6">
+    <div className="w-full">
       {/* Masthead */}
       <header className="hero-grad animate-in relative overflow-hidden rounded-[2rem] p-7 text-white shadow-[0_24px_60px_-24px_rgb(79_70_229/0.7)] sm:p-10">
         <div className="pointer-events-none absolute -right-20 -top-24 h-80 w-80 rounded-full bg-white/15 blur-3xl" aria-hidden />
@@ -150,13 +150,14 @@ export function BriefView({ c, shareUrl, emailUrl }: { c: DigestContent; shareUr
               {weekly ? "Weekly brief" : "Daily note"} · {c.profile.name} · {c.window.start} → {c.window.end}
             </p>
             <div className="no-print flex flex-wrap gap-2">
-              <PrintButton className="btn btn-sm border border-white/40 bg-white/10 text-white backdrop-blur hover:bg-white/20" />
-              <a href={emailUrl} className="btn btn-sm border border-white/40 bg-white/10 text-white backdrop-blur hover:bg-white/20">
-                Email version
-              </a>
-              <Link href={`/?profile=${c.profile.id}`} className="btn btn-sm bg-white text-indigo-700 hover:bg-indigo-50">
-                Open dashboard →
-              </Link>
+              {actions ?? (
+                <>
+                  <PrintButton className="btn btn-sm border border-white/40 bg-white/10 text-white backdrop-blur hover:bg-white/20" />
+                  <Link href={`/brief?profile=${c.profile.id}`} className="btn btn-sm bg-white text-indigo-700 hover:bg-indigo-50">
+                    Open in Funding Pulse →
+                  </Link>
+                </>
+              )}
             </div>
           </div>
           <h1 className="mt-5 max-w-4xl text-3xl font-extrabold leading-[1.15] sm:text-[2.6rem]">{c.headline}</h1>
@@ -458,6 +459,6 @@ export function BriefView({ c, shareUrl, emailUrl }: { c: DigestContent; shareUr
           </footer>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

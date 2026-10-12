@@ -636,3 +636,13 @@ The exact emailed HTML moved to `/share/[token]/email`. The email itself got a g
 band, a 2×2 KPI grid, a "Read the interactive brief" button, accent-barred section titles,
 inline bar charts for sectors and stages, and roomier type. All of it is email-safe inline CSS.
 A rendered weekly email is about 54–67 KB, under the 98 KB clip guard.
+
+**D-083 · The brief is a page of the app.** User direction: the website is the product and the
+email is an add-on, so the brief must not be shown in email format anywhere on the site.
+→ `/brief` (in the main navigation, second after Overview) renders the latest stored brief for
+the selected profile, or any from its history. It uses the dashboard layout from D-082, with
+**Regenerate brief** and a **Live preview** that builds one from the current window without
+saving. The email-format page (`/share/[token]/email`) and the template-preview links are
+removed. `/digests` and `/brief/latest` redirect to `/brief`. Public share links still render
+the same web layout read-only for LPs. `/api/digest/preview` remains as an API endpoint for S11
+but is not linked from the UI.

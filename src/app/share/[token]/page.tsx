@@ -13,8 +13,7 @@ import { appUrl, type DigestContent } from "@/pipeline/digest";
 /**
  * /share/[token] — public, read-only web brief (PRD §18.10), forwardable to
  * LPs. Rendered from the stored digest content, so it shows exactly what was
- * generated. `?print=1` opens the print dialog (PDF, PRD §23); the email as
- * sent is at /share/[token]/email.
+ * generated. `?print=1` opens the print dialog (PDF, PRD §23).
  */
 
 export const metadata: Metadata = { title: "Brief · Startup Funding Pulse", robots: { index: false, follow: false } };
@@ -28,10 +27,10 @@ async function Content({ params, searchParams }: { params: Promise<{ token: stri
   if (!row?.content) notFound();
   const base = appUrl();
   return (
-    <>
+    <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6">
       {sp.print === "1" ? <AutoPrint /> : null}
-      <BriefView c={row.content as DigestContent} shareUrl={`${base}/share/${token}`} emailUrl={`/share/${token}/email`} />
-    </>
+      <BriefView c={row.content as DigestContent} shareUrl={`${base}/share/${token}`} />
+    </main>
   );
 }
 

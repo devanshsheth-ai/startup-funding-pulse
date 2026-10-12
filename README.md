@@ -114,7 +114,7 @@ pgvector, with the database's cosine distance matching the value computed locall
 | `/portfolio` | Non-dismissible simulated-portfolio disclosure, per tracked company: adjacency timeline, competitive pressure, sector momentum, related events; watchlist status. |
 | `/explorer` | Every deal and event; filters, table/card views, CSV of the current view, **natural-language search** (Gemini → validated filter object, never SQL). |
 | `/sectors/[sector]` | Trend, deals, investors, cheque evolution, nightly **market map** with tracked companies placed, exits, on-demand **deep-dive** (PDF via print). |
-| `/digests` | Archive of every brief, with web view, PDF and JSON, plus live template previews. |
+| `/brief` | **The brief, as a dashboard**: the latest brief for the selected profile (or any from its history), with KPI masthead, summary, alerts and adjacency maps, the written analysis with source chips, pattern cards, ranked deals, market charts and LP talking points. **Live preview** builds a fresh one without saving; **Regenerate brief** saves a new one. Public share links (`/share/[token]`) render the same page read-only. |
 | `/settings` | Mandate editor with **Tune weights**, watchlist (alias suggestions, bulk paste, CSV import/export, suggestions), tracked companies with keyword guidance, manual article submission. |
 
 Reading is public. Saving anything (settings, Regenerate) asks once for `ADMIN_SECRET` and keeps
