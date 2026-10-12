@@ -120,7 +120,7 @@ export function ScorecardView({ card }: { card: Scorecard }) {
                   {COMPONENT_LABELS[k]}
                 </Tip>
                 <span className="h-2 overflow-hidden rounded-full bg-line/70">
-                  <span className="animate-grow block h-2 rounded-full bg-grad" style={{ width: `${Math.max(pct ? 4 : 0, pct)}%` }} />
+                  <span className="animate-grow block h-2 rounded-full bar-accent" style={{ width: `${Math.max(pct ? 4 : 0, pct)}%` }} />
                 </span>
                 <span className="text-right font-semibold tabular-nums">
                   {c.points}/{c.max}
@@ -261,7 +261,7 @@ export function BarList({
           </div>
           <span className="block h-2.5 overflow-hidden rounded-full bg-line/60">
             <span
-              className={`animate-grow block h-2.5 rounded-full ${r.highlight ? "bg-grad" : "bg-gradient-to-r from-slate-300 to-slate-400 dark:from-slate-600 dark:to-slate-500"}`}
+              className={`animate-grow block h-2.5 rounded-full ${r.highlight ? "bar-accent" : "bg-gradient-to-r from-slate-300 to-slate-400 dark:from-slate-600 dark:to-slate-500"}`}
               style={{ width: `${Math.max(2, (100 * r.value) / max)}%`, animationDelay: `${Math.min(i, 10) * 50}ms` }}
             />
           </span>

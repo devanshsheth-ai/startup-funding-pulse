@@ -38,8 +38,8 @@ export function Nav() {
           <Link
             key={l.href}
             href={profile ? `${l.href}?profile=${encodeURIComponent(profile)}` : l.href}
-            className={`shrink-0 rounded-xl px-3 py-1.5 font-medium transition-all duration-200 ${
-              active ? "bg-grad text-white shadow-[0_4px_14px_-4px_rgb(99_102_241/0.6)]" : "text-muted hover:bg-accent-soft hover:text-accent"
+            className={`shrink-0 rounded-full px-3.5 py-1.5 font-medium transition-all duration-200 ${
+              active ? "bg-card text-foreground shadow-[0_2px_8px_-3px_rgb(15_23_41/0.25)]" : "text-muted hover:text-foreground"
             }`}
             aria-current={active ? "page" : undefined}
             onMouseEnter={(e) => show(e.currentTarget, l.hint)}
