@@ -61,6 +61,10 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
                         PDF
                       </a>{" "}
                       ·{" "}
+                      <a className="link" href={`/share/${r.shareToken}/email`} target="_blank" rel="noopener noreferrer">
+                        Email
+                      </a>{" "}
+                      ·{" "}
                     </>
                   ) : null}
                   <a className="link" href={`/api/digest/${r.id}`} target="_blank" rel="noopener noreferrer">

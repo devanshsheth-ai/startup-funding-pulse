@@ -6,8 +6,8 @@ import { renderDigest } from "@/emails/render";
 import type { DigestContent } from "@/pipeline/digest";
 
 /**
- * GET /share/[token] — public read-only render of a stored digest (PRD §18.10).
- * `?print=1` opens the browser's print dialog for "Save as PDF" (PRD §23).
+ * GET /share/[token]/email — the stored digest exactly as it was emailed. The
+ * readable web brief lives at /share/[token]. `?print=1` opens the print dialog.
  */
 export async function GET(req: NextRequest, ctx: { params: Promise<{ token: string }> }): Promise<Response> {
   await connection();

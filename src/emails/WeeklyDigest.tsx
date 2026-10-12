@@ -1,7 +1,7 @@
 import { Body, Container, Head, Html, Link, Preview, Section, Text } from "@react-email/components";
 import type { DigestContent } from "@/pipeline/digest";
 import { withUtm } from "@/pipeline/digest";
-import { AdjacencySection, HeldAlerts, C, DealBlock, EventLine, Footer, S, SectionTitle, usd } from "./parts";
+import { AdjacencySection, BarRow, HeldAlerts, Hero, C, DealBlock, EventLine, Footer, S, SectionTitle, usd } from "./parts";
 
 /** Weekly digest — section order per PRD §16.1. */
 export function WeeklyDigest({ c }: { c: DigestContent }) {
@@ -16,21 +16,11 @@ export function WeeklyDigest({ c }: { c: DigestContent }) {
       <Preview>{c.headline}</Preview>
       <Body style={S.body}>
         <Container style={S.container}>
-          {/* 1. Header */}
+          {/* 1–2. Header band: headline, KPI grid and the link to the web brief */}
+          <Hero c={c} eyebrow={`Weekly brief · ${c.profile.name} · ${c.window.start} → ${c.window.end}`} />
           <Text style={S.small}>
-            Weekly brief · {c.profile.name} · {c.window.start} → {c.window.end}
+            Temperature blends deal count (z {c.kpis.temperatureComponents.deal_count?.z.toFixed(1)}) and capital (z {c.kpis.temperatureComponents.total_capital?.z.toFixed(1)}) against the trailing 8 weeks{wow === null ? "." : `; ${c.kpis.prevDeals} deals in the previous window.`}
           </Text>
-          {/* 2. Headline + KPI strip */}
-          <Text style={S.h1}>{c.headline}</Text>
-          <Section style={{ ...S.card, backgroundColor: C.bg }}>
-            <Text style={S.p}>
-              <strong>{c.kpis.deals}</strong> deals · <strong>{usd(c.kpis.capitalUsd)}</strong> raised ({c.kpis.pricedDeals} priced) · median <strong>{usd(c.kpis.medianUsd)}</strong>
-            </Text>
-            <Text style={S.small}>
-              {wow === null ? "No previous window to compare" : `${wow >= 0 ? "▲" : "▼"} ${Math.abs(wow)}% deals vs previous window (${c.kpis.prevDeals})`} · Market temperature{" "}
-              <strong>{c.kpis.temperature}/100</strong> (deal count z {c.kpis.temperatureComponents.deal_count?.z.toFixed(1)}, capital z {c.kpis.temperatureComponents.total_capital?.z.toFixed(1)})
-            </Text>
-          </Section>
 
           {/* 3. Watchlist hits */}
           {c.watchlistHits.length ? (
@@ -135,21 +125,30 @@ export function WeeklyDigest({ c }: { c: DigestContent }) {
 
           {/* 9. Sector heat */}
           <SectionTitle>Sector heat</SectionTitle>
-          {c.sectorHeat.map((s) => (
-            <Text key={s.sector} style={{ ...S.p, fontWeight: s.mandate ? 600 : 400 }}>
-              {s.mandate ? "★ " : ""}
-              {s.sector}: {s.n} deals · {usd(s.capitalUsd)} · {s.wowDelta > 0 ? `▲${s.wowDelta}` : s.wowDelta < 0 ? `▼${-s.wowDelta}` : "–"} vs last window · {s.z >= 0 ? "+" : ""}
-              {s.z.toFixed(1)}σ vs 8-wk
-            </Text>
+          {c.sectorHeat.filter((sh) => sh.n > 0).map((sh) => (
+            <BarRow
+              key={sh.sector}
+              label={`${sh.mandate ? "★ " : ""}${sh.sector}`}
+              strong={sh.mandate}
+              value={sh.capitalUsd}
+              max={Math.max(...c.sectorHeat.map((x) => x.capitalUsd), 1)}
+              display={`${sh.capitalUsd > 0 ? usd(sh.capitalUsd) : "undisclosed"} · ${sh.n} deal${sh.n === 1 ? "" : "s"} ${sh.wowDelta > 0 ? `▲${sh.wowDelta}` : sh.wowDelta < 0 ? `▼${-sh.wowDelta}` : ""}`}
+              color={sh.mandate ? "#6366f1" : "#94a3b8"}
+            />
           ))}
-          <Text style={S.small}>★ = core sector in your mandate</Text>
+          <Text style={S.small}>★ core sector in your mandate · bars show disclosed capital · arrows show deal count vs the previous window</Text>
 
           {/* 10. Stage & cheque */}
           <SectionTitle>Stage &amp; cheque</SectionTitle>
-          {c.stages.map((s) => (
-            <Text key={s.stage} style={S.p}>
-              {s.stage}: {s.n} deals · median {usd(s.medianUsd)} · {s.sharePct.toFixed(0)}% of capital (8-wk {s.baselineSharePct.toFixed(0)}%)
-            </Text>
+          {c.stages.map((st) => (
+            <BarRow
+              key={st.stage}
+              label={st.stage}
+              value={st.sharePct}
+              max={Math.max(...c.stages.map((x) => x.sharePct), 1)}
+              display={`${st.sharePct.toFixed(0)}% of capital · median ${usd(st.medianUsd)} · ${st.n} deals`}
+              color="#06b6d4"
+            />
           ))}
 
           {/* 11. Investor activity */}
