@@ -51,7 +51,7 @@ function Kpi({ label, value, sub, tone, hint }: { label: string; value: ReactNod
   // On the gradient, rises read as mint and falls as soft rose.
   const t = tone === "up" ? "text-emerald-200" : tone === "down" ? "text-rose-200" : "text-white/80";
   return (
-    <div className="rounded-2xl bg-white/10 p-4 ring-1 ring-white/20 backdrop-blur">
+    <div className="rounded-2xl bg-white/[0.12] p-4 ring-1 ring-white/20">
       <Tip text={hint} className="cursor-help text-xs font-semibold uppercase tracking-wide text-white/75 underline decoration-white/40 decoration-dotted underline-offset-4">
         {label}
       </Tip>
@@ -175,7 +175,7 @@ export function BriefView({ c, shareUrl, actions }: { c: DigestContent; shareUrl
             <div className="no-print flex flex-wrap gap-2">
               {actions ?? (
                 <>
-                  <PrintButton className="btn btn-sm border border-white/40 bg-white/10 text-white backdrop-blur hover:bg-white/20" />
+                  <PrintButton className="btn btn-sm border border-white/40 bg-white/15 text-white hover:bg-white/25" />
                   <Link href={`/brief?profile=${c.profile.id}`} className="btn btn-sm bg-white text-indigo-700 hover:bg-indigo-50">
                     Open in Dealscope →
                   </Link>

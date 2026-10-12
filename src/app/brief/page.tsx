@@ -22,7 +22,7 @@ export const metadata = { title: "Brief · Dealscope" };
 // A live preview runs narration (~30–60 s).
 export const maxDuration = 300;
 
-const btnOnHero = "btn btn-sm border border-white/40 bg-white/10 text-white backdrop-blur hover:bg-white/20";
+const btnOnHero = "btn btn-sm border border-white/40 bg-white/15 text-white hover:bg-white/25";
 
 async function LivePreview({ profileId }: { profileId: string }) {
   const p = await loadProfileWithName(profileId);
