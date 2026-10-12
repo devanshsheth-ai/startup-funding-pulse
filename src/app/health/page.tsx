@@ -154,7 +154,7 @@ async function HealthContent() {
           </div>
         </section>
 
-        <section className="grid gap-4 text-sm md:grid-cols-3 [&>div]:card [&>div]:card-hover [&>div]:p-5">
+        <section className="grid gap-6 text-sm md:grid-cols-3 [&>div]:card [&>div]:card-hover [&>div]:p-5">
           <div>
             <h2 className="mb-3 text-[17px] font-bold">Alerts engine</h2>
             <p>
@@ -286,7 +286,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 
 export default function HealthPage() {
   return (
-    <main className="mx-auto w-full max-w-7xl space-y-6 px-4 py-8">
+    <main className="mx-auto w-full max-w-7xl space-y-8 px-4 py-10 sm:px-6">
       <header>
         <p className="eyebrow mb-1">Operations</p>
         <h1 className="text-3xl font-extrabold tracking-tight">System health</h1>

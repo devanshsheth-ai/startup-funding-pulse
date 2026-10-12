@@ -608,3 +608,16 @@ the run.
 the same input succeeded. → Narration retries once on an invalid reply. Invalid replies are
 never cached, so the retry is a fresh generation. Degradation is now logged with the error
 instead of passing silently.
+
+**D-081 · Decluttering.** User feedback: the Overview felt cluttered. Changes:
+- **Spacing:** 24 px gaps between cards and 24 px padding inside them.
+- **Grouping:** the Overview is grouped under three headings (Market pulse, Your portfolio, Deals).
+- **Hierarchy:** four headline KPIs stay large; three secondary ones become a slim row.
+- **Fewer cards:** geography, stage mix, deal sizes and concentration share one tabbed card.
+- **Text on demand:** footnotes and sample sizes moved into ⓘ popovers that open on hover or
+  keyboard/tap focus, so `n` and the method notes stay available without filling the page.
+- **Visuals instead of text:** a sector treemap (area = capital, colour = change) replaces the
+  sector bar list, and radial adjacency maps replace the alert list (full rationale on hover,
+  source on click).
+- **Shorter lists:** the top 5 deals show, with a "Show all" call to action.
+- **Empty states:** illustrated instead of plain text.

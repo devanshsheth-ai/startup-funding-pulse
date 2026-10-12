@@ -45,7 +45,7 @@ async function Content({ params, searchParams }: { params: Promise<{ sector: str
         {isCore ? <Badge tone="accent">core sector for {active?.displayName}</Badge> : null}
       </p>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2" title="Trend over time" n={s.weekly.reduce((a, w) => a + w.n, 0)} note="Deals per ISO week (left) and disclosed capital (right chart).">
           <WeekLines data={s.weekly.map((w) => ({ label: w.week.slice(5), deals: w.n }))} series={[{ key: "deals", label: "Deals" }]} height={180} />
           <WeekLines data={s.weekly.map((w) => ({ label: w.week.slice(5), capital: w.capital }))} series={[{ key: "capital", label: "Capital" }]} money height={160} />
@@ -89,7 +89,7 @@ async function Content({ params, searchParams }: { params: Promise<{ sector: str
         )}
       </Card>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
         <Card title="Cheque evolution by stage" n={s.chequeByStage.reduce((a, c) => a + c.n, 0)} note={`Median round size in the last ${DEEP_DIVE_DAYS} days vs the ${DEEP_DIVE_DAYS} days before. Priced rounds only; small n is shown, not hidden.`}>
           {s.chequeByStage.length === 0 ? (
             <Empty>No priced rounds in this window.</Empty>
@@ -158,7 +158,7 @@ async function Title({ params }: { params: Promise<{ sector: string }> }) {
 
 export default function SectorPage({ params, searchParams }: { params: Promise<{ sector: string }>; searchParams: SearchParams }) {
   return (
-    <main className="mx-auto w-full max-w-7xl space-y-6 px-4 py-6">
+    <main className="mx-auto w-full max-w-7xl space-y-8 px-4 py-10 sm:px-6">
       <div>
         <Link className="link text-xs text-muted" href="/sectors">
           ← Sectors

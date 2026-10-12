@@ -38,7 +38,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
   return (
     <>
       <ProfileSwitcher path="/alerts" sp={sp} profiles={all} active={active} />
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3">
         <Card icon={Icon.pie} title="Where alerts went" subtitle="Every alert is logged with its outcome" n={total}>
           {total === 0 ? (
             <Empty>No alerts yet.</Empty>
