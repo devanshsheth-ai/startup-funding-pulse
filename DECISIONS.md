@@ -602,3 +602,9 @@ profile's due brief was never attempted, because the stage always returned a nul
 → The cursor is now the index of the next profile, so the dispatcher's next invocation picks up
 where the last one stopped. `isDue` already prevents a second send for profiles sent earlier in
 the run.
+
+**D-080 · Narration retry.** On 12 Oct the fintech profile's weekly brief went out degraded
+(statistics only). The Gemini reply arrived but failed JSON/schema validation, and a rerun of
+the same input succeeded. → Narration retries once on an invalid reply. Invalid replies are
+never cached, so the retry is a fresh generation. Degradation is now logged with the error
+instead of passing silently.

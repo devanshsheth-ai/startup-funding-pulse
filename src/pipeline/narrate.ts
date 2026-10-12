@@ -153,6 +153,19 @@ export function formatAggregates(a: Aggregates, coreSectors: Set<string>): strin
 
 // ─── Calls ─────────────────────────────────────────────────────────────────
 
+/**
+ * One retry when the reply fails JSON/schema validation (it happened on 12 Oct and degraded a
+ * sent brief). Invalid replies are never cached, so the retry gets a fresh generation.
+ */
+async function withOutputRetry<T>(call: () => Promise<T>): Promise<T> {
+  try {
+    return await call();
+  } catch (err) {
+    if (!(err instanceof GeminiOutputError)) throw err;
+    return await call();
+  }
+}
+
 export interface WeeklyNarrationInput {
   mandate: string;
   window: string;
@@ -178,15 +191,17 @@ export async function narrateWeekly(
   counters?: StageCounters,
 ): Promise<NarrationResult<{ headline: string; tldr: string[]; narrative: NarrativeItem[]; lpTalkingPoints: string[]; openQuestions: string[] }>> {
   try {
-    const { data } = await generateStructured({
-      task: "narrate",
-      prompt: { name: "narrate-weekly", version: 1 },
-      vars: { ...input },
-      schema: weeklyNarrationSchema,
-      temperature: 0.35,
-      counters,
-      maxOutputTokens: 8192,
-    });
+    const { data } = await withOutputRetry(() =>
+      generateStructured({
+        task: "narrate",
+        prompt: { name: "narrate-weekly", version: 1 },
+        vars: { ...input },
+        schema: weeklyNarrationSchema,
+        temperature: 0.35,
+        counters,
+        maxOutputTokens: 8192,
+      }),
+    );
     const n = enforceNarrative(data.narrative, allowed, trackedNames);
     const tl = enforceBullets(data.tldr, trackedNames, true);
     const lp = enforceBullets(data.lp_talking_points, trackedNames, true);
@@ -211,14 +226,16 @@ export async function narrateDaily(
   counters?: StageCounters,
 ): Promise<NarrationResult<{ headline: string; context: { text: string; evidenceDealIds: string[]; statBasis: string } | null }>> {
   try {
-    const { data } = await generateStructured({
-      task: "narrate",
-      prompt: { name: "narrate-daily", version: 1 },
-      vars,
-      schema: dailyNarrationSchema,
-      temperature: 0.3,
-      counters,
-    });
+    const { data } = await withOutputRetry(() =>
+      generateStructured({
+        task: "narrate",
+        prompt: { name: "narrate-daily", version: 1 },
+        vars,
+        schema: dailyNarrationSchema,
+        temperature: 0.3,
+        counters,
+      }),
+    );
     const ids = data.context.evidence_deal_ids.filter((id) => allowedDeals.has(id));
     const own = ownershipViolation(data.context.text, trackedNames);
     const rejected: Rejection[] = [];
