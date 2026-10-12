@@ -91,7 +91,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
                 {sectors.map((s) => (
                   <tr key={s}>
                     <td className={`sticky left-0 bg-card px-1 py-0.5 ${coreSet.has(s) ? "font-semibold" : ""}`}>
-                      <Link className="link" href={`/sectors/${encodeURIComponent(s)}?profile=${active.id}`}>
+                      <Link className="transition-colors hover:text-accent" href={`/sectors/${encodeURIComponent(s)}?profile=${active.id}`}>
                         {s}
                       </Link>
                     </td>
@@ -103,8 +103,8 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
                         <td
                           key={w}
                           title={`${s}, ${w}: ${c?.n ?? 0} deals, ${usd(c?.capital ?? 0, { undisclosed: "$0" })}${c?.median ? `, median ${usd(c.median)}` : ""}`}
-                          className="h-6 rounded-sm text-center tabular-nums"
-                          style={{ background: `color-mix(in srgb, var(--accent) ${Math.round(a * 85)}%, transparent)`, color: a > 0.55 ? "white" : undefined }}
+                          className="h-7 rounded-md text-center font-semibold tabular-nums transition-transform duration-150 hover:scale-110"
+                          style={{ background: a ? `color-mix(in srgb, ${a > 0.6 ? "var(--chart-4)" : "var(--chart-1)"} ${Math.round(18 + a * 72)}%, var(--card))` : "var(--card-2)", color: a > 0.5 ? "white" : undefined }}
                         >
                           {fmt(v, metric)}
                         </td>
@@ -177,7 +177,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
 
 export default function TrendsPage({ searchParams }: { searchParams: SearchParams }) {
   return (
-    <Page title="Trends" subtitle="Where capital has moved over time, and what the statistically gated detectors have seen.">
+    <Page eyebrow="Over time" title="Trends" subtitle="Where capital has moved over time, and what the statistically gated detectors have seen.">
       <Suspense fallback={<Loading what="trends" />}>
         <Content searchParams={searchParams} />
       </Suspense>

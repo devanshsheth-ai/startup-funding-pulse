@@ -1,0 +1,3840 @@
+{
+ "generatedAt": "2026-10-11T23:57:29.393Z",
+ "deals": [
+  {
+   "deal": {
+    "id": "01e1951905cd7f0e47228006f9a92d4485089b27dda4a70c2d846ff31b810215",
+    "company": "Sid’s Farm",
+    "round_stage": "Series A",
+    "amount_usd": 8500000,
+    "amount_confidence": "reported",
+    "corroboration_count": 1,
+    "is_verified": false,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W31"
+   },
+   "sources": [
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-08-01T03:30:15.000Z",
+     "stage": "Series A",
+     "amountUsd": 8500000,
+     "amountRaw": "$8.5 Mn",
+     "amountConfidence": "reported",
+     "investorsLead": [],
+     "payload": {
+      "amount": {
+       "raw": "$8.5 Mn",
+       "unit": "million",
+       "value": 8.5,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": "Pre-Series B",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "D2C",
+      "round_stage": null,
+      "company_name": "Sid’s Farm",
+      "founded_year": null,
+      "announced_date": "2026-07-30",
+      "business_model": "B2C",
+      "investors_lead": [],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Sid’s Farm is a B2C ecommerce D2C brand.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Omnivore",
+       "Narotam Sekhsaria Family Office",
+       "Dodla Dairy",
+       "Next Bharat Ventures",
+       "Leaders for India Organisation"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "0430225f039ef38a3c40c7a61e6961b3c9bfe197088501f5e9537ee81a8f0de2",
+    "company": "House of Student",
+    "round_stage": "Seed",
+    "amount_usd": 2000000,
+    "amount_confidence": "reported",
+    "corroboration_count": 2,
+    "is_verified": true,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W31"
+   },
+   "sources": [
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-08-01T03:30:15.000Z",
+     "stage": "Seed",
+     "amountUsd": 2000000,
+     "amountRaw": "$2 Mn",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Nirmitsu Ventures"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$2 Mn",
+       "unit": "million",
+       "value": 2,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": "Seed",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "Listing & Discoveries",
+      "round_stage": "Seed",
+      "company_name": "House of Student",
+      "founded_year": null,
+      "announced_date": "2026-07-28",
+      "business_model": "B2C",
+      "investors_lead": [
+       "Nirmitsu Ventures"
+      ],
+      "sector_primary": "Real Estate & Proptech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "House of Student is a B2C real estate tech listing and discovery platform.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Gautam Verlekar",
+       "Glen Fernandes",
+       "Richard McCallum",
+       "Ali Moosa",
+       "Unilodgers"
+      ]
+     }
+    },
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-08-01T12:00:00.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": null,
+     "amountRaw": null,
+     "amountConfidence": "undisclosed",
+     "investorsLead": [],
+     "payload": {
+      "amount": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "global student living technology",
+      "round_stage": null,
+      "company_name": "House of Student",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [],
+      "sector_primary": "Real Estate & Proptech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "undisclosed",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "House of Student is a global student living technology company.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.85,
+      "investors_participating": []
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "04fee2921106f396e4cb35f1afd8d2a2b02f9189309e925b2d2e23cea28c6dba",
+    "company": "Yuma Energy",
+    "round_stage": "Series A",
+    "amount_usd": 35000000,
+    "amount_confidence": "reported",
+    "corroboration_count": 2,
+    "is_verified": true,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W36"
+   },
+   "sources": [
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-09-05T03:30:51.000Z",
+     "stage": "Series A",
+     "amountUsd": 35000000,
+     "amountRaw": "$35 Mn",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Magna International"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$35 Mn",
+       "unit": "million",
+       "value": 35,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": "Series A",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "Electric Vehicles",
+      "round_stage": "Series A",
+      "company_name": "Yuma Energy",
+      "founded_year": null,
+      "announced_date": "2026-09-01",
+      "business_model": "B2B2C",
+      "investors_lead": [
+       "Magna International"
+      ],
+      "sector_primary": "Mobility & EV",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [
+       "Climate & Energy"
+      ],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Yuma Energy is a clean tech company focused on electric vehicles operating via a B2B2C business model.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": []
+     }
+    },
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-09-05T12:00:00.000Z",
+     "stage": "Series A",
+     "amountUsd": 35000000,
+     "amountRaw": "$35 million",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Magna International"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$35 million",
+       "unit": "million",
+       "value": 35,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": "Series A",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "BaaS",
+      "round_stage": "Series A",
+      "company_name": "Yuma Energy",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [
+       "Magna International"
+      ],
+      "sector_primary": "Mobility & EV",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Yuma Energy is a BaaS provider.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": []
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "06e02e1acb9778803c94e562f954fa8c4e4a541ab23bc5bc022465d7234dfdac",
+    "company": "Matel Motion & Energy Solutions",
+    "round_stage": "Series B",
+    "amount_usd": 13600000,
+    "amount_confidence": "reported",
+    "corroboration_count": 2,
+    "is_verified": true,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W32"
+   },
+   "sources": [
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-08-08T03:30:29.000Z",
+     "stage": "Series B",
+     "amountUsd": 13600000,
+     "amountRaw": "$13.6 Mn",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "UC Impower"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$13.6 Mn",
+       "unit": "million",
+       "value": 13.6,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": "Series B",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "Electric Vehicles",
+      "round_stage": "Series B",
+      "company_name": "Matel Motion & Energy Solutions",
+      "founded_year": null,
+      "announced_date": "2026-08-03",
+      "business_model": "B2B",
+      "investors_lead": [
+       "UC Impower"
+      ],
+      "sector_primary": "Mobility & EV",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [
+       "Climate & Energy"
+      ],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Clean tech company in the electric vehicles space.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 1,
+      "investors_participating": [
+       "Catamaran",
+       "Transition VC"
+      ]
+     }
+    },
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-08-08T12:00:00.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 13654028,
+     "amountRaw": "Rs 130 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [],
+     "payload": {
+      "amount": {
+       "raw": "Rs 130 crore",
+       "unit": "crore",
+       "value": 130,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": null,
+      "round_stage": null,
+      "company_name": "Matel Motion & Energy Solutions",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [],
+      "sector_primary": "Deeptech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": null,
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.9,
+      "investors_participating": [
+       "UC Impower"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "07c6f4e38c57ddf33c462062654dc6fca2487f4d0ad4e5d1d7ea8e3d967b08fd",
+    "company": "SpeakX",
+    "round_stage": "Undisclosed",
+    "amount_usd": null,
+    "amount_confidence": "undisclosed",
+    "corroboration_count": 2,
+    "is_verified": true,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W36"
+   },
+   "sources": [
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-09-05T03:30:51.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": null,
+     "amountRaw": null,
+     "amountConfidence": "undisclosed",
+     "investorsLead": [
+      "MS Dhoni"
+     ],
+     "payload": {
+      "amount": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "Digital Learning Platform",
+      "round_stage": null,
+      "company_name": "SpeakX",
+      "founded_year": null,
+      "announced_date": "2026-09-01",
+      "business_model": "B2C",
+      "investors_lead": [
+       "MS Dhoni"
+      ],
+      "sector_primary": "Edtech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "undisclosed",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "SpeakX operates a B2C digital learning platform in edtech.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": []
+     }
+    },
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-09-12T12:00:00.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": null,
+     "amountRaw": null,
+     "amountConfidence": "undisclosed",
+     "investorsLead": [],
+     "payload": {
+      "amount": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": null,
+      "round_stage": null,
+      "company_name": "SpeakX",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [],
+      "sector_primary": "Edtech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "undisclosed",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": null,
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.8,
+      "investors_participating": []
+     }
+    },
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-09-05T12:00:00.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": null,
+     "amountRaw": null,
+     "amountConfidence": "undisclosed",
+     "investorsLead": [],
+     "payload": {
+      "amount": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "English learning app",
+      "round_stage": null,
+      "company_name": "SpeakX",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [],
+      "sector_primary": "Edtech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "undisclosed",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "SpeakX is an English learning app.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.85,
+      "investors_participating": []
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "0a71125314878e2e2f221c11424b98de7c45e7eff7001a462afd612871fe83af",
+    "company": "Be Clinical",
+    "round_stage": "Seed",
+    "amount_usd": 2200000,
+    "amount_confidence": "reported",
+    "corroboration_count": 1,
+    "is_verified": false,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W34"
+   },
+   "sources": [
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-08-29T03:30:36.000Z",
+     "stage": "Seed",
+     "amountUsd": 2200000,
+     "amountRaw": "$2.2 Mn",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Sauce VC"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$2.2 Mn",
+       "unit": "million",
+       "value": 2.2,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": "Seed",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "D2C",
+      "round_stage": "Seed",
+      "company_name": "Be Clinical",
+      "founded_year": null,
+      "announced_date": "2026-08-22",
+      "business_model": "B2C",
+      "investors_lead": [
+       "Sauce VC"
+      ],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": null,
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.98,
+      "investors_participating": [
+       "Sangeet Agrawal",
+       "Navin Parwal",
+       "Arjun Purkayastha",
+       "Shaunak Chirayu Amin"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "0a71280c3be26df9d2d3c12e01e3c1a6ceeca7e8af92589b9062378df44d3252",
+    "company": "Biryani Bees",
+    "round_stage": "Undisclosed",
+    "amount_usd": 1000000,
+    "amount_confidence": "reported",
+    "corroboration_count": 1,
+    "is_verified": false,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W35"
+   },
+   "sources": [
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-08-29T03:30:36.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 1000000,
+     "amountRaw": "$1 Mn",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Vivek Oberoi Family Office"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$1 Mn",
+       "unit": "million",
+       "value": 1,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "QSR",
+      "round_stage": null,
+      "company_name": "Biryani Bees",
+      "founded_year": null,
+      "announced_date": "2026-08-27",
+      "business_model": "B2C",
+      "investors_lead": [
+       "Vivek Oberoi Family Office"
+      ],
+      "sector_primary": "Consumer Internet",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": null,
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.98,
+      "investors_participating": []
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "0b0e035ec9de28f2fd8148b32aa095a56e4884f201ee1e1ba3ef17fe066f6f4f",
+    "company": "Jagdish Farshan",
+    "round_stage": "Undisclosed",
+    "amount_usd": 4603662,
+    "amount_confidence": "reported",
+    "corroboration_count": 1,
+    "is_verified": false,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W36"
+   },
+   "sources": [
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-09-05T03:30:51.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 4603662,
+     "amountRaw": "₹43.5 Cr",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Sharrp Ventures"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "₹43.5 Cr",
+       "unit": "crore",
+       "value": 43.5,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": "first institutional round",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": null,
+      "round_stage": null,
+      "company_name": "Jagdish Farshan",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [
+       "Sharrp Ventures"
+      ],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [
+       "Quick Commerce"
+      ],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Jagdish Farshan is an 88-year-old brand expanding through quick commerce.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.9,
+      "investors_participating": []
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "0b96cdc410d6a0ded8e71b91ae27c3ccf7f8fd11f9bed3cab6e6584a396f5e2d",
+    "company": "Emerald Leisures",
+    "round_stage": "Debt",
+    "amount_usd": 11028253,
+    "amount_confidence": "reported",
+    "corroboration_count": 1,
+    "is_verified": false,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W32"
+   },
+   "sources": [
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-08-08T12:00:00.000Z",
+     "stage": "Debt",
+     "amountUsd": 11028253,
+     "amountRaw": "Rs 105 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [],
+     "payload": {
+      "amount": {
+       "raw": "Rs 105 crore",
+       "unit": "crore",
+       "value": 105,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": "private credit investment",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": null,
+      "round_stage": "Debt",
+      "company_name": "Emerald Leisures",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [],
+      "sector_primary": "Other",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": null,
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.85,
+      "investors_participating": [
+       "Lighthouse Canton"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "0c269b5e50271bf6e0993caa94b23c6a6880d8a1cbc95870b9158321d07f1444",
+    "company": "Keploy",
+    "round_stage": "Undisclosed",
+    "amount_usd": null,
+    "amount_confidence": "undisclosed",
+    "corroboration_count": 1,
+    "is_verified": false,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W40"
+   },
+   "sources": [
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-10-03T03:30:21.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": null,
+     "amountRaw": null,
+     "amountConfidence": "undisclosed",
+     "investorsLead": [
+      "Flipkart Ventures"
+     ],
+     "payload": {
+      "amount": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "Horizontal SaaS",
+      "round_stage": null,
+      "company_name": "Keploy",
+      "founded_year": null,
+      "announced_date": "2026-09-28",
+      "business_model": "B2B",
+      "investors_lead": [
+       "Flipkart Ventures"
+      ],
+      "sector_primary": "B2B SaaS",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "undisclosed",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Keploy provides horizontal SaaS solutions in the enterprise tech space.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": []
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "0cf21e6458ee62d20e56ed555c61ebc02da08a3d304770c9aa287edfb8c428ee",
+    "company": "Truth & Hair",
+    "round_stage": "Seed",
+    "amount_usd": 566000,
+    "amount_confidence": "reported",
+    "corroboration_count": 1,
+    "is_verified": false,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W31"
+   },
+   "sources": [
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-08-01T03:30:15.000Z",
+     "stage": "Seed",
+     "amountUsd": 566000,
+     "amountRaw": "$566K",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Inflection Point Ventures"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$566K",
+       "unit": "absolute",
+       "value": 566000,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": "Seed",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "D2C",
+      "round_stage": "Seed",
+      "company_name": "Truth & Hair",
+      "founded_year": null,
+      "announced_date": "2026-07-30",
+      "business_model": "B2C",
+      "investors_lead": [
+       "Inflection Point Ventures"
+      ],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Truth & Hair is a B2C ecommerce D2C brand.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": []
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "0dabc37b344e42ea62d5788b56fd1fbf45d5f4b34deb7d0d163575f52d933ac9",
+    "company": "Othor AI",
+    "round_stage": "Undisclosed",
+    "amount_usd": 70000,
+    "amount_confidence": "reported",
+    "corroboration_count": 1,
+    "is_verified": false,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W29"
+   },
+   "sources": [
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-07-18T04:00:28.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 70000,
+     "amountRaw": "$70K",
+     "amountConfidence": "reported",
+     "investorsLead": [],
+     "payload": {
+      "amount": {
+       "raw": "$70K",
+       "unit": "absolute",
+       "value": 70000,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "Application Layer",
+      "round_stage": null,
+      "company_name": "Othor AI",
+      "founded_year": null,
+      "announced_date": "2026-07-16",
+      "business_model": "B2B",
+      "investors_lead": [],
+      "sector_primary": "AI Applications",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Othor AI is a B2B AI application layer company.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Amit Ashu",
+       "Avinash Kumar",
+       "Balasubrahmanyan Sridhara"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "0dffc991fbe7e62085e36d17e76556631282bd8e5de9db992b3e49ea1b0893b0",
+    "company": "IndigoTex",
+    "round_stage": "Undisclosed",
+    "amount_usd": 518565,
+    "amount_confidence": "reported",
+    "corroboration_count": 1,
+    "is_verified": false,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W41"
+   },
+   "sources": [
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-10-06T07:22:20.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 518565,
+     "amountRaw": "Rs 5 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "IAN Angel Fund"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "Rs 5 crore",
+       "unit": "crore",
+       "value": 5,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [
+       {
+        "name": "Satendra Singh",
+        "previous_company": null
+       },
+       {
+        "name": "Prof. B.S. Butola",
+        "previous_company": null
+       },
+       {
+        "name": "Dilip Singh",
+        "previous_company": null
+       }
+      ],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "textile tech",
+      "round_stage": null,
+      "company_name": "IndigoTex",
+      "founded_year": 2024,
+      "announced_date": null,
+      "business_model": "B2B",
+      "investors_lead": [
+       "IAN Angel Fund"
+      ],
+      "sector_primary": "Deeptech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "IndigoTex develops waterless wool finishing technology and wool-based fabrics.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "SIDBI",
+       "FITT",
+       "IIT Delhi Angels"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "0e2b475926ceabf819722a3bea2e940ee38189fd1f0f27ebfe80b1c43cd18205",
+    "company": "Zinara",
+    "round_stage": "Pre-seed",
+    "amount_usd": 373011,
+    "amount_confidence": "reported",
+    "corroboration_count": 1,
+    "is_verified": false,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W41"
+   },
+   "sources": [
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-10-08T05:36:30.000Z",
+     "stage": "Pre-seed",
+     "amountUsd": 373011,
+     "amountRaw": "Rs 3.61 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Inflection Point Ventures"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "Rs 3.61 crore",
+       "unit": "crore",
+       "value": 3.61,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": "Delhi NCR",
+      "founders": [
+       {
+        "name": "Harshit Abrol",
+        "previous_company": "P&G"
+       },
+       {
+        "name": "Sumanyu Vyas",
+        "previous_company": "Blinkit"
+       }
+      ],
+      "stage_raw": "pre-seed round",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "lab-grown diamond jewellery",
+      "round_stage": "Pre-seed",
+      "company_name": "Zinara",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": "D2C",
+      "investors_lead": [
+       "Inflection Point Ventures"
+      ],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Zinara is a lab-grown diamond jewellery brand offering everyday diamond jewellery made with lab-grown diamonds and 18K gold vermeil.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Nine Jewellery",
+       "Nikita Dutta"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "0e959f602859abf59d142c9bf3d8731f5a7ce5d62fe0651ff3607b095b7e5268",
+    "company": "Arivihan",
+    "round_stage": "Series A",
+    "amount_usd": 10000000,
+    "amount_confidence": "reported",
+    "corroboration_count": 3,
+    "is_verified": true,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W40"
+   },
+   "sources": [
+    {
+     "publication": "Economic Times Tech — Funding",
+     "publishedAt": "2026-09-30T00:30:00.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 10000000,
+     "amountRaw": "$10 million",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Prosus",
+      "Accel India"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$10 million",
+       "unit": "million",
+       "value": 10,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": "Indore",
+      "founders": [
+       {
+        "name": "Ritesh Singh Chandel",
+        "previous_company": null
+       }
+      ],
+      "stage_raw": null,
+      "valuation": {
+       "raw": "Rs 570 crore",
+       "unit": "crore",
+       "value": 570,
+       "currency": "INR"
+      },
+      "sub_sector": "AI tutoring",
+      "round_stage": null,
+      "company_name": "Arivihan",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [
+       "Prosus",
+       "Accel"
+      ],
+      "sector_primary": "Edtech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [
+       "AI Applications"
+      ],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [
+       "Prosus",
+       "Accel"
+      ],
+      "company_description": "Arivihan provides AI tutoring services for state board and competitive exams.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": []
+     }
+    },
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-10-03T03:30:21.000Z",
+     "stage": "Series A",
+     "amountUsd": 10200000,
+     "amountRaw": "$10.2 Mn",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Accel India",
+      "Prosus Ventures"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$10.2 Mn",
+       "unit": "million",
+       "value": 10.2,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": "Series A",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "Digital Learning Platform",
+      "round_stage": "Series A",
+      "company_name": "Arivihan",
+      "founded_year": null,
+      "announced_date": "2026-09-30",
+      "business_model": "B2C",
+      "investors_lead": [
+       "Accel",
+       "Prosus Ventures"
+      ],
+      "sector_primary": "Edtech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Arivihan operates a digital learning platform in the edtech sector.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Dinesh Chandra Agrawal",
+       "Dinesh Gulati",
+       "Rajesh Sawhney"
+      ]
+     }
+    },
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-10-03T12:00:00.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 10000000,
+     "amountRaw": "$10 million",
+     "amountConfidence": "reported",
+     "investorsLead": [],
+     "payload": {
+      "amount": {
+       "raw": "$10 million",
+       "unit": "million",
+       "value": 10,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": null,
+      "round_stage": null,
+      "company_name": "Arivihan",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [],
+      "sector_primary": "Edtech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Edtech startup.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.9,
+      "investors_participating": []
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "1d2113f97000c72d6a4f20f9b0dbd1eda41f72c2bd03afffc0ef9aa6b3b48ee0",
+    "company": "Ema",
+    "round_stage": "Series B",
+    "amount_usd": 77000000,
+    "amount_confidence": "reported",
+    "corroboration_count": 3,
+    "is_verified": true,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W39"
+   },
+   "sources": [
+    {
+     "publication": "Economic Times Tech — Funding",
+     "publishedAt": "2026-09-23T15:53:51.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 77000000,
+     "amountRaw": "$77 million",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Creaegis"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$77 million",
+       "unit": "million",
+       "value": 77,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "enterprise AI",
+      "round_stage": null,
+      "company_name": "Ema",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": "B2B",
+      "investors_lead": [
+       "Creaegis"
+      ],
+      "sector_primary": "AI Applications",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [
+       "B2B SaaS"
+      ],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [
+       "Accel",
+       "Section 32 (S32)",
+       "Prosus"
+      ],
+      "company_description": "Ema is an enterprise AI startup.",
+      "total_raised_to_date": {
+       "raw": "$140 million",
+       "unit": "million",
+       "value": 140,
+       "currency": "USD"
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": []
+     }
+    },
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-09-26T03:30:24.000Z",
+     "stage": "Series B",
+     "amountUsd": 77000000,
+     "amountRaw": "$77 Mn",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Creaegis"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$77 Mn",
+       "unit": "million",
+       "value": 77,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": "Series B",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "Application Layer",
+      "round_stage": "Series B",
+      "company_name": "Ema",
+      "founded_year": null,
+      "announced_date": "2026-09-24",
+      "business_model": "B2B",
+      "investors_lead": [
+       "Creaegis"
+      ],
+      "sector_primary": "AI Applications",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": null,
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Accel",
+       "S32",
+       "Prosus"
+      ]
+     }
+    },
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-09-26T12:00:00.000Z",
+     "stage": "Series B",
+     "amountUsd": 77000000,
+     "amountRaw": "$77 million",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Creaegis"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$77 million",
+       "unit": "million",
+       "value": 77,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [
+       {
+        "name": "Surojit Chatterjee",
+        "previous_company": "Google and Coinbase"
+       }
+      ],
+      "stage_raw": "Series B",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "Enterprise AI",
+      "round_stage": "Series B",
+      "company_name": "Ema",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [
+       "Creaegis"
+      ],
+      "sector_primary": "AI Applications",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Ema is an enterprise AI startup.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": []
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "81e14602b1f6207ac493ef2e70c191bead1d9a78e0fa5c76c35e278cd47de0ee",
+    "company": "DailyObjects",
+    "round_stage": "Series C",
+    "amount_usd": 34304608,
+    "amount_confidence": "reported",
+    "corroboration_count": 3,
+    "is_verified": true,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W41"
+   },
+   "sources": [
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-10-08T12:00:03.000Z",
+     "stage": "Series C",
+     "amountUsd": 34304608,
+     "amountRaw": "Rs 332 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Xponentia Capital Partners",
+      "Anicut Capital",
+      "Axiom Asia Private Capital"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "Rs 332 crore",
+       "unit": "crore",
+       "value": 332,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [
+       {
+        "name": "Pankaj Garg",
+        "previous_company": null
+       },
+       {
+        "name": "Saurav Adlakha",
+        "previous_company": null
+       }
+      ],
+      "stage_raw": "Series C",
+      "valuation": {
+       "raw": "Rs 1,050 crore",
+       "unit": "crore",
+       "value": 1050,
+       "currency": "INR"
+      },
+      "sub_sector": "lifestyle-tech",
+      "round_stage": "Series C",
+      "company_name": "DailyObjects",
+      "founded_year": 2012,
+      "announced_date": null,
+      "business_model": "D2C",
+      "investors_lead": [
+       "Xponentia Capital Partners",
+       "Anicut Capital",
+       "Axiom Asia Private Capital"
+      ],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [],
+      "prior_round_date": "2024-05",
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [
+       "Roots Ventures",
+       "360 One Asset",
+       "Trifecta Capital"
+      ],
+      "company_description": "DailyObjects is a lifestyle-tech brand offering technology accessories, carry, workspace, and lifestyle products.",
+      "total_raised_to_date": {
+       "raw": "nearly $50 million",
+       "unit": "million",
+       "value": 50,
+       "currency": "USD"
+      },
+      "extraction_confidence": 0.98,
+      "investors_participating": []
+     }
+    },
+    {
+     "publication": "Economic Times Tech — Funding",
+     "publishedAt": "2026-10-08T11:38:43.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 34304608,
+     "amountRaw": "Rs 332 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Xponentia Capital Partners",
+      "Anicut Capital",
+      "Axiom Asia Private Capital"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "Rs 332 crore",
+       "unit": "crore",
+       "value": 332,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": "Rs 1,050 crore",
+       "unit": "crore",
+       "value": 1050,
+       "currency": "INR"
+      },
+      "sub_sector": "lifestyle accessories",
+      "round_stage": null,
+      "company_name": "DailyObjects",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": "D2C",
+      "investors_lead": [
+       "Xponentia Capital Partners",
+       "Anicut Capital",
+       "Axiom Asia Private Capital"
+      ],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [
+       "Roots Ventures"
+      ],
+      "company_description": "DailyObjects is a lifestyle accessories brand.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": []
+     }
+    },
+    {
+     "publication": "BusinessLine — Companies",
+     "publishedAt": "2026-10-08T12:02:55.000Z",
+     "stage": "Series C",
+     "amountUsd": 34304608,
+     "amountRaw": "₹332 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Xponentia Capital Partners",
+      "Anicut Capital",
+      "Axiom Asia Private Capital"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "₹332 crore",
+       "unit": "crore",
+       "value": 332,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [
+       {
+        "name": "Pankaj Garg",
+        "previous_company": null
+       },
+       {
+        "name": "Saurav Adlakha",
+        "previous_company": null
+       }
+      ],
+      "stage_raw": "Series C",
+      "valuation": {
+       "raw": "₹1,050 crore",
+       "unit": "crore",
+       "value": 1050,
+       "currency": "INR"
+      },
+      "sub_sector": "lifestyle tech",
+      "round_stage": "Series C",
+      "company_name": "DailyObjects",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": "D2C",
+      "investors_lead": [
+       "Xponentia Capital Partners",
+       "Anicut Capital",
+       "Axiom Asia Private Capital"
+      ],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [
+       "Roots Ventures",
+       "360 One Asset",
+       "Trifecta Capital"
+      ],
+      "company_description": "DailyObjects is a lifestyle tech and design-led consumer brand offering everyday products.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": []
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "90fcdbfdd02a7bafc0db00c3dcbc46cff91404f01f969f18fde99a4ec4f762e7",
+    "company": "Enlight Metals",
+    "round_stage": "Undisclosed",
+    "amount_usd": 1500000,
+    "amount_confidence": "reported",
+    "corroboration_count": 3,
+    "is_verified": true,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W41"
+   },
+   "sources": [
+    {
+     "publication": "VCCircle",
+     "publishedAt": null,
+     "stage": "Undisclosed",
+     "amountUsd": 1500000,
+     "amountRaw": "$1.5 million",
+     "amountConfidence": "reported",
+     "investorsLead": [],
+     "payload": {
+      "amount": {
+       "raw": "$1.5 million",
+       "unit": "million",
+       "value": 1.5,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": "$10 million",
+       "unit": "million",
+       "value": 10,
+       "currency": "USD"
+      },
+      "sub_sector": "metal procurement",
+      "round_stage": null,
+      "company_name": "Enlight Metals",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": "B2B",
+      "investors_lead": [],
+      "sector_primary": "Supply Chain & Logistics",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [
+       "AI Applications"
+      ],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Enlight Metals provides an AI-enabled metal procurement platform.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Exar North Group"
+      ]
+     }
+    },
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-09-19T03:30:44.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 1500000,
+     "amountRaw": "$1.5 Mn",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Exar North Group"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$1.5 Mn",
+       "unit": "million",
+       "value": 1.5,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "Manufacturing Solutions",
+      "round_stage": null,
+      "company_name": "Enlight Metals",
+      "founded_year": null,
+      "announced_date": "2026-09-17",
+      "business_model": "B2B",
+      "investors_lead": [
+       "Exar North Group"
+      ],
+      "sector_primary": "Enterprise Services",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Enlight Metals offers manufacturing solutions in the enterprise services sector.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": []
+     }
+    },
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-09-19T12:00:00.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 1500000,
+     "amountRaw": "$1.5 million",
+     "amountConfidence": "reported",
+     "investorsLead": [],
+     "payload": {
+      "amount": {
+       "raw": "$1.5 million",
+       "unit": "million",
+       "value": 1.5,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": "$10 million",
+       "unit": "million",
+       "value": 10,
+       "currency": "USD"
+      },
+      "sub_sector": "metal procurement platform",
+      "round_stage": null,
+      "company_name": "Enlight Metals",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [],
+      "sector_primary": "Supply Chain & Logistics",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Enlight Metals is a metal procurement platform.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.9,
+      "investors_participating": [
+       "Exar North Group"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "999eaead1200837e05875e29f4e0d18b5ab2e8e00a97ddc608ac4f69d55e9e14",
+    "company": "Arovia Consumer",
+    "round_stage": "Undisclosed",
+    "amount_usd": 10418837,
+    "amount_confidence": "reported",
+    "corroboration_count": 3,
+    "is_verified": true,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W40"
+   },
+   "sources": [
+    {
+     "publication": "Economic Times Tech — Funding",
+     "publishedAt": "2026-09-28T14:46:23.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 10418837,
+     "amountRaw": "Rs 100 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [],
+     "payload": {
+      "amount": {
+       "raw": "Rs 100 crore",
+       "unit": "crore",
+       "value": 100,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [
+       {
+        "name": "Prashant Parameswaran",
+        "previous_company": "Soulfull"
+       }
+      ],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "packaged food brands",
+      "round_stage": null,
+      "company_name": "Arovia Consumer",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [
+       "Arovia"
+      ],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Arovia Consumer is a holding company established to build a portfolio of regional and family-owned packaged food brands.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.9,
+      "investors_participating": [
+       "Fireside Ventures"
+      ]
+     }
+    },
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-10-03T03:30:21.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": null,
+     "amountRaw": null,
+     "amountConfidence": "undisclosed",
+     "investorsLead": [
+      "Fireside Ventures"
+     ],
+     "payload": {
+      "amount": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "Roll Ups",
+      "round_stage": null,
+      "company_name": "Arovia Consumer",
+      "founded_year": null,
+      "announced_date": "2026-09-28",
+      "business_model": "B2C",
+      "investors_lead": [
+       "Fireside Ventures"
+      ],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "undisclosed",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Arovia Consumer operates an ecommerce roll ups business.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": []
+     }
+    },
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-10-03T12:00:00.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 10382060,
+     "amountRaw": "Rs 100 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Fireside Ventures"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "Rs 100 crore",
+       "unit": "crore",
+       "value": 100,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": null,
+      "round_stage": null,
+      "company_name": "Arovia Consumer",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [
+       "Fireside Ventures"
+      ],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": null,
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.9,
+      "investors_participating": []
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "9bfdb28a3edc92aabfe31a41cafa3100f523405ee840e04b01d63bd3780fc79d",
+    "company": "DheyaTech",
+    "round_stage": "Pre-Series A",
+    "amount_usd": 4484773,
+    "amount_confidence": "reported",
+    "corroboration_count": 3,
+    "is_verified": false,
+    "has_disputed_field": true,
+    "disputed_fields": [
+     "amount"
+    ],
+    "iso_week": "2026-W41"
+   },
+   "sources": [
+    {
+     "publication": "VCCircle",
+     "publishedAt": null,
+     "stage": "Undisclosed",
+     "amountUsd": 4445363,
+     "amountRaw": "Rs 43 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Avaana Capital"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "Rs 43 crore",
+       "unit": "crore",
+       "value": 43,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": "Bengaluru",
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "gas turbine engines",
+      "round_stage": null,
+      "company_name": "DheyaTech",
+      "founded_year": 2018,
+      "announced_date": null,
+      "business_model": "B2B",
+      "investors_lead": [
+       "Avaana Capital"
+      ],
+      "sector_primary": "Deeptech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [
+       "Mobility & EV",
+       "Climate & Energy"
+      ],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "DheyaTech develops small gas turbine engines for advanced aerial mobility and energy applications.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Unimech Aerospace and Manufacturing"
+      ]
+     }
+    },
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-09-19T03:30:44.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 5100000,
+     "amountRaw": "$5.1 Mn",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Avaana Capital"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$5.1 Mn",
+       "unit": "million",
+       "value": 5.1,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "Aerial Vehicles",
+      "round_stage": null,
+      "company_name": "DheyaTech",
+      "founded_year": null,
+      "announced_date": "2026-09-17",
+      "business_model": "B2B",
+      "investors_lead": [
+       "Avaana Capital"
+      ],
+      "sector_primary": "Deeptech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "DheyaTech provides aerial vehicles under advanced hardware and technology.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Unimech Aerospace and Manufacturing"
+      ]
+     }
+    },
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-09-19T12:00:00.000Z",
+     "stage": "Pre-Series A",
+     "amountUsd": 4484773,
+     "amountRaw": "Rs 43 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Avaana Capital"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "Rs 43 crore",
+       "unit": "crore",
+       "value": 43,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": "pre-Series A",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": null,
+      "round_stage": "Pre-Series A",
+      "company_name": "DheyaTech",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [
+       "Avaana Capital"
+      ],
+      "sector_primary": "Deeptech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "DheyaTech is a deeptech startup.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": []
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "b9cc983ace0d88c0e2fd600bd87f8b74e69fe151ab2f3ae005c514c15a77a8b6",
+    "company": "Simple Energy",
+    "round_stage": "Series C",
+    "amount_usd": 182615047,
+    "amount_confidence": "reported",
+    "corroboration_count": 3,
+    "is_verified": true,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W40"
+   },
+   "sources": [
+    {
+     "publication": "Economic Times Tech — Funding",
+     "publishedAt": "2026-09-30T12:21:20.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 182615047,
+     "amountRaw": "Rs 1,750 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "family office of Dr Arokiaswamy Velumani"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "Rs 1,750 crore",
+       "unit": "crore",
+       "value": 1750,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": "Bengaluru",
+      "founders": [
+       {
+        "name": "Suhas Rajkumar",
+        "previous_company": null
+       },
+       {
+        "name": "Shreshth Mishra",
+        "previous_company": null
+       },
+       {
+        "name": "Ankit Gupta",
+        "previous_company": null
+       }
+      ],
+      "stage_raw": "all-equity round",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "electric two-wheeler maker",
+      "round_stage": null,
+      "company_name": "Simple Energy",
+      "founded_year": 2019,
+      "announced_date": null,
+      "business_model": "B2C",
+      "investors_lead": [
+       "family office of Dr Arokiaswamy Velumani"
+      ],
+      "sector_primary": "Mobility & EV",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Simple Energy manufactures electric two-wheelers.",
+      "total_raised_to_date": {
+       "raw": "about Rs 2,530 crore",
+       "unit": "crore",
+       "value": 2530,
+       "currency": "INR"
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Suhas Rajkumar",
+       "Ankit Gupta",
+       "Amit Mishra",
+       "Haran Family Office"
+      ]
+     }
+    },
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-10-03T03:30:21.000Z",
+     "stage": "Series C",
+     "amountUsd": 180000000,
+     "amountRaw": "$180 Mn",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Dr. Arokiaswamy Velumani Family Office"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$180 Mn",
+       "unit": "million",
+       "value": 180,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": "Series C",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "Electric Vehicles",
+      "round_stage": "Series C",
+      "company_name": "Simple Energy",
+      "founded_year": null,
+      "announced_date": "2026-09-30",
+      "business_model": "B2C",
+      "investors_lead": [
+       "Dr. Arokiaswamy Velumani Family Office"
+      ],
+      "sector_primary": "Mobility & EV",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [
+       "Climate & Energy"
+      ],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Simple Energy is an electric vehicle maker in the clean tech sector.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Haran Family Office",
+       "Amit Mishra",
+       "Suhas Rajkumar",
+       "Ankit Gupta"
+      ]
+     }
+    },
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-10-03T12:00:00.000Z",
+     "stage": "Series C",
+     "amountUsd": 182000000,
+     "amountRaw": "$182 million",
+     "amountConfidence": "reported",
+     "investorsLead": [],
+     "payload": {
+      "amount": {
+       "raw": "$182 million",
+       "unit": "million",
+       "value": 182,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": "Series C",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "Electric two-wheeler",
+      "round_stage": "Series C",
+      "company_name": "Simple Energy",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [],
+      "sector_primary": "Mobility & EV",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Electric two-wheeler maker.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": []
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "cce5ab5411c7033ab857fa43ea4c8ddbcfff44d2b097163f813dfad087f1c8fa",
+    "company": "Nat Habit",
+    "round_stage": "Series C",
+    "amount_usd": 14680037,
+    "amount_confidence": "reported",
+    "corroboration_count": 5,
+    "is_verified": true,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W41"
+   },
+   "sources": [
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-10-09T11:18:31.000Z",
+     "stage": "Series C",
+     "amountUsd": 14742066,
+     "amountRaw": "Rs 142.6 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Trident Growth Partners"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "Rs 142.6 crore",
+       "unit": "crore",
+       "value": 142.6,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [
+       {
+        "name": "Swagatika Das",
+        "previous_company": null
+       },
+       {
+        "name": "Gaurav Agarwal",
+        "previous_company": null
+       }
+      ],
+      "stage_raw": "Series C",
+      "valuation": {
+       "raw": "around Rs 800 crore",
+       "unit": "crore",
+       "value": 800,
+       "currency": "INR"
+      },
+      "sub_sector": "natural personal care",
+      "round_stage": "Series C",
+      "company_name": "Nat Habit",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": "D2C",
+      "investors_lead": [
+       "Trident Growth Partners"
+      ],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [
+       "Breathe Life"
+      ],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [
+       "Bertelsmann"
+      ],
+      "company_description": "Nat Habit is a natural personal care D2C brand that sells Ayurvedic personal care products, including shampoos, face washes, and moisturisers.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Linklight Ventures",
+       "Mirabilis",
+       "Firstport",
+       "Dharmayug Investments"
+      ]
+     }
+    },
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-10-10T10:31:17.000Z",
+     "stage": "Series C",
+     "amountUsd": 14680037,
+     "amountRaw": "₹142 Cr",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Trident Growth Partners"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "₹142 Cr",
+       "unit": "crore",
+       "value": 142,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [
+       {
+        "name": "Swagatika Das",
+        "previous_company": null
+       },
+       {
+        "name": "Gaurav Agarwal",
+        "previous_company": null
+       }
+      ],
+      "stage_raw": "all-primary Series C",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "personal care",
+      "round_stage": "Series C",
+      "company_name": "Nat Habit",
+      "founded_year": 2019,
+      "announced_date": null,
+      "business_model": "D2C",
+      "investors_lead": [
+       "Trident Growth Partners"
+      ],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [],
+      "prior_round_date": "2023",
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": "Series B",
+      "investors_existing": [
+       "Bertelsmann India Investments",
+       "Mirabilis Investment Trust",
+       "Sharrp Ventures"
+      ],
+      "company_description": "Nat Habit sells personal care products including hair oils, masks, scrubs, and face creams developed using plant-based formulations.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Physis Capital",
+       "Hero Family Office"
+      ]
+     }
+    },
+    {
+     "publication": "YourStory",
+     "publishedAt": "2026-10-10T12:43:32.000Z",
+     "stage": "Series C",
+     "amountUsd": 14680037,
+     "amountRaw": "Rs 142 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Trident Growth Partners"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "Rs 142 crore",
+       "unit": "crore",
+       "value": 142,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [
+       {
+        "name": "Swagatika Das",
+        "previous_company": null
+       },
+       {
+        "name": "Gaurav Agarwal",
+        "previous_company": null
+       }
+      ],
+      "stage_raw": "Series C",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "personal care",
+      "round_stage": "Series C",
+      "company_name": "Nat Habit",
+      "founded_year": 2019,
+      "announced_date": null,
+      "business_model": "D2C",
+      "investors_lead": [
+       "Trident Growth Partners"
+      ],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [
+       "Bertelsmann India Investments",
+       "Mirabilis Investment Trust",
+       "Sharrp Ventures"
+      ],
+      "company_description": "Nat Habit is an Ayurvedic personal care brand offering natural products across hair care, skin care, body care and baby care.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Physis Capital",
+       "Hero Family Office"
+      ]
+     }
+    },
+    {
+     "publication": "Economic Times Tech — Startups",
+     "publishedAt": "2026-10-10T14:09:31.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 14680037,
+     "amountRaw": "Rs 142 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Trident Growth Partners"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "Rs 142 crore",
+       "unit": "crore",
+       "value": 142,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [
+       {
+        "name": "Swagatika Das",
+        "previous_company": null
+       },
+       {
+        "name": "Gaurav Agarwal",
+        "previous_company": null
+       }
+      ],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "beauty and personal care",
+      "round_stage": null,
+      "company_name": "Nat Habit",
+      "founded_year": 2019,
+      "announced_date": null,
+      "business_model": "D2C",
+      "investors_lead": [
+       "Trident Growth Partners"
+      ],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [
+       "Bertelsmann India Investments",
+       "Mirabilis Investment Trust",
+       "Sharrp Ventures"
+      ],
+      "company_description": "Nat Habit is an Ayurveda-focused direct-to-consumer beauty and personal care startup.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Physis Capital",
+       "Hero Family Office"
+      ]
+     }
+    },
+    {
+     "publication": "BusinessLine — Companies",
+     "publishedAt": "2026-10-10T15:05:57.000Z",
+     "stage": "Series C",
+     "amountUsd": 14680037,
+     "amountRaw": "₹142 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Trident Growth Partners"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "₹142 crore",
+       "unit": "crore",
+       "value": 142,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [
+       {
+        "name": "Swagatika Das",
+        "previous_company": null
+       },
+       {
+        "name": "Gaurav Agarwal",
+        "previous_company": null
+       }
+      ],
+      "stage_raw": "Series C",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "personal care",
+      "round_stage": "Series C",
+      "company_name": "Nat Habit",
+      "founded_year": 2019,
+      "announced_date": null,
+      "business_model": "D2C",
+      "investors_lead": [
+       "Trident Growth Partners"
+      ],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [
+       "Bertelsmann India Investments",
+       "Mirabilis Investment Trust",
+       "Sharrp Ventures"
+      ],
+      "company_description": "Nat Habit is a personal care brand built around all-natural and Fresh Ayurveda positioning that offers hair care, skin care, body care, and baby care products.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Physis Capital",
+       "Hero Family Office"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "e6b6f920097da35cbb0f6cf7790ca5c45802ac4ffa3c4fecd0dc49b12b369eb1",
+    "company": "EDT",
+    "round_stage": "Pre-Series A",
+    "amount_usd": 2400000,
+    "amount_confidence": "reported",
+    "corroboration_count": 4,
+    "is_verified": true,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W40"
+   },
+   "sources": [
+    {
+     "publication": "Economic Times Tech — Startups",
+     "publishedAt": "2026-09-30T00:30:00.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 2400000,
+     "amountRaw": "$2.4 million",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Sauce"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$2.4 million",
+       "unit": "million",
+       "value": 2.4,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": "Mumbai",
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "kitchen appliances",
+      "round_stage": null,
+      "company_name": "EDT",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": "D2C",
+      "investors_lead": [
+       "Sauce"
+      ],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [
+       "Sauce"
+      ],
+      "company_description": "EDT is a kitchen appliance brand that also expands into beauty gadgets.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Alteria Capital",
+       "Raul Rai",
+       "Shibam Das",
+       "Arindam Paul",
+       "Ajith Pai",
+       "Anushree Tainwala"
+      ]
+     }
+    },
+    {
+     "publication": "Economic Times Tech — Funding",
+     "publishedAt": "2026-09-30T00:30:00.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 2400000,
+     "amountRaw": "$2.4 million",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Sauce VC"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$2.4 million",
+       "unit": "million",
+       "value": 2.4,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": "Mumbai",
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "kitchen appliances",
+      "round_stage": null,
+      "company_name": "EDT",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": "D2C",
+      "investors_lead": [
+       "Sauce VC"
+      ],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [
+       "Sauce"
+      ],
+      "company_description": "EDT is a kitchen appliance brand that produces kitchen appliances and beauty gadgets.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Alteria Capital",
+       "Raul Rai",
+       "Shibam Das",
+       "Arindam Paul",
+       "Ajith Pai",
+       "Anushree Tainwala"
+      ]
+     }
+    },
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-10-03T03:30:21.000Z",
+     "stage": "Pre-Series A",
+     "amountUsd": 2400000,
+     "amountRaw": "$2.4 Mn",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "Sauce VC"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$2.4 Mn",
+       "unit": "million",
+       "value": 2.4,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": "Pre-Series A",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "D2C",
+      "round_stage": "Pre-Series A",
+      "company_name": "EDT",
+      "founded_year": null,
+      "announced_date": "2026-09-30",
+      "business_model": "B2C",
+      "investors_lead": [
+       "Sauce.VC"
+      ],
+      "sector_primary": "D2C & Commerce",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "EDT is a D2C ecommerce brand.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Alteria Capital",
+       "Raul Rai",
+       "Shibam Das",
+       "Arindam Paul",
+       "Ajith Pai",
+       "Anushree Tainwala"
+      ]
+     }
+    },
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-10-03T12:00:00.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": null,
+     "amountRaw": null,
+     "amountConfidence": "undisclosed",
+     "investorsLead": [],
+     "payload": {
+      "amount": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": null,
+      "round_stage": null,
+      "company_name": "EDT",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [],
+      "sector_primary": "Other",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "undisclosed",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": null,
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.8,
+      "investors_participating": []
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "e9cf19e645fd9bf2b6c2f2d46da92c6b4a96db3adcbfefe08ffc8e20fb0a11af",
+    "company": "NeoGrowth",
+    "round_stage": "Debt",
+    "amount_usd": 8787346,
+    "amount_confidence": "reported",
+    "corroboration_count": 5,
+    "is_verified": true,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W41"
+   },
+   "sources": [
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-10-09T03:42:36.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 8787346,
+     "amountRaw": "Rs 85 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [],
+     "payload": {
+      "amount": {
+       "raw": "Rs 85 crore",
+       "unit": "crore",
+       "value": 85,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": "Mumbai",
+      "founders": [
+       {
+        "name": "Dhruv Khaitan",
+        "previous_company": null
+       },
+       {
+        "name": "Piyush Khaitan",
+        "previous_company": null
+       }
+      ],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "MSME lending",
+      "round_stage": null,
+      "company_name": "NeoGrowth",
+      "founded_year": 2011,
+      "announced_date": null,
+      "business_model": "B2B",
+      "investors_lead": [],
+      "sector_primary": "Fintech",
+      "company_aliases": [],
+      "prior_round_date": "2022-12",
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": "Series D+",
+      "investors_existing": [
+       "LeapFrog Investments"
+      ],
+      "company_description": "NeoGrowth is a digital lender providing tailored collateral-free and collateral-based business loans to micro, small and medium enterprises.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.9,
+      "investors_participating": [
+       "FMO"
+      ]
+     }
+    },
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-10-09T08:47:54.000Z",
+     "stage": "Debt",
+     "amountUsd": 8787346,
+     "amountRaw": "₹85 Cr",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "FMO"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "₹85 Cr",
+       "unit": "crore",
+       "value": 85,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": "Mumbai",
+      "founders": [
+       {
+        "name": "Dhruv Khaitan",
+        "previous_company": null
+       },
+       {
+        "name": "Piyush Khaitan",
+        "previous_company": null
+       }
+      ],
+      "stage_raw": "a mix of debt and equity round",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "MSME lending",
+      "round_stage": null,
+      "company_name": "NeoGrowth",
+      "founded_year": 2012,
+      "announced_date": null,
+      "business_model": "B2B",
+      "investors_lead": [
+       "FMO"
+      ],
+      "sector_primary": "Fintech",
+      "company_aliases": [],
+      "prior_round_date": "2022",
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "NeoGrowth offers loans to MSMEs across more than 75 business segments, targeting small businesses that often have difficulty accessing credit.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "LeapFrog Investments"
+      ]
+     }
+    },
+    {
+     "publication": "Economic Times Tech — Startups",
+     "publishedAt": "2026-10-09T00:30:00.000Z",
+     "stage": "Debt",
+     "amountUsd": 8787346,
+     "amountRaw": "Rs 85 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [],
+     "payload": {
+      "amount": {
+       "raw": "Rs 85 crore",
+       "unit": "crore",
+       "value": 85,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": "a mix of equity and debt",
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "MSME lending",
+      "round_stage": null,
+      "company_name": "NeoGrowth",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": "B2B",
+      "investors_lead": [],
+      "sector_primary": "Fintech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [
+       "LeapFrog Investments"
+      ],
+      "company_description": "NeoGrowth is an MSME lender that lends primarily to small, offline businesses such as retailers, restaurants, and cafes.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "FMO"
+      ]
+     }
+    },
+    {
+     "publication": "Economic Times Tech — Funding",
+     "publishedAt": "2026-10-09T00:30:00.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 8787346,
+     "amountRaw": "Rs 85 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [],
+     "payload": {
+      "amount": {
+       "raw": "Rs 85 crore",
+       "unit": "crore",
+       "value": 85,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "MSME lending",
+      "round_stage": null,
+      "company_name": "NeoGrowth",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": "B2B",
+      "investors_lead": [],
+      "sector_primary": "Fintech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [
+       "LeapFrog Investments"
+      ],
+      "company_description": "NeoGrowth is a digital MSME lender that provides credit primarily to small, offline businesses such as retailers, restaurants, and cafes.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "FMO"
+      ]
+     }
+    },
+    {
+     "publication": "VCCircle",
+     "publishedAt": null,
+     "stage": "Undisclosed",
+     "amountUsd": 8787346,
+     "amountRaw": "Rs 85 crore",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "FMO",
+      "LeapFrog Investments"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "Rs 85 crore",
+       "unit": "crore",
+       "value": 85,
+       "currency": "INR"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [
+       {
+        "name": "Dhruv Khaitan",
+        "previous_company": "Venture Infotek"
+       },
+       {
+        "name": "Piyush Khaitan",
+        "previous_company": "Venture Infotek"
+       }
+      ],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "MSME lending",
+      "round_stage": null,
+      "company_name": "NeoGrowth",
+      "founded_year": 2012,
+      "announced_date": null,
+      "business_model": "B2B",
+      "investors_lead": [
+       "FMO",
+       "LeapFrog Investments"
+      ],
+      "sector_primary": "Fintech",
+      "company_aliases": [],
+      "prior_round_date": "2022-12",
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": "Series D+",
+      "investors_existing": [
+       "FMO",
+       "LeapFrog Investments"
+      ],
+      "company_description": "NeoGrowth is a non-bank lender focused on providing loans to micro, small, and medium-sized enterprises.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": []
+     }
+    }
+   ]
+  },
+  {
+   "deal": {
+    "id": "ff816fd8a4dbe5d2cab45a4b1b1df97990fb313d6e7e69454213c337f25f9c94",
+    "company": "Gravity",
+    "round_stage": "Undisclosed",
+    "amount_usd": 15000000,
+    "amount_confidence": "reported",
+    "corroboration_count": 4,
+    "is_verified": true,
+    "has_disputed_field": false,
+    "disputed_fields": [],
+    "iso_week": "2026-W40"
+   },
+   "sources": [
+    {
+     "publication": "Economic Times Tech — Startups",
+     "publishedAt": "2026-09-30T08:21:35.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 15000000,
+     "amountRaw": "$15 million",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "3one4 Capital",
+      "Info Edge Ventures"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$15 million",
+       "unit": "million",
+       "value": 15,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [
+       {
+        "name": "Saurabh Jain",
+        "previous_company": "Livspace"
+       },
+       {
+        "name": "Lalit Mittal",
+        "previous_company": "Livspace"
+       }
+      ],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "home interior design",
+      "round_stage": null,
+      "company_name": "Gravity",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [
+       "3one4 Capital",
+       "Info Edge Ventures"
+      ],
+      "sector_primary": "Real Estate & Proptech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Gravity is a home interior design startup that operates as a technology platform layer for the industry.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Alteria Capital",
+       "Genesia"
+      ]
+     }
+    },
+    {
+     "publication": "Economic Times Tech — Funding",
+     "publishedAt": "2026-09-30T08:21:35.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 15000000,
+     "amountRaw": "$15 million",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "3one4 Capital",
+      "Info Edge Ventures"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$15 million",
+       "unit": "million",
+       "value": 15,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [
+       {
+        "name": "Saurabh Jain",
+        "previous_company": "Livspace"
+       },
+       {
+        "name": "Lalit Mittal",
+        "previous_company": "Livspace"
+       }
+      ],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "home interior design",
+      "round_stage": null,
+      "company_name": "Gravity",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [
+       "3one4 Capital",
+       "Info Edge Ventures"
+      ],
+      "sector_primary": "Real Estate & Proptech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Gravity is a home interior design technology platform layer.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Alteria Capital",
+       "Genesia"
+      ]
+     }
+    },
+    {
+     "publication": "Inc42",
+     "publishedAt": "2026-10-03T03:30:21.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 15000000,
+     "amountRaw": "$15 Mn",
+     "amountConfidence": "reported",
+     "investorsLead": [
+      "3one4 Capital",
+      "Info Edge Ventures"
+     ],
+     "payload": {
+      "amount": {
+       "raw": "$15 Mn",
+       "unit": "million",
+       "value": 15,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "Real Estate Services",
+      "round_stage": null,
+      "company_name": "Gravity",
+      "founded_year": null,
+      "announced_date": "2026-09-30",
+      "business_model": "B2B",
+      "investors_lead": [
+       "3one4 Capital",
+       "Info Edge Ventures"
+      ],
+      "sector_primary": "Real Estate & Proptech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Gravity is a home interior and real estate services startup.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.95,
+      "investors_participating": [
+       "Alteria Capital",
+       "Genesia Ventures"
+      ]
+     }
+    },
+    {
+     "publication": "Entrackr",
+     "publishedAt": "2026-10-03T12:00:00.000Z",
+     "stage": "Undisclosed",
+     "amountUsd": 15000000,
+     "amountRaw": "$15 million",
+     "amountConfidence": "reported",
+     "investorsLead": [],
+     "payload": {
+      "amount": {
+       "raw": "$15 million",
+       "unit": "million",
+       "value": 15,
+       "currency": "USD"
+      },
+      "domain": null,
+      "hq_city": null,
+      "founders": [],
+      "stage_raw": null,
+      "valuation": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "sub_sector": "home interior materials",
+      "round_stage": null,
+      "company_name": "Gravity",
+      "founded_year": null,
+      "announced_date": null,
+      "business_model": null,
+      "investors_lead": [],
+      "sector_primary": "Real Estate & Proptech",
+      "company_aliases": [],
+      "prior_round_date": null,
+      "sector_secondary": [],
+      "amount_confidence": "reported",
+      "prior_round_stage": null,
+      "investors_existing": [],
+      "company_description": "Premium home interior materials startup.",
+      "total_raised_to_date": {
+       "raw": null,
+       "unit": null,
+       "value": null,
+       "currency": null
+      },
+      "extraction_confidence": 0.9,
+      "investors_participating": []
+     }
+    }
+   ]
+  }
+ ]
+}

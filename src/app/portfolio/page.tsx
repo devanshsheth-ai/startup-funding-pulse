@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
-import { Badge, Card, Disclosure, Empty, Loading, Page, ProfileSwitcher, Table, td } from "@/components/ui";
+import { BarList } from "@/components/deals";
+import { Badge, Card, Disclosure, Empty, Icon, Loading, Page, ProfileSwitcher, Table, td } from "@/components/ui";
 import { getAggregates } from "@/db/queries/aggregates";
 import { getAdjacencyTimeline, getRelatedEvents, getTracked, getWatchlist, pressureScore } from "@/db/queries/portfolio";
 import { RELATIONSHIP_LABELS, STAGE_HELD_LABEL } from "@/lib/copy";
@@ -31,6 +32,16 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
   return (
     <>
       <ProfileSwitcher path="/portfolio" sp={sp} profiles={all} active={active} />
+      {tracked.length ? (
+        <Card icon={Icon.flame} title="Competitive pressure across tracked companies" subtitle="Recent competitor and same-layer raises, weighted by confidence and recency" n={timeline.length}>
+          <BarList
+            rows={tracked
+              .map((t) => ({ t, p: pressureScore(timeline.filter((e) => e.portfolioId === t.id), now) }))
+              .sort((x, y) => y.p.score - x.p.score)
+              .map(({ t, p }) => ({ key: String(t.id), label: t.name, value: p.score, display: `${p.score.toFixed(2)} · ${p.competitors} competitor / ${p.sameLayer} same-layer`, highlight: p.score > 0 }))}
+          />
+        </Card>
+      ) : null}
 
       {tracked.length === 0 ? (
         <Card>
@@ -67,19 +78,19 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
                 <p className="text-muted">{t.description}</p>
               </div>
               <div className="mb-3 grid grid-cols-3 gap-2 text-center">
-                <div className="rounded-md border border-line p-2">
+                <div className="rounded-xl bg-card-2 p-3 ring-1 ring-line/70">
                   <div className="text-lg font-semibold tabular-nums">{p.score.toFixed(2)}</div>
                   <div className="text-[11px] text-muted" title="Σ weight × confidence × e^(−age/30d); competitor = 1, same layer = 0.6">
                     competitive pressure
                   </div>
                 </div>
-                <div className="rounded-md border border-line p-2">
+                <div className="rounded-xl bg-card-2 p-3 ring-1 ring-line/70">
                   <div className="text-lg font-semibold tabular-nums">
                     {p.competitors} / {p.sameLayer}
                   </div>
                   <div className="text-[11px] text-muted">competitor / same-layer raises ({p.last30} in 30 days)</div>
                 </div>
-                <div className="rounded-md border border-line p-2">
+                <div className="rounded-xl bg-card-2 p-3 ring-1 ring-line/70">
                   <div className="text-lg font-semibold tabular-nums">{m ? `${m.z >= 0 ? "+" : ""}${m.z.toFixed(1)}σ` : "—"}</div>
                   <div className="text-[11px] text-muted">
                     {t.sector} momentum, 28 days (n = {m?.n ?? 0})
@@ -166,7 +177,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
 
 export default function PortfolioPage({ searchParams }: { searchParams: SearchParams }) {
   return (
-    <Page title="Portfolio" subtitle="Tracked companies, the raises adjacent to them, and the watchlist.">
+    <Page eyebrow="Tracked companies" title="Portfolio" subtitle="Tracked companies, the raises adjacent to them, and the watchlist.">
       <Disclosure />
       <Suspense fallback={<Loading what="tracked companies" />}>
         <Content searchParams={searchParams} />

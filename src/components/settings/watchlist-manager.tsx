@@ -25,7 +25,7 @@ export interface WatchRowView {
 }
 
 type Suggestion = { company: string; score: number; stage: string; sector: string };
-const input = "rounded-md border border-line bg-background px-2 py-1 text-sm";
+const input = "input";
 const list = (s: string) => s.split(",").map((x) => x.trim()).filter(Boolean);
 
 function toItem(r: WatchRowView): WatchItem {
@@ -142,7 +142,7 @@ export function WatchlistManager({ profileId, rows, suggestions }: { profileId: 
       {msg ? <p className={`text-sm ${msg.ok ? "text-up" : "text-down"}`} role="status">{msg.text}</p> : null}
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <div className="space-y-2 rounded-lg border border-line bg-card p-4">
+        <div className="card space-y-3 p-5">
           <h3 className="text-sm font-semibold">Add one</h3>
           <div className="flex flex-wrap gap-2">
             <select className={input} value={type} onChange={(e) => setType(e.target.value as WatchItem["watch_type"])} aria-label="Watch type">
@@ -154,11 +154,11 @@ export function WatchlistManager({ profileId, rows, suggestions }: { profileId: 
           </div>
           <div className="flex flex-wrap gap-2">
             {type === "company" || type === "investor" ? (
-              <button type="button" disabled={busy || !value.trim()} onClick={suggestAliases} className="rounded-md border border-line px-3 py-1 text-sm disabled:opacity-50">
+              <button type="button" disabled={busy || !value.trim()} onClick={suggestAliases} className="btn btn-secondary btn-sm">
                 Suggest aliases
               </button>
             ) : null}
-            <button type="button" disabled={busy || !value.trim()} onClick={add} className="rounded-md bg-foreground px-3 py-1 text-sm text-background disabled:opacity-50">
+            <button type="button" disabled={busy || !value.trim()} onClick={add} className="btn btn-primary btn-sm">
               Add to watchlist
             </button>
           </div>
@@ -175,14 +175,14 @@ export function WatchlistManager({ profileId, rows, suggestions }: { profileId: 
           ) : null}
         </div>
 
-        <div className="space-y-2 rounded-lg border border-line bg-card p-4">
+        <div className="card space-y-3 p-5">
           <h3 className="text-sm font-semibold">Bulk paste and CSV</h3>
           <textarea className={`${input} h-20 w-full`} value={bulk} onChange={(e) => setBulk(e.target.value)} placeholder={"One per line, added as the type selected on the left\nRazorpay\nZepto"} aria-label="Bulk paste" />
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
               disabled={busy || !bulk.trim()}
-              className="rounded-md bg-foreground px-3 py-1 text-sm text-background disabled:opacity-50"
+              className="btn btn-primary btn-sm"
               onClick={async () => {
                 const lines = [...new Set(bulk.split(/\r?\n/).map((l) => l.trim()).filter(Boolean))];
                 if (await send(lines.map((v) => ({ watch_type: type, value: v, aliases: [], notes: null, tags: [], alerts_enabled: true, status: "watching" })), `Added ${lines.length} ${type} entries`)) setBulk("");
@@ -190,7 +190,7 @@ export function WatchlistManager({ profileId, rows, suggestions }: { profileId: 
             >
               Add {bulk.split(/\r?\n/).filter((l) => l.trim()).length || ""} as {type}
             </button>
-            <label className="cursor-pointer rounded-md border border-line px-3 py-1 text-sm">
+            <label className="btn btn-secondary btn-sm">
               Import CSV
               <input
                 type="file"
@@ -203,7 +203,7 @@ export function WatchlistManager({ profileId, rows, suggestions }: { profileId: 
                 }}
               />
             </label>
-            <a className="rounded-md border border-line px-3 py-1 text-sm" href={`/api/export/watchlist.csv?profile=${profileId}`}>
+            <a className="btn btn-secondary btn-sm" href={`/api/export/watchlist.csv?profile=${profileId}`}>
               Export CSV
             </a>
           </div>
@@ -211,7 +211,7 @@ export function WatchlistManager({ profileId, rows, suggestions }: { profileId: 
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-line bg-card">
+      <div className="card overflow-x-auto p-2">
         <table className="w-full min-w-[820px] text-left text-sm">
           <thead className="text-xs text-muted">
             <tr className="border-b border-line">
@@ -249,10 +249,10 @@ export function WatchlistManager({ profileId, rows, suggestions }: { profileId: 
                     <input className={`${input} w-44`} value={editing.notesText} onChange={(e) => setEditing({ ...editing, notesText: e.target.value })} aria-label="Notes" />
                   </td>
                   <td className="whitespace-nowrap px-2 py-1.5">
-                    <button type="button" className="mr-1 rounded-md bg-foreground px-2 py-0.5 text-xs text-background" disabled={busy} onClick={saveEdit}>
+                    <button type="button" className="btn btn-primary btn-sm mr-1" disabled={busy} onClick={saveEdit}>
                       Save
                     </button>
-                    <button type="button" className="rounded-md border border-line px-2 py-0.5 text-xs" onClick={() => setEditing(null)}>
+                    <button type="button" className="btn btn-secondary btn-sm" onClick={() => setEditing(null)}>
                       Cancel
                     </button>
                   </td>
@@ -268,10 +268,10 @@ export function WatchlistManager({ profileId, rows, suggestions }: { profileId: 
                   <td className="px-2 py-1.5 text-xs">{r.lastEvent ?? "—"}</td>
                   <td className="px-2 py-1.5 text-xs text-muted">{r.notes ?? ""}</td>
                   <td className="whitespace-nowrap px-2 py-1.5">
-                    <button type="button" className="mr-1 rounded-md border border-line px-2 py-0.5 text-xs" onClick={() => startEdit(r)}>
+                    <button type="button" className="btn btn-secondary btn-sm mr-1" onClick={() => startEdit(r)}>
                       Edit
                     </button>
-                    <button type="button" className="rounded-md border border-line px-2 py-0.5 text-xs text-down" disabled={busy} onClick={() => remove(r)}>
+                    <button type="button" className="btn btn-secondary btn-sm !text-down" disabled={busy} onClick={() => remove(r)}>
                       Remove
                     </button>
                   </td>
@@ -282,7 +282,7 @@ export function WatchlistManager({ profileId, rows, suggestions }: { profileId: 
         </table>
       </div>
 
-      <div className="rounded-lg border border-line bg-card p-4">
+      <div className="card p-5">
         <h3 className="mb-2 text-sm font-semibold">Suggested to watch</h3>
         <p className="mb-2 text-xs text-muted">Companies in act-now or high-tier deals for this profile in the last 90 days that you are not watching or tracking.</p>
         {suggestions.length === 0 ? (
@@ -290,14 +290,14 @@ export function WatchlistManager({ profileId, rows, suggestions }: { profileId: 
         ) : (
           <ul className="flex flex-wrap gap-2">
             {suggestions.map((s) => (
-              <li key={s.company} className="flex items-center gap-2 rounded-md border border-line px-2 py-1 text-sm">
+              <li key={s.company} className="flex items-center gap-2 rounded-xl border border-line bg-card px-2.5 py-1.5 text-sm shadow-sm">
                 <span>
                   {s.company} <span className="text-xs text-muted">· {s.stage} · {s.sector} · score {Math.round(s.score)}</span>
                 </span>
                 <button
                   type="button"
                   disabled={busy}
-                  className="rounded bg-foreground px-1.5 text-xs text-background"
+                  className="btn btn-primary btn-sm !py-0.5"
                   onClick={() => send([{ watch_type: "company", value: s.company, aliases: [], notes: `Suggested from a ${s.stage} deal (score ${Math.round(s.score)})`, tags: ["suggested"], alerts_enabled: true, status: "watching" }], `Watching ${s.company}`)}
                 >
                   + Watch

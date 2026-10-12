@@ -16,16 +16,16 @@ export const metadata = { title: "Explorer · Startup Funding Pulse" };
 // Natural-language translation is one Gemini call (cached by content hash).
 export const maxDuration = 60;
 
-const input = "w-full rounded-md border border-line bg-card px-2 py-1 text-sm";
+const input = "input";
 
 function Multi({ name, label, options, selected, render }: { name: string; label: string; options: readonly string[]; selected: string[]; render?: (o: string) => string }) {
   return (
     <details className="relative">
-      <summary className="cursor-pointer list-none rounded-md border border-line bg-card px-2 py-1 text-sm">
+      <summary className="btn btn-secondary btn-sm list-none">
         {label}
         {selected.length ? ` (${selected.length})` : ""} ▾
       </summary>
-      <div className="absolute z-10 mt-1 max-h-72 w-64 overflow-y-auto rounded-md border border-line bg-card p-2 shadow-lg">
+      <div className="absolute z-10 mt-1 max-h-72 w-64 overflow-y-auto rounded-2xl border border-line bg-card p-2 shadow-xl">
         {options.map((o) => (
           <label key={o} className="flex items-center gap-2 py-0.5 text-sm">
             <input type="checkbox" name={name} value={o} defaultChecked={selected.includes(o)} />
@@ -65,10 +65,10 @@ function FilterForm({ f, view }: { f: DealFilters; view: string }) {
         </select>
       </div>
       <div className="flex gap-2">
-        <button className="rounded-md bg-foreground px-3 py-1 text-sm text-background" type="submit">
+        <button className="btn btn-primary btn-sm" type="submit">
           Apply filters
         </button>
-        <Link className="rounded-md border border-line px-3 py-1 text-sm" href={f.profile ? `/explorer?profile=${f.profile}` : "/explorer"}>
+        <Link className="btn btn-secondary btn-sm" href={f.profile ? `/explorer?profile=${f.profile}` : "/explorer"}>
           Reset
         </Link>
       </div>
@@ -115,7 +115,7 @@ async function Deals({ sp }: { sp: Record<string, string | string[] | undefined>
       f = { ...r.filters, profile: active?.id };
       const href = `/explorer?${filtersToParams(f).toString()}`;
       nlNote = (
-        <div className="space-y-1 rounded-md border border-line bg-card p-3 text-sm">
+        <div className="card animate-in space-y-1 p-4 text-sm">
           <p>
             “{nl}” was interpreted as <Chips f={f} />{" "}
             <Link className="link text-xs" href={href}>
@@ -126,7 +126,7 @@ async function Deals({ sp }: { sp: Record<string, string | string[] | undefined>
           <p className="text-xs text-muted">Gemini only produced a filter object from a fixed list of fields; it was validated before the query ran. No model-written SQL.</p>
         </div>
       );
-    } else nlNote = <p className="rounded-md border border-line bg-card p-3 text-sm text-down">{r.error ?? "No filters could be derived from that question."}</p>;
+    } else nlNote = <p className="card p-4 text-sm text-down">{r.error ?? "No filters could be derived from that question."}</p>;
   }
   const res = await queryDeals(f);
   const base = filtersToParams({ ...f, cursor: 0, limit: f.limit });
@@ -139,7 +139,7 @@ async function Deals({ sp }: { sp: Record<string, string | string[] | undefined>
       <form method="get" action="/explorer" className="no-print flex gap-2">
         {active ? <input type="hidden" name="profile" value={active.id} /> : null}
         <input className={`${input} py-2`} name="nl" defaultValue={nl ?? ""} placeholder="Ask in plain English, e.g. “fintech seed rounds in Bengaluru over $2M since August, biggest first”" aria-label="Natural-language search" />
-        <button className="rounded-md bg-accent px-3 text-sm text-white" type="submit">
+        <button className="btn btn-primary" type="submit">
           Search
         </button>
       </form>
@@ -151,7 +151,7 @@ async function Deals({ sp }: { sp: Record<string, string | string[] | undefined>
         </div>
         <div className="no-print flex items-center gap-2 text-sm">
           <Pills label="View" items={["table", "cards"].map((v) => ({ href: hrefWith("/explorer", sp, { view: v }), label: v === "table" ? "Table" : "Cards", active: v === view }))} />
-          <a className="rounded-md border border-line px-2.5 py-1 text-xs" href={csv}>
+          <a className="btn btn-secondary btn-sm" href={csv}>
             ⬇ CSV of this view
           </a>
         </div>
@@ -225,7 +225,7 @@ async function Events({ sp }: { sp: Record<string, string | string[] | undefined
         <input className={`${input} w-48`} name="q" placeholder="Search headlines" defaultValue={f.q ?? ""} aria-label="Search headlines" />
         <input className={`${input} w-40`} type="date" name="from" defaultValue={f.from ?? ""} aria-label="From date" />
         <input className={`${input} w-40`} type="date" name="to" defaultValue={f.to ?? ""} aria-label="To date" />
-        <button className="rounded-md bg-foreground px-3 py-1 text-sm text-background" type="submit">
+        <button className="btn btn-primary btn-sm" type="submit">
           Apply
         </button>
       </form>
@@ -293,7 +293,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
 
 export default function ExplorerPage({ searchParams }: { searchParams: SearchParams }) {
   return (
-    <Page title="Explorer" subtitle="Every deal and event in the database, filterable and exportable.">
+    <Page eyebrow="Archive" title="Explorer" subtitle="Every deal and event in the database, filterable and exportable.">
       <Suspense fallback={<Loading what="the archive" />}>
         <Content searchParams={searchParams} />
       </Suspense>

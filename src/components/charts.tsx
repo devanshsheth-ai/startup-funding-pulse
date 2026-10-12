@@ -6,56 +6,83 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  Cell,
   ComposedChart,
   Legend,
   Line,
-  LineChart,
+  Pie,
+  PieChart,
   ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
+import { SERIES } from "@/lib/chart-colors";
 
 /**
  * Client-side Recharts wrappers. Pages compute every number on the server and
- * pass plain arrays in; these components only draw.
+ * pass plain arrays in; these components only draw. Gradient fills, rounded
+ * bars and short entrance animations; colours are CSS tokens so both themes work.
  */
 
 const money = (v: number) => (v >= 1e9 ? `$${(v / 1e9).toFixed(1)}B` : v >= 1e6 ? `$${Math.round(v / 1e6)}M` : v >= 1e3 ? `$${Math.round(v / 1e3)}K` : `$${v}`);
 const wk = (w: string) => w.replace(/^\d{4}-/, "");
-const axis = { stroke: "var(--muted)", fontSize: 11, tickLine: false } as const;
-const tooltipStyle = { contentStyle: { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 6, fontSize: 12 }, labelStyle: { color: "var(--foreground)" } };
+const axis = { stroke: "var(--muted)", fontSize: 11, tickLine: false, axisLine: false } as const;
+const anim = { isAnimationActive: true, animationDuration: 900, animationEasing: "ease-out" } as const;
+const tooltipStyle = {
+  contentStyle: { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, fontSize: 12, boxShadow: "0 12px 32px -12px rgb(15 23 42 / 0.25)", padding: "8px 12px" },
+  labelStyle: { color: "var(--foreground)", fontWeight: 600 },
+  cursor: { fill: "var(--accent-soft)", opacity: 0.6 },
+};
+const legend = { wrapperStyle: { fontSize: 12, paddingTop: 6 }, iconType: "circle" as const, iconSize: 8 };
+
+
+function Grad({ id, color, from = 0.9, to = 0.35, vertical = true }: { id: string; color: string; from?: number; to?: number; vertical?: boolean }) {
+  return (
+    <linearGradient id={id} x1="0" y1="0" x2={vertical ? "0" : "1"} y2={vertical ? "1" : "0"}>
+      <stop offset="0%" stopColor={color} stopOpacity={from} />
+      <stop offset="100%" stopColor={color} stopOpacity={to} />
+    </linearGradient>
+  );
+}
 
 export function CapitalCountChart({ data }: { data: { week: string; capital: number; n: number; partial: boolean }[] }) {
   return (
-    <ResponsiveContainer width="100%" height={240}>
-      <ComposedChart data={data.map((d) => ({ ...d, label: d.partial ? `${wk(d.week)}*` : wk(d.week) }))} margin={{ top: 8, right: 4, left: 4, bottom: 0 }}>
-        <CartesianGrid stroke="var(--grid)" vertical={false} />
+    <ResponsiveContainer width="100%" height={260}>
+      <ComposedChart data={data.map((d) => ({ ...d, label: d.partial ? `${wk(d.week)}*` : wk(d.week) }))} margin={{ top: 10, right: 4, left: 0, bottom: 0 }}>
+        <defs>
+          <Grad id="capBar" color="var(--chart-1)" from={0.95} to={0.45} />
+        </defs>
+        <CartesianGrid stroke="var(--grid)" vertical={false} strokeDasharray="4 4" />
         <XAxis dataKey="label" {...axis} />
         <YAxis yAxisId="cap" tickFormatter={money} {...axis} width={52} />
         <YAxis yAxisId="n" orientation="right" allowDecimals={false} {...axis} width={28} />
         <Tooltip {...tooltipStyle} formatter={(v, name) => (name === "Capital" ? money(Number(v)) : v)} />
-        <Legend wrapperStyle={{ fontSize: 12 }} />
-        <Bar isAnimationActive={false} yAxisId="cap" dataKey="capital" name="Capital" fill="var(--chart-1)" radius={[3, 3, 0, 0]} />
-        <Line isAnimationActive={false} yAxisId="n" dataKey="n" name="Deals" stroke="var(--chart-3)" strokeWidth={2} dot={{ r: 2 }} />
+        <Legend {...legend} />
+        <Bar yAxisId="cap" dataKey="capital" name="Capital" fill="url(#capBar)" radius={[8, 8, 3, 3]} maxBarSize={36} {...anim} />
+        <Line yAxisId="n" dataKey="n" name="Deals" stroke="var(--chart-4)" strokeWidth={2.5} dot={{ r: 3, strokeWidth: 2, fill: "var(--card)" }} activeDot={{ r: 5 }} type="monotone" {...anim} />
       </ComposedChart>
     </ResponsiveContainer>
   );
 }
 
 export function StageMixChart({ data, keys }: { data: Record<string, number | string>[]; keys: string[] }) {
-  const colors = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-5)"];
   return (
-    <ResponsiveContainer width="100%" height={220}>
-      <AreaChart data={data} stackOffset="expand" margin={{ top: 8, right: 4, left: 4, bottom: 0 }}>
-        <CartesianGrid stroke="var(--grid)" vertical={false} />
+    <ResponsiveContainer width="100%" height={230}>
+      <AreaChart data={data} stackOffset="expand" margin={{ top: 8, right: 4, left: 0, bottom: 0 }}>
+        <defs>
+          {keys.map((k, i) => (
+            <Grad key={k} id={`stage-${i}`} color={SERIES[i % SERIES.length] ?? "var(--chart-1)"} from={0.75} to={0.25} />
+          ))}
+        </defs>
+        <CartesianGrid stroke="var(--grid)" vertical={false} strokeDasharray="4 4" />
         <XAxis dataKey="label" {...axis} />
         <YAxis tickFormatter={(v: number) => `${Math.round(v * 100)}%`} {...axis} width={40} />
         <Tooltip {...tooltipStyle} formatter={(v) => money(Number(v))} />
-        <Legend wrapperStyle={{ fontSize: 12 }} />
+        <Legend {...legend} />
         {keys.map((k, i) => (
-          <Area isAnimationActive={false} key={k} type="monotone" dataKey={k} stackId="1" stroke={colors[i % colors.length]} fill={colors[i % colors.length]} fillOpacity={0.55} />
+          <Area key={k} type="monotone" dataKey={k} stackId="1" stroke={SERIES[i % SERIES.length]} strokeWidth={2} fill={`url(#stage-${i})`} {...anim} />
         ))}
       </AreaChart>
     </ResponsiveContainer>
@@ -64,14 +91,17 @@ export function StageMixChart({ data, keys }: { data: Record<string, number | st
 
 export function HistogramChart({ data, medianLabel }: { data: { label: string; n: number }[]; medianLabel: string | null }) {
   return (
-    <ResponsiveContainer width="100%" height={220}>
-      <BarChart data={data} margin={{ top: 16, right: 4, left: 4, bottom: 0 }}>
-        <CartesianGrid stroke="var(--grid)" vertical={false} />
+    <ResponsiveContainer width="100%" height={230}>
+      <BarChart data={data} margin={{ top: 18, right: 4, left: 0, bottom: 0 }}>
+        <defs>
+          <Grad id="histBar" color="var(--chart-2)" from={0.95} to={0.45} />
+        </defs>
+        <CartesianGrid stroke="var(--grid)" vertical={false} strokeDasharray="4 4" />
         <XAxis dataKey="label" {...axis} interval={0} angle={-30} textAnchor="end" height={48} />
         <YAxis allowDecimals={false} {...axis} width={28} />
         <Tooltip {...tooltipStyle} />
-        <Bar isAnimationActive={false} dataKey="n" name="Deals" fill="var(--chart-2)" radius={[3, 3, 0, 0]} />
-        {medianLabel ? <ReferenceLine x={medianLabel} stroke="var(--chart-3)" strokeDasharray="4 3" label={{ value: "median", position: "top", fill: "var(--chart-3)", fontSize: 11 }} /> : null}
+        <Bar dataKey="n" name="Deals" fill="url(#histBar)" radius={[8, 8, 3, 3]} {...anim} />
+        {medianLabel ? <ReferenceLine x={medianLabel} stroke="var(--chart-4)" strokeWidth={2} strokeDasharray="5 4" label={{ value: "median", position: "top", fill: "var(--chart-4)", fontSize: 11, fontWeight: 600 }} /> : null}
       </BarChart>
     </ResponsiveContainer>
   );
@@ -79,34 +109,71 @@ export function HistogramChart({ data, medianLabel }: { data: { label: string; n
 
 export function ShareLine({ data, label, baseline }: { data: { week: string; value: number | null }[]; label: string; baseline?: number | null }) {
   return (
-    <ResponsiveContainer width="100%" height={140}>
-      <LineChart data={data.map((d) => ({ ...d, label: wk(d.week) }))} margin={{ top: 8, right: 4, left: 4, bottom: 0 }}>
-        <CartesianGrid stroke="var(--grid)" vertical={false} />
+    <ResponsiveContainer width="100%" height={150}>
+      <AreaChart data={data.map((d) => ({ ...d, label: wk(d.week) }))} margin={{ top: 8, right: 4, left: 0, bottom: 0 }}>
+        <defs>
+          <Grad id="shareArea" color="var(--chart-7)" from={0.4} to={0} />
+        </defs>
+        <CartesianGrid stroke="var(--grid)" vertical={false} strokeDasharray="4 4" />
         <XAxis dataKey="label" {...axis} />
         <YAxis domain={[0, 1]} tickFormatter={(v: number) => `${Math.round(v * 100)}%`} {...axis} width={40} />
         <Tooltip {...tooltipStyle} formatter={(v) => `${Math.round(Number(v) * 100)}%`} />
         {baseline != null ? <ReferenceLine y={baseline} stroke="var(--muted)" strokeDasharray="4 3" /> : null}
-        <Line isAnimationActive={false} dataKey="value" name={label} stroke="var(--chart-4)" strokeWidth={2} dot={{ r: 2 }} connectNulls />
-      </LineChart>
+        <Area dataKey="value" name={label} type="monotone" stroke="var(--chart-7)" strokeWidth={2.5} fill="url(#shareArea)" connectNulls dot={{ r: 2.5 }} {...anim} />
+      </AreaChart>
     </ResponsiveContainer>
   );
 }
 
-/** Generic multi-series line chart over ISO weeks (trends page, sector page). */
+/** Generic multi-series chart over ISO weeks; the first series is drawn as a soft area. */
 export function WeekLines({ data, series, money: isMoney = false, height = 240 }: { data: Record<string, number | string | null>[]; series: { key: string; label: string }[]; money?: boolean; height?: number }) {
-  const colors = ["var(--chart-1)", "var(--chart-3)", "var(--chart-2)", "var(--chart-4)", "var(--chart-5)"];
+  const uid = series.map((s) => s.key).join("-");
   return (
     <ResponsiveContainer width="100%" height={height}>
-      <LineChart data={data} margin={{ top: 8, right: 8, left: 4, bottom: 0 }}>
-        <CartesianGrid stroke="var(--grid)" vertical={false} />
+      <ComposedChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+        <defs>
+          {series.map((s, i) => (
+            <Grad key={s.key} id={`wl-${uid}-${i}`} color={SERIES[i % SERIES.length] ?? "var(--chart-1)"} from={0.35} to={0} />
+          ))}
+        </defs>
+        <CartesianGrid stroke="var(--grid)" vertical={false} strokeDasharray="4 4" />
         <XAxis dataKey="label" {...axis} />
         <YAxis tickFormatter={isMoney ? money : undefined} allowDecimals={false} {...axis} width={isMoney ? 52 : 32} />
         <Tooltip {...tooltipStyle} formatter={(v) => (isMoney ? money(Number(v)) : v)} />
-        <Legend wrapperStyle={{ fontSize: 12 }} />
-        {series.map((s, i) => (
-          <Line isAnimationActive={false} key={s.key} dataKey={s.key} name={s.label} stroke={colors[i % colors.length]} strokeWidth={2} dot={{ r: 2 }} connectNulls />
-        ))}
-      </LineChart>
+        {series.length > 1 ? <Legend {...legend} /> : null}
+        {series.map((s, i) =>
+          i === 0 ? (
+            <Area key={s.key} dataKey={s.key} name={s.label} type="monotone" stroke={SERIES[0]} strokeWidth={2.5} fill={`url(#wl-${uid}-0)`} connectNulls dot={{ r: 2.5 }} {...anim} />
+          ) : (
+            <Line key={s.key} dataKey={s.key} name={s.label} type="monotone" stroke={SERIES[i % SERIES.length]} strokeWidth={2.5} dot={{ r: 2.5 }} connectNulls {...anim} />
+          ),
+        )}
+      </ComposedChart>
     </ResponsiveContainer>
+  );
+}
+
+/** Donut with a centred total (stage mix, status splits). */
+export function Donut({ data, centerLabel, centerValue, money: isMoney = false, height = 220 }: { data: { name: string; value: number }[]; centerLabel: string; centerValue: string; money?: boolean; height?: number }) {
+  const shown = data.filter((d) => d.value > 0);
+  return (
+    <div className="relative" style={{ height }}>
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Tooltip {...tooltipStyle} formatter={(v) => (isMoney ? money(Number(v)) : v)} />
+          <Pie data={shown} dataKey="value" nameKey="name" innerRadius="62%" outerRadius="88%" paddingAngle={3} cornerRadius={8} stroke="none" {...anim}>
+            {shown.map((d, i) => (
+              <Cell key={d.name} fill={SERIES[i % SERIES.length]} />
+            ))}
+          </Pie>
+        </PieChart>
+      </ResponsiveContainer>
+      <div className="pointer-events-none absolute inset-0 grid place-items-center text-center">
+        <div>
+          <div className="num text-xl font-extrabold">{centerValue}</div>
+          <div className="text-[11px] text-muted">{centerLabel}</div>
+        </div>
+      </div>
+    </div>
   );
 }

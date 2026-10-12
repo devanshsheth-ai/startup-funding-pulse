@@ -27,8 +27,8 @@ export function ManualDealForm() {
         }
       }}
     >
-      <input type="url" required value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://… article announcing a round" aria-label="Article URL" className="min-w-0 flex-1 rounded-md border border-line bg-background px-2 py-1" />
-      <button type="submit" disabled={busy} className="rounded-md bg-foreground px-3 py-1 text-background disabled:opacity-50">
+      <input type="url" required value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://… article announcing a round" aria-label="Article URL" className="input min-w-0 flex-1" />
+      <button type="submit" disabled={busy} className="btn btn-primary btn-sm">
         {busy ? "Fetching…" : "Submit article"}
       </button>
       {msg ? <span className={`w-full text-xs ${msg.ok ? "text-up" : "text-down"}`}>{msg.text}</span> : null}

@@ -79,7 +79,7 @@ async function HealthContent() {
   const data = await loadHealth();
   if (!data) {
     return (
-      <p className="rounded border border-red-300 p-3 text-sm text-red-800 dark:border-red-800 dark:text-red-300">
+      <p className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-red-800 dark:border-red-800 dark:text-red-300">
         Health data is temporarily unavailable: the database could not be reached. This is reported as-is rather than
         hidden.
       </p>
@@ -90,14 +90,14 @@ async function HealthContent() {
     const enabled = sources.filter((s) => s.enabled);
     return (
       <>
-        <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <section className="stagger grid grid-cols-2 gap-4 sm:grid-cols-4">
           <Stat label="Raw articles" value={totals.total.toLocaleString("en-IN")} />
           <Stat label="Fetched last 24h" value={totals.last24h.toLocaleString("en-IN")} />
           <Stat label="Sources with articles" value={`${totals.sourcesWithArticles} / ${enabled.length} enabled`} />
           <Stat label="Awaiting filter" value={totals.pendingFilter.toLocaleString("en-IN")} />
         </section>
 
-        <section className="space-y-1 text-sm">
+        <section className="card card-hover animate-in p-5 space-y-1 text-sm">
           <p>
             Last successful collection: <strong>{fmt(lastCollect)}</strong>{" "}
             <span className={live24h ? "text-emerald-700 dark:text-emerald-400" : "text-red-700 dark:text-red-400"}>
@@ -113,8 +113,8 @@ async function HealthContent() {
           </p>
         </section>
 
-        <section>
-          <h2 className="mb-2 text-lg font-semibold">Pipeline funnel</h2>
+        <section className="card animate-in p-5">
+          <h2 className="mb-3 text-[17px] font-bold">Pipeline funnel</h2>
           <ol className="grid grid-cols-2 gap-3 sm:grid-cols-5">
             <Stat label="Articles collected" value={funnel.articles.toLocaleString("en-IN")} />
             <Stat label="Relevant (Stage A)" value={funnel.relevant.toLocaleString("en-IN")} />
@@ -154,9 +154,9 @@ async function HealthContent() {
           </div>
         </section>
 
-        <section className="grid gap-4 text-sm md:grid-cols-3">
+        <section className="grid gap-4 text-sm md:grid-cols-3 [&>div]:card [&>div]:card-hover [&>div]:p-5">
           <div>
-            <h2 className="mb-2 text-lg font-semibold">Alerts engine</h2>
+            <h2 className="mb-3 text-[17px] font-bold">Alerts engine</h2>
             <p>
               {Object.entries(data.alertHealth.byStatus).map(([k, v]) => `${k} ${v}`).join(" · ") || "no alerts yet"}. Last run: {fmt(data.alertHealth.lastRun)}
               {data.alertHealth.lastRunStatus ? ` (${data.alertHealth.lastRunStatus})` : ""}. Runs after every pipeline cycle and again at 07:30 IST, after quiet hours.{" "}
@@ -166,14 +166,14 @@ async function HealthContent() {
             </p>
           </div>
           <div>
-            <h2 className="mb-2 text-lg font-semibold">Backfill vs live</h2>
+            <h2 className="mb-3 text-[17px] font-bold">Backfill vs live</h2>
             <p>
               Deals by ingestion mode: {data.prov.modes.map((m) => `${m.mode} ${m.n}`).join(" · ") || "none"}. Backfill comes from weekly funding roundups; live comes from the
               daily feeds. {data.prov.scored.n} scorecards across {data.prov.scored.profiles} profiles.
             </p>
           </div>
           <div>
-            <h2 className="mb-2 text-lg font-semibold">Detector status{data.detectors?.week ? ` (${data.detectors.week}, ${data.detectors.profile})` : ""}</h2>
+            <h2 className="mb-3 text-[17px] font-bold">Detector status{data.detectors?.week ? ` (${data.detectors.week}, ${data.detectors.profile})` : ""}</h2>
             {data.detectors && data.detectors.rows.length ? (
               <ul className="space-y-0.5">
                 {data.detectors.rows.map((r) => (
@@ -192,11 +192,11 @@ async function HealthContent() {
           </div>
         </section>
 
-        <section>
-          <h2 className="mb-2 text-lg font-semibold">Sources</h2>
-          <div className="overflow-x-auto rounded border border-black/10 dark:border-white/15">
+        <section className="card animate-in p-5">
+          <h2 className="mb-3 text-[17px] font-bold">Sources</h2>
+          <div className="overflow-x-auto rounded-xl ring-1 ring-line">
             <table className="w-full min-w-[720px] text-left text-sm">
-              <thead className="bg-black/[0.03] dark:bg-white/[0.05]">
+              <thead className="bg-card-2 text-[11px] uppercase tracking-wide text-muted">
                 <tr>
                   <th className="px-3 py-2">Source</th>
                   <th className="px-3 py-2">Tier</th>
@@ -209,7 +209,7 @@ async function HealthContent() {
               </thead>
               <tbody>
                 {sources.map((s) => (
-                  <tr key={s.id} className="border-t border-black/5 align-top dark:border-white/10">
+                  <tr key={s.id} className="border-t border-line/70 align-top transition-colors hover:bg-accent-soft/50">
                     <td className="px-3 py-2">
                       {s.name}
                       <div className="text-xs opacity-60">{s.type}</div>
@@ -233,14 +233,14 @@ async function HealthContent() {
           </div>
         </section>
 
-        <section>
-          <h2 className="mb-2 text-lg font-semibold">Run log (latest 20 stage runs)</h2>
+        <section className="card animate-in p-5">
+          <h2 className="mb-3 text-[17px] font-bold">Run log (latest 20 stage runs)</h2>
           {runs.length === 0 ? (
             <p className="text-sm opacity-70">No pipeline runs recorded yet.</p>
           ) : (
-            <div className="overflow-x-auto rounded border border-black/10 dark:border-white/15">
+            <div className="overflow-x-auto rounded-xl ring-1 ring-line">
               <table className="w-full min-w-[720px] text-left text-sm">
-                <thead className="bg-black/[0.03] dark:bg-white/[0.05]">
+                <thead className="bg-card-2 text-[11px] uppercase tracking-wide text-muted">
                   <tr>
                     <th className="px-3 py-2">Started</th>
                     <th className="px-3 py-2">Stage</th>
@@ -252,7 +252,7 @@ async function HealthContent() {
                 </thead>
                 <tbody>
                   {runs.map((r, i) => (
-                    <tr key={`${r.runId}-${r.stage}-${i}`} className="border-t border-black/5 dark:border-white/10">
+                    <tr key={`${r.runId}-${r.stage}-${i}`} className="border-t border-line/70">
                       <td className="px-3 py-2 whitespace-nowrap">{fmt(r.startedAt)}</td>
                       <td className="px-3 py-2">{r.stage}</td>
                       <td className={`px-3 py-2 ${statusClass(r.status === "partial" ? "empty" : r.status)}`}>{r.status}</td>
@@ -277,18 +277,19 @@ async function HealthContent() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded border border-black/10 p-3 dark:border-white/15">
-      <div className="text-xs uppercase tracking-wide opacity-60">{label}</div>
-      <div className="mt-1 text-lg font-semibold">{value}</div>
+    <div className="card card-hover p-4">
+      <div className="text-[11px] font-semibold uppercase tracking-wide text-muted">{label}</div>
+      <div className="num text-gradient mt-1 text-2xl font-extrabold">{value}</div>
     </div>
   );
 }
 
 export default function HealthPage() {
   return (
-    <main className="mx-auto w-full max-w-6xl space-y-6 px-4 py-8">
+    <main className="mx-auto w-full max-w-7xl space-y-6 px-4 py-8">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">System health</h1>
+        <p className="eyebrow mb-1">Operations</p>
+        <h1 className="text-3xl font-extrabold tracking-tight">System health</h1>
         <p className="text-sm opacity-70">
           Live ingestion status. Every figure below is computed from the database at request time.
         </p>

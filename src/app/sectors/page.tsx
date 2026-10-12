@@ -41,7 +41,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
 
 export default function SectorsPage({ searchParams }: { searchParams: SearchParams }) {
   return (
-    <Page title="Sectors" subtitle="Trend, deals, investors, cheque evolution and a market map for every sector.">
+    <Page eyebrow="Markets" title="Sectors" subtitle="Trend, deals, investors, cheque evolution and a market map for every sector.">
       <Suspense fallback={<Loading what="sectors" />}>
         <Content searchParams={searchParams} />
       </Suspense>

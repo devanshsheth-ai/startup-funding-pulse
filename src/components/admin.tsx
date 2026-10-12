@@ -56,7 +56,7 @@ export async function adminFetch(url: string, init: RequestInit = {}): Promise<R
   return res;
 }
 
-export function RegenerateButton({ profileId, mode }: { profileId: string; mode: "weekly" | "daily" }) {
+export function RegenerateButton({ profileId, mode, variant = "primary" }: { profileId: string; mode: "weekly" | "daily"; variant?: "primary" | "light" }) {
   const router = useRouter();
   const [state, setState] = useState<{ busy: boolean; msg: string | null; link: string | null; error: boolean }>({ busy: false, msg: null, link: null, error: false });
   async function run() {
@@ -80,15 +80,24 @@ export function RegenerateButton({ profileId, mode }: { profileId: string; mode:
         type="button"
         onClick={run}
         disabled={state.busy}
-        className="rounded-md bg-foreground px-3 py-1.5 text-sm font-medium text-background disabled:opacity-60"
+        className={variant === "light" ? "btn bg-white text-indigo-700 shadow-lg shadow-indigo-900/20 hover:-translate-y-0.5 hover:bg-indigo-50" : "btn btn-primary"}
       >
+        {state.busy ? (
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" className="animate-spin" aria-hidden>
+            <path d="M21 12a9 9 0 1 1-6.2-8.6" />
+          </svg>
+        ) : (
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M21 12a9 9 0 0 1-15.5 6.3L3 16M3 12a9 9 0 0 1 15.5-6.3L21 8M21 3v5h-5M3 21v-5h5" />
+          </svg>
+        )}
         {state.busy ? "Regenerating…" : "Regenerate brief"}
       </button>
       {state.msg ? (
-        <p className={`max-w-xs text-right text-xs ${state.error ? "text-down" : "text-muted"}`} role="status">
+        <p className={`max-w-xs text-right text-xs ${variant === "light" ? (state.error ? "font-semibold text-rose-100" : "text-white/85") : state.error ? "text-down" : "text-muted"}`} role="status">
           {state.msg}{" "}
           {state.link ? (
-            <a className="link" href={state.link} target="_blank" rel="noopener noreferrer">
+            <a className={variant === "light" ? "font-semibold text-white underline underline-offset-2" : "link"} href={state.link} target="_blank" rel="noopener noreferrer">
               Open brief ↗
             </a>
           ) : null}

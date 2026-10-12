@@ -18,7 +18,7 @@ export default function RouteError({ reset }: { error: Error & { digest?: string
         </a>{" "}
         is always available.
       </p>
-      <button type="button" onClick={reset} className="rounded-md border border-line px-3 py-1 text-sm">
+      <button type="button" onClick={reset} className="btn btn-secondary btn-sm">
         Try again
       </button>
     </main>

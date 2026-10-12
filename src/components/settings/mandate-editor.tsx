@@ -16,7 +16,7 @@ const BASE_WEIGHTS = ["sector_fit", "stage_fit", "cheque_fit", "tracked_investor
 const OVERRIDES = ["override_watchlist", "override_adjacency_competitor", "override_adjacency_same_layer", "override_adjacency_adjacent", "override_investor_first_move"] as const;
 const label = (k: string) => k.replace(/^override_/, "").replace(/_/g, " ");
 const list = (s: string) => s.split(",").map((x) => x.trim()).filter(Boolean);
-const input = "rounded-md border border-line bg-background px-2 py-1 text-sm";
+const input = "input";
 
 /** Comma-separated list field: edits a local string, commits the parsed list on blur. */
 function ListInput({ value, onChange, className = "", ...rest }: { value: string[]; onChange: (v: string[]) => void; className?: string; placeholder?: string; "aria-label"?: string }) {
@@ -26,11 +26,13 @@ function ListInput({ value, onChange, className = "", ...rest }: { value: string
 
 function Section({ title, children, hint }: { title: string; children: ReactNode; hint?: string }) {
   return (
-    <fieldset className="space-y-2 rounded-lg border border-line bg-card p-4">
-      <legend className="px-1 text-sm font-semibold">{title}</legend>
-      {hint ? <p className="text-xs text-muted">{hint}</p> : null}
+    <section className="card space-y-3 p-5">
+      <div>
+        <h3 className="text-[15px] font-bold">{title}</h3>
+        {hint ? <p className="mt-0.5 text-xs text-muted">{hint}</p> : null}
+      </div>
       {children}
-    </fieldset>
+    </section>
   );
 }
 
@@ -261,7 +263,7 @@ export function MandateEditor({ profileId, initial, sectors, stages, triggerKeys
         </div>
       </Section>
 
-      <div className="no-print sticky bottom-0 flex flex-wrap items-start justify-between gap-3 border-t border-line bg-background/95 py-3 backdrop-blur">
+      <div className="no-print card sticky bottom-3 z-10 flex flex-wrap items-start justify-between gap-3 bg-card/90 p-3 backdrop-blur">
         <div className="text-sm">
           {status.kind === "ok" ? <span className="text-up">{status.msg}</span> : null}
           {status.kind === "error" ? (
@@ -280,13 +282,13 @@ export function MandateEditor({ profileId, initial, sectors, stages, triggerKeys
           ) : null}
         </div>
         <div className="flex items-start gap-2">
-          <button type="button" className="rounded-md border border-line px-3 py-1.5 text-sm" onClick={() => {
+          <button type="button" className="btn btn-secondary" onClick={() => {
               setCfg(initial);
               setRev((r) => r + 1);
             }}>
             Discard changes
           </button>
-          <button type="button" onClick={save} disabled={status.kind === "saving"} className="rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-white disabled:opacity-60">
+          <button type="button" onClick={save} disabled={status.kind === "saving"} className="btn btn-primary">
             {status.kind === "saving" ? "Saving…" : "Save mandate"}
           </button>
           {status.kind === "ok" ? <RegenerateButton profileId={profileId} mode={cfg.delivery.mode === "daily" ? "daily" : "weekly"} /> : null}

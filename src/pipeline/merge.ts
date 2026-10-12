@@ -38,12 +38,18 @@ export function amountsAgree(a: number, b: number): boolean {
   return hi === 0 || Math.abs(a - b) / hi <= AMOUNT_TOLERANCE;
 }
 
+/** Order-independent tie-break: earlier publication first, then publication name, then amount. */
+function tieKey(r: SourceReport): string {
+  const t = r.publishedAt?.getTime() ?? Number.MAX_SAFE_INTEGER;
+  return `${String(t).padStart(16, "0")}|${r.publication.trim().toLowerCase()}|${String(r.amountUsd ?? 0).padStart(16, "0")}`;
+}
+
 function earliestIndex(reports: SourceReport[]): number {
   let best = 0;
   for (let i = 1; i < reports.length; i++) {
-    const a = reports[i]?.publishedAt?.getTime() ?? Infinity;
-    const b = reports[best]?.publishedAt?.getTime() ?? Infinity;
-    if (a < b) best = i;
+    const r = reports[i];
+    const cur = reports[best];
+    if (r && cur && tieKey(r) < tieKey(cur)) best = i;
   }
   return best;
 }
@@ -71,7 +77,9 @@ export function mergeReports(reports: SourceReport[]): MergedDeal {
     const topRank = Math.max(...withAmount.map((x) => CONFIDENCE_RANK[x.r.amountConfidence ?? "reported"] ?? 3));
     const top = withAmount.filter((x) => (CONFIDENCE_RANK[x.r.amountConfidence ?? "reported"] ?? 3) === topRank);
     const support = (v: number) => withAmount.filter((x) => amountsAgree(x.r.amountUsd, v)).length;
-    const chosen = [...top].sort((a, b) => support(b.r.amountUsd) - support(a.r.amountUsd) || a.i - b.i)[0];
+    const exact = (v: number) => withAmount.filter((x) => x.r.amountUsd === v).length;
+    // Most corroborated (within 10%), then the figure most sources state exactly, then the earliest report.
+    const chosen = [...top].sort((a, b) => support(b.r.amountUsd) - support(a.r.amountUsd) || exact(b.r.amountUsd) - exact(a.r.amountUsd) || tieKey(a.r).localeCompare(tieKey(b.r)))[0];
     if (chosen) {
       amountUsd = chosen.r.amountUsd;
       amountRaw = chosen.r.amountRaw;
@@ -96,7 +104,9 @@ export function mergeReports(reports: SourceReport[]): MergedDeal {
   if (named.length > 0) {
     const counts = new Map<string, number>();
     for (const s of named) counts.set(s, (counts.get(s) ?? 0) + 1);
-    roundStage = [...counts.entries()].sort((a, b) => b[1] - a[1] || named.indexOf(a[0]) - named.indexOf(b[0]))[0]?.[0] ?? "Undisclosed";
+    // Ties between stages go to the one reported earliest (order-independent).
+    const firstKey = (st: string) => reports.filter((r) => r.stage === st).map(tieKey).sort()[0] ?? "";
+    roundStage = [...counts.entries()].sort((a, b) => b[1] - a[1] || firstKey(a[0]).localeCompare(firstKey(b[0])))[0]?.[0] ?? "Undisclosed";
     if (counts.size > 1) {
       disputed.push("stage");
       stageBadge = "disputed";

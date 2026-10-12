@@ -3,64 +3,47 @@
 import { useEffect, useState } from "react";
 
 /**
- * Light / dark / system toggle. The pre-paint script in the root layout
- * applies the stored choice before first render, so there is no flash; this
- * control only changes and remembers it (localStorage, per browser).
+ * Light / dark switch. Light is the default; the pre-paint script in the
+ * root layout applies a stored "dark" before first render, so there is no
+ * flash. The choice is remembered in localStorage (per browser).
  */
-type Theme = "system" | "light" | "dark";
 const KEY = "fp_theme";
-const NEXT: Record<Theme, Theme> = { system: "light", light: "dark", dark: "system" };
-const LABEL: Record<Theme, string> = { system: "◐ Auto", light: "☀ Light", dark: "☾ Dark" };
-
-function apply(t: Theme) {
-  const dark = t === "dark" || (t === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-  document.documentElement.classList.toggle("dark", dark);
-}
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("system");
+  const [dark, setDark] = useState(false);
   useEffect(() => {
-    let stored: Theme = "system";
-    try {
-      const v = localStorage.getItem(KEY);
-      if (v === "light" || v === "dark") stored = v;
-    } catch {
-      /* storage blocked: follow the system */
-    }
-    // localStorage is only readable after mount.
+    // The class is only readable after mount.
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setTheme(stored);
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const onChange = () => {
-      let cur: string | null = null;
-      try {
-        cur = localStorage.getItem(KEY);
-      } catch {
-        /* ignore */
-      }
-      if (cur !== "light" && cur !== "dark") apply("system");
-    };
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
+    setDark(document.documentElement.classList.contains("dark"));
   }, []);
   return (
     <button
       type="button"
-      className="no-print rounded-md px-2 py-1 text-xs text-muted hover:bg-black/5 hover:text-foreground dark:hover:bg-white/10"
-      aria-label={`Theme: ${theme}. Click to change.`}
       onClick={() => {
-        const next = NEXT[theme];
-        setTheme(next);
+        const next = !dark;
+        setDark(next);
+        document.documentElement.classList.toggle("dark", next);
         try {
-          if (next === "system") localStorage.removeItem(KEY);
-          else localStorage.setItem(KEY, next);
+          if (next) localStorage.setItem(KEY, "dark");
+          else localStorage.removeItem(KEY);
         } catch {
-          /* storage blocked: applies for this page only */
+          /* storage blocked: applies to this page only */
         }
-        apply(next);
       }}
+      aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+      title={dark ? "Light mode" : "Dark mode"}
+      className="no-print grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-line bg-card text-muted transition-all hover:-translate-y-0.5 hover:text-accent hover:shadow-md"
     >
-      {LABEL[theme]}
+      {dark ? (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+        </svg>
+      ) : (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+        </svg>
+      )}
     </button>
   );
 }
