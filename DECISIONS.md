@@ -693,3 +693,18 @@ things on hover.
   - Tables keep native titles, because their scroll container would clip a positioned tip.
   - Tier, relationship and event-type meanings live in `src/lib/format.ts`, so every page uses
     the same wording.
+
+**D-086 · One profile.** The owner asked for the fintech seed fund and consumer angel syndicate
+profiles, and everything about them, to be removed. The product now runs for Aarav only.
+- **This departs from the PRD.** §4.2 seeds three profiles, and acceptance S6 ("switching
+  profile produces a materially different brief") can no longer be demonstrated. The README
+  says so under Limitations.
+- **Soft delete, per CLAUDE.md §2.** Migration 0010 adds `profiles.is_active` and switches the
+  two profiles off. Their rows stay archived: scores, alerts, briefs, portfolio and watchlist.
+  Every reader filters on active profiles, so they disappear from every page, pipeline stage,
+  email, API route and share link. Shared links to their briefs now return 404.
+- **Removed from the repo:** their seed files, their entry in `seed.ts`, and their test case.
+  Earlier entries in this log still mention them as history.
+- **The switcher hides itself** when only one profile is active. The multi-profile
+  architecture is unchanged, so adding a profile back means one seed file and
+  `is_active = true`.

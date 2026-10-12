@@ -116,9 +116,9 @@ describe("components", () => {
 });
 
 describe("profile seeds", () => {
-  it("all three validate, keep keywords specific and the disclosure label", async () => {
+  it("the seeded profile validates, keeps keywords specific and the disclosure label", async () => {
     const { profileSeedSchema } = await import("@/config/profile");
-    for (const f of ["profile-aarav.json", "profile-fintech-seed-fund.json", "profile-consumer-syndicate.json"]) {
+    for (const f of ["profile-aarav.json"]) {
       const p = profileSeedSchema.parse((await import(`../../seed/${f}`)).default);
       expect(p.portfolio.every((c) => c.relationship_type === "simulated_holding")).toBe(true);
     }

@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { connection, type NextRequest } from "next/server";
 import { mandateConfigSchema } from "@/config/profile";
 import { getDb } from "@/db/client";
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
   const parsed = mandateConfigSchema.safeParse(body);
   if (!parsed.success) return Response.json({ ok: false, error: "invalid config", issues: parsed.error.issues.map((i) => ({ path: i.path.join("."), message: i.message })) }, { status: 422 });
   try {
-    const res = await getDb().update(profiles).set({ config: parsed.data, updatedAt: new Date() }).where(eq(profiles.id, id)).returning({ id: profiles.id });
+    const res = await getDb().update(profiles).set({ config: parsed.data, updatedAt: new Date() }).where(and(eq(profiles.id, id), eq(profiles.isActive, true))).returning({ id: profiles.id });
     if (res.length === 0) return Response.json({ ok: false, error: "unknown profile" }, { status: 404 });
     logger.info("mandate config updated", { profile: id });
     return Response.json({ ok: true, profile: id });

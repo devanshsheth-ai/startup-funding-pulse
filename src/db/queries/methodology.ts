@@ -14,14 +14,14 @@ export interface ProfileSummary {
 }
 
 export async function listProfiles(): Promise<ProfileSummary[]> {
-  return getDb().select({ id: profiles.id, displayName: profiles.displayName, isDefault: profiles.isDefault }).from(profiles).orderBy(desc(profiles.isDefault), profiles.id);
+  return getDb().select({ id: profiles.id, displayName: profiles.displayName, isDefault: profiles.isDefault }).from(profiles).where(eq(profiles.isActive, true)).orderBy(desc(profiles.isDefault), profiles.id);
 }
 
 export async function getProfileConfig(id: string | null): Promise<{ id: string; displayName: string; config: MandateConfig; window: { start: string; end: string } } | null> {
   const db = getDb();
   const [row] = id
-    ? await db.select().from(profiles).where(eq(profiles.id, id)).limit(1)
-    : await db.select().from(profiles).where(eq(profiles.isDefault, true)).limit(1);
+    ? await db.select().from(profiles).where(and(eq(profiles.id, id), eq(profiles.isActive, true))).limit(1)
+    : await db.select().from(profiles).where(and(eq(profiles.isDefault, true), eq(profiles.isActive, true))).limit(1);
   if (!row) return null;
   return { id: row.id, displayName: row.displayName, config: mandateConfigSchema.parse(row.config), window: digestWindow(row.lastDigestSentAt, new Date()) };
 }

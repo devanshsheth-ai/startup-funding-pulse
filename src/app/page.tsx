@@ -173,7 +173,7 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
       </div>
 
       {/* ── Market pulse ─────────────────────────────────────────────── */}
-      <SectionHeading title="Market pulse" subtitle="How Indian startup funding moved in this window" info="Market-wide numbers: the same for every profile. Hover any label for what it measures; ▲/▼ compare with the previous window of the same length." />
+      <SectionHeading title="Market pulse" subtitle="How Indian startup funding moved in this window" info="Market-wide numbers for all Indian startup funding we track, not just your mandate. Hover any label for what it measures; ▲/▼ compare with the previous window of the same length." />
       <div className="stagger grid grid-cols-2 gap-5 lg:grid-cols-4">
         <KpiTile label="Deals" color="indigo" icon={Icon.list} value={<CountUp value={stats.n} />} delta={delta(stats.n, statsPrev.n)} spark={weekly.map((w) => w.n)} hint="Unique funding rounds announced in the window. Several articles about one round count once." />
         <KpiTile label="Total capital" color="violet" icon={Icon.chart} value={<CountUp value={stats.capital} format="usd" />} delta={delta(stats.capital, statsPrev.capital)} spark={weekly.map((w) => w.capital)} hint={`Sum of disclosed round sizes in US dollars (rupee amounts converted at that day's rate). ${agg.totals.undisclosed_n} undisclosed rounds are not counted.`} />

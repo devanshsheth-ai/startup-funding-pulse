@@ -46,6 +46,7 @@ export async function loadProfiles(): Promise<ProfileRow[]> {
   const rows = await getDb()
     .select({ id: profiles.id, config: profiles.config, lastDigestSentAt: profiles.lastDigestSentAt })
     .from(profiles)
+    .where(eq(profiles.isActive, true))
     .orderBy(asc(profiles.id));
   return rows.map((r) => ({ id: r.id, config: mandateConfigSchema.parse(r.config), lastDigestSentAt: r.lastDigestSentAt }));
 }

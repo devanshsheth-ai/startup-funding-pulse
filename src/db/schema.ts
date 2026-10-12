@@ -44,6 +44,8 @@ export const profiles = pgTable("profiles", {
   fundType: text("fund_type"),
   config: jsonb("config").notNull(),
   isDefault: boolean("is_default").notNull().default(false),
+  // Retired profiles are switched off, never deleted (soft delete, D-086).
+  isActive: boolean("is_active").notNull().default(true),
   lastDigestSentAt: timestamp("last_digest_sent_at", tz),
   ...timestamps,
 });

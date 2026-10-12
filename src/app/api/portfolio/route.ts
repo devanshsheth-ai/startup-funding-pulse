@@ -27,7 +27,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   const v = parsed.data;
   const db = getDb();
   try {
-    const [p] = await db.select({ id: profiles.id }).from(profiles).where(eq(profiles.id, v.profile)).limit(1);
+    const [p] = await db.select({ id: profiles.id }).from(profiles).where(and(eq(profiles.id, v.profile), eq(profiles.isActive, true))).limit(1);
     if (!p) return Response.json({ ok: false, error: "unknown profile" }, { status: 404 });
     const clash = await db
       .select({ id: watchlist.id })
