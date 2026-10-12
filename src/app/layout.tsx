@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Geist_Mono, Inter, Inter_Tight } from "next/font/google";
 import Link from "next/link";
 import { Suspense } from "react";
 import { BRAND, LogoGlyph, Splash, Wordmark } from "@/components/logo";
@@ -7,8 +7,8 @@ import { Nav } from "@/components/nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import "./globals.css";
 
-// Plus Jakarta Sans for headings and figures, Inter for body copy (D-077).
-const heading = Plus_Jakarta_Sans({ variable: "--font-heading", subsets: ["latin"], weight: ["500", "600", "700", "800"] });
+// Inter Tight for headings and figures (tight display tracking), Inter for body copy.
+const heading = Inter_Tight({ variable: "--font-heading", subsets: ["latin"], weight: ["500", "600", "700", "800"] });
 const body = Inter({ variable: "--font-body", subsets: ["latin"] });
 const mono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
@@ -29,15 +29,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="flex min-h-full flex-col">
         <Splash />
-        <header className="no-print sticky top-0 z-30 border-b border-line/70 bg-card/75 backdrop-blur-xl">
-          <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-4 py-2.5">
-            <Link href="/" className="ds-hover group flex shrink-0 items-center gap-2.5" aria-label={`${BRAND.name} home`}>
-              <span className="bg-grad grid h-9 w-9 place-items-center rounded-xl text-white shadow-[0_6px_16px_-6px_rgb(99_102_241/0.7)] transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105">
-                <LogoGlyph size={21} />
+        <header className="no-print sticky top-0 z-30 px-3 pt-3 sm:px-4">
+          <div className="mx-auto flex w-full max-w-7xl items-center gap-4 rounded-full bg-[#121214] py-2 pl-2.5 pr-2 text-white shadow-[0_14px_40px_-18px_rgb(0_0_0/0.7)] ring-1 ring-white/10">
+            <Link href="/" className="ds-hover group flex shrink-0 items-center gap-2.5 pr-2" aria-label={`${BRAND.name} home`}>
+              <span className="ds-tile grid h-9 w-9 place-items-center rounded-full transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105">
+                <LogoGlyph size={20} />
               </span>
               <span className="hidden leading-tight sm:block">
-                <Wordmark className="block text-[16px]" />
-                <span className="block text-[11px] text-muted">{BRAND.tagline}</span>
+                <Wordmark onDark className="block text-[17px]" />
               </span>
             </Link>
             <div className="min-w-0 flex-1">

@@ -32,7 +32,7 @@ export function ThemeToggle() {
       }}
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
       title={dark ? "Light mode" : "Dark mode"}
-      className="no-print grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-line bg-card text-muted transition-all hover:-translate-y-0.5 hover:text-accent hover:shadow-md"
+      className="no-print grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/15 bg-white/5 text-white/80 transition-all hover:bg-white/15 hover:text-lime"
     >
       {dark ? (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>

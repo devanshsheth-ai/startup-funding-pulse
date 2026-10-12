@@ -25,19 +25,19 @@ export function LogoGlyph({ size = 20, animated = false, className = "" }: { siz
 export function LogoMark({ size = 36, animated = false, className = "" }: { size?: number; animated?: boolean; className?: string }) {
   return (
     <span
-      className={`bg-grad grid shrink-0 place-items-center text-white shadow-[0_6px_16px_-6px_rgb(99_102_241/0.7)] ${className}`}
-      style={{ width: size, height: size, borderRadius: size * 0.3 }}
+      className={`ds-tile grid shrink-0 place-items-center shadow-[0_10px_24px_-12px_rgb(0_0_0/0.45)] ${className}`}
+      style={{ width: size, height: size, borderRadius: size * 0.32 }}
     >
       <LogoGlyph size={Math.round(size * 0.58)} animated={animated} />
     </span>
   );
 }
 
-/** "Deal" in the text colour, "scope" in the gradient. */
-export function Wordmark({ className = "" }: { className?: string }) {
+/** "Deal" in the text colour, "scope" in the accent (lime on dark surfaces). */
+export function Wordmark({ className = "", onDark = false }: { className?: string; onDark?: boolean }) {
   return (
-    <span className={`font-[family-name:var(--font-heading)] font-extrabold tracking-tight ${className}`}>
-      Deal<span className="text-gradient">scope</span>
+    <span className={`font-[family-name:var(--font-heading)] font-bold tracking-[-0.03em] ${className}`}>
+      Deal<span className={onDark ? "text-lime" : "text-gradient"}>scope</span>
     </span>
   );
 }
