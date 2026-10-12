@@ -12,7 +12,7 @@ import { translateQuery } from "@/pipeline/nl-search";
 
 /** /explorer (PRD §18.5): the full deal and event archive with filters, CSV export and natural-language search. */
 
-export const metadata = { title: "Explorer · Startup Funding Pulse" };
+export const metadata = { title: "Explorer · Dealscope" };
 // Natural-language translation is one Gemini call (cached by content hash).
 export const maxDuration = 60;
 

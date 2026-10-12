@@ -17,7 +17,7 @@ export function WeeklyDigest({ c }: { c: DigestContent }) {
       <Body style={S.body}>
         <Container style={S.container}>
           {/* 1–2. Header band: headline, KPI grid and the link to the web brief */}
-          <Hero c={c} eyebrow={`Weekly brief · ${c.profile.name} · ${c.window.start} → ${c.window.end}`} />
+          <Hero c={c} eyebrow={`Dealscope · Weekly brief · ${c.profile.name} · ${c.window.start} → ${c.window.end}`} />
           <Text style={S.small}>
             Temperature blends deal count (z {c.kpis.temperatureComponents.deal_count?.z.toFixed(1)}) and capital (z {c.kpis.temperatureComponents.total_capital?.z.toFixed(1)}) against the trailing 8 weeks{wow === null ? "." : `; ${c.kpis.prevDeals} deals in the previous window.`}
           </Text>

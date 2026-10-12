@@ -729,3 +729,27 @@ Reo.Dev's Series A, which Inc42 reported as $11.3 Mn. Extraction copied the typo
     figure.
   - DheyaTech is a real disagreement: two of three sources say Rs 43 crore, and it is
     shown as disputed.
+
+**D-088 · The product is named Dealscope.** The owner chose a new name. The PRD title, *Startup
+Funding Pulse*, stays as the name of the exam problem and is cited in the README.
+- **Mark:** a lens with three rising bars (deals seen through a scope) on the brand gradient.
+  - `src/components/logo.tsx` holds the glyph, the tile, the wordmark ("Deal" plus "scope"
+    in the gradient) and `BRAND`.
+  - `src/app/icon.svg` and `apple-icon.tsx` replace the default favicon.
+- **Motion:**
+  - On every full load, a CSS-only intro draws the mark: the ring sweeps closed, the bars
+    grow, and the name rises, then it fades. It is gone in about 1.3 s, never blocks clicks,
+    and clears without JavaScript.
+  - Client-side navigation never replays it, because the root layout stays mounted.
+  - Reduced-motion users skip it.
+  - Loading skeletons show a swaying lens, and the header bars re-rise on hover.
+- **Renamed:** page titles, the header and footer, the brief button, email eyebrows and the
+  alert footer, the CSV filename, the UTM source (`dealscope`), the README and the
+  components map.
+- **Deliberately unchanged:**
+  - The crawler's User-Agent (`FundingPulseBot`). Publishers' robots and rate-limit
+    decisions are keyed to it, so changing it mid-operation risks new blocks.
+  - The deployment URL (`startup-funding-pulse.vercel.app`) and the repository name, which
+    are the owner's to change in Vercel and GitHub.
+  - The `EMAIL_FROM` display name. It is an environment variable, updated in `.env` and to be
+    updated in Vercel by the owner.

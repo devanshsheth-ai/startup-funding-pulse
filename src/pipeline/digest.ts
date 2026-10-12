@@ -153,7 +153,7 @@ export function appUrl(): string {
 export function withUtm(url: string, mode: DigestMode | "alert"): string {
   try {
     const u = new URL(url);
-    u.searchParams.set("utm_source", "fundingpulse");
+    u.searchParams.set("utm_source", "dealscope");
     u.searchParams.set("utm_medium", "email");
     u.searchParams.set("utm_campaign", `digest-${mode}`);
     return u.toString();

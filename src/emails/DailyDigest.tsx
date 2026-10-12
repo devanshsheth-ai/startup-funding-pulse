@@ -19,7 +19,7 @@ export function DailyDigest({ c }: { c: DigestContent }) {
       <Body style={S.body}>
         <Container style={S.container}>
           {/* 1–2. Header band with KPIs and the link to the web brief */}
-          <Hero c={c} eyebrow={`Daily note · ${c.profile.name} · ${c.window.end}`} />
+          <Hero c={c} eyebrow={`Dealscope · Daily note · ${c.profile.name} · ${c.window.end}`} />
           {c.rolling7d ? (
             <Text style={S.small}>
               Last 7 days: {c.rolling7d.deals} deals, {usd(c.rolling7d.capitalUsd)} raised.

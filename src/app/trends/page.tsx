@@ -11,7 +11,7 @@ import { hrefWith, param, resolveProfile, type SearchParams } from "@/lib/view";
 
 /** /trends (PRD §18.2): any metric over any window, sector heatmap, stage velocity, mandate vs ecosystem, silence tracker, pattern history. */
 
-export const metadata = { title: "Trends · Startup Funding Pulse" };
+export const metadata = { title: "Trends · Dealscope" };
 
 const METRICS: { key: TrendMetric; label: string }[] = [
   { key: "n", label: "Deal count" },

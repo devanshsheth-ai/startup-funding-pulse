@@ -177,7 +177,7 @@ export function BriefView({ c, shareUrl, actions }: { c: DigestContent; shareUrl
                 <>
                   <PrintButton className="btn btn-sm border border-white/40 bg-white/10 text-white backdrop-blur hover:bg-white/20" />
                   <Link href={`/brief?profile=${c.profile.id}`} className="btn btn-sm bg-white text-indigo-700 hover:bg-indigo-50">
-                    Open in Funding Pulse →
+                    Open in Dealscope →
                   </Link>
                 </>
               )}

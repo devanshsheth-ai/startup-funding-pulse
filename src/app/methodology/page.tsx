@@ -10,7 +10,7 @@ import { logger } from "@/lib/logger";
  * real scored deals: changing a weight in settings changes this page.
  */
 
-export const metadata = { title: "Methodology · Startup Funding Pulse" };
+export const metadata = { title: "Methodology · Dealscope" };
 
 const COMPONENT_ROWS: { key: string; label: string; how: string }[] = [
   { key: "sector_fit", label: "Sector fit", how: "Gemini rates the deal's sector and sub-sector against your core and watch sectors (0–1), cached per sector × sub-sector × mandate, then × weight." },

@@ -1,6 +1,6 @@
 # Components Map
 
-How Startup Funding Pulse fits together: every component in the PRD, where it lives, what it
+How Dealscope fits together: every component in the PRD, where it lives, what it
 reads and writes, and how it fails. One daily cron drives the pipeline; a second releases
 alerts held during quiet hours.
 

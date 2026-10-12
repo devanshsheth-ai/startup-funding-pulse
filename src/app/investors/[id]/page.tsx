@@ -15,7 +15,7 @@ import { z } from "zod";
 
 /** Investor profile (PRD §18.3): deals, sector and stage mix, cheque, cadence, co-investors, overlap with your portfolio. */
 
-export const metadata = { title: "Investor · Startup Funding Pulse" };
+export const metadata = { title: "Investor · Dealscope" };
 
 async function overlap(profileId: string, dealIds: string[]): Promise<{ dealId: string; company: string; portfolio: string; relationship: string }[]> {
   if (dealIds.length === 0) return [];

@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { SIMULATED_PORTFOLIO_DISCLOSURE } from "@/lib/copy";
 import type { ViewProfile, ViewWindow } from "@/lib/view";
 import { hrefWith, WINDOW_OPTIONS } from "@/lib/view";
+import { LogoMark } from "./logo";
 import { Tip } from "./tip";
 
 export { Tip };
@@ -270,6 +271,10 @@ export function Unavailable({ what }: { what: string }) {
 export function Loading({ what }: { what: string }) {
   return (
     <div className="space-y-4" aria-busy="true" aria-label={`Loading ${what}`}>
+      <div className="flex items-center gap-3 text-sm font-medium text-muted">
+        <LogoMark size={30} className="ds-scan" />
+        Scanning {what}…
+      </div>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {Array.from({ length: 4 }, (_, i) => (
           <div key={i} className="skeleton h-28" />
@@ -279,7 +284,6 @@ export function Loading({ what }: { what: string }) {
         <div className="skeleton h-72 lg:col-span-2" />
         <div className="skeleton h-72" />
       </div>
-      <p className="sr-only">Loading {what}…</p>
     </div>
   );
 }
