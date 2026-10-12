@@ -119,15 +119,15 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
   return (
     <>
       {/* Summary panel: the window at a glance, with the actions beside it */}
-      <section className="card animate-in relative overflow-hidden p-7 sm:p-10">
+      <section className="card animate-in relative overflow-hidden p-6 sm:p-8">
         <div className="pointer-events-none absolute inset-y-0 left-0 w-2 bg-[var(--cyan-strong)]" aria-hidden />
         <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-[var(--cyan)]/15 blur-3xl" aria-hidden />
-        <div className="relative flex flex-wrap items-center justify-between gap-8 pl-3">
+        <div className="relative flex flex-wrap items-center justify-between gap-6 pl-3">
           <div className="min-w-0">
             <p className="flex items-center gap-2 text-sm font-semibold text-muted">
               <span className="live-dot" aria-hidden /> {win.label} · {active.displayName}
             </p>
-            <h2 className="mt-3 text-[2.4rem] font-bold leading-[1.05] tracking-[-0.035em] sm:text-[3.25rem]">
+            <h2 className="mt-2.5 text-[2.1rem] font-bold leading-[1.08] tracking-[-0.035em] sm:text-[2.75rem]">
               <Tip text="Unique funding rounds announced in this window, after merging duplicate reports of the same round." side="bottom">
                 <span className="cursor-help">
                   <span className="num">{stats.n}</span> deals
@@ -140,7 +140,7 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
                 </span>
               </Tip>
             </h2>
-            <div className="mt-5 flex flex-wrap gap-2">
+            <div className="mt-4 flex flex-wrap gap-2">
               <span className="rounded-full bg-card-2 px-3.5 py-1.5 text-sm font-medium text-foreground/80 ring-1 ring-line">
                 {hitDeals.length} watchlist {hitDeals.length === 1 ? "hit" : "hits"}
               </span>
@@ -151,10 +151,10 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
             </div>
           </div>
           <div className="no-print flex flex-wrap items-start gap-3">
-            <Link href={`/brief?profile=${active.id}`} className="btn btn-primary px-6 py-3 text-[15px]">
+            <Link href={`/brief?profile=${active.id}`} className="btn btn-primary px-5 py-2.5">
               Read the brief
             </Link>
-            <Link href={`/explorer?profile=${active.id}&from=${win.start}&to=${win.end}&sort=score`} className="btn btn-outline px-6 py-3 text-[15px]">
+            <Link href={`/explorer?profile=${active.id}&from=${win.start}&to=${win.end}&sort=score`} className="btn btn-outline px-5 py-2.5">
               Explore deals →
             </Link>
             <RegenerateButton key={active.id} profileId={active.id} mode={mode} variant="outline" />
