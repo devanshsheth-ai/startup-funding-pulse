@@ -137,13 +137,23 @@ export async function runDeliver(opts: { runId: string; cursor: string | null; d
   const now = new Date();
   const outcomes: (DeliveryOutcome | { profileId: string; status: "not_due"; reason: string })[] = [];
   const env = getEnv();
-  for (const p of await loadProfiles()) {
+  const profiles = await loadProfiles();
+  // The cursor is the index of the next profile to evaluate, so a run that runs out of time
+  // hands the remaining profiles to the dispatcher's next invocation instead of dropping them.
+  const start = Math.max(0, Number(opts.cursor ?? 0) || 0);
+  let next: number | null = null;
+  for (let i = start; i < profiles.length; i++) {
+    const p = profiles[i];
+    if (!p) continue;
     const due = isDue(p.config, p.lastDigestSentAt, now);
     if (!due.due) {
       outcomes.push({ profileId: p.id, status: "not_due", reason: due.reason });
       continue;
     }
-    if (Date.now() > opts.deadline) break;
+    if (Date.now() > opts.deadline) {
+      next = i;
+      break;
+    }
     try {
       outcomes.push(await generateAndMaybeSend(p.id, due.mode, { send: !!env.RESEND_API_KEY && !!env.EMAIL_FROM, runId: opts.runId, now }));
     } catch (err) {
@@ -154,6 +164,6 @@ export async function runDeliver(opts: { runId: string; cursor: string | null; d
   }
   const failed = outcomes.filter((o) => o.status === "failed").length;
   stage.counters.itemsOut = outcomes.filter((o) => o.status === "sent").length;
-  await stage.finish(failed ? "partial" : "ok", { outcomes });
-  return { processed: outcomes.length, next_cursor: null };
+  await stage.finish(failed ? "partial" : "ok", { outcomes, next_cursor: next });
+  return { processed: outcomes.length, next_cursor: next === null ? null : String(next) };
 }

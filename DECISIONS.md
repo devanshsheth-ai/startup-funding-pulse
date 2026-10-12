@@ -595,3 +595,10 @@ applied this; a second run changes nothing. The golden file uses, for each verif
 article whose own extraction matches the corroborated values. Article text is never committed;
 the runner reads it from the database or re-fetches it. `npm run verify:idempotency` runs every
 processing stage twice on live data and compares 16 tables plus deal and score fingerprints.
+
+**D-079 · Delivery continuation.** On 12 Oct the consumer syndicate's weekly brief (with
+narration) used up the delivery stage's 50 s budget. The loop then stopped, and the fintech
+profile's due brief was never attempted, because the stage always returned a null cursor.
+→ The cursor is now the index of the next profile, so the dispatcher's next invocation picks up
+where the last one stopped. `isDue` already prevents a second send for profiles sent earlier in
+the run.
