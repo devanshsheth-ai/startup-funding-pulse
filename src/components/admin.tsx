@@ -63,12 +63,12 @@ export function RegenerateButton({ profileId, mode, variant = "primary" }: { pro
     setState({ busy: true, msg: "Rescoring against the current mandate, then writing the brief (up to ~1 min)…", link: null, error: false });
     try {
       const res = await adminFetch(`/api/profile/${profileId}/regenerate?mode=${mode}`, { method: "POST" });
-      const body = (await res.json()) as { ok: boolean; scored?: number; shareUrl?: string | null; error?: string; reason?: string };
+      const body = (await res.json()) as { ok: boolean; scored?: number; digestId?: number | null; error?: string; reason?: string };
       if (!body.ok) {
         setState({ busy: false, msg: body.error ?? body.reason ?? "Regenerate failed.", link: null, error: true });
         return;
       }
-      setState({ busy: false, msg: `Rescored ${body.scored ?? 0} deals and generated a new brief.`, link: body.shareUrl ?? null, error: false });
+      setState({ busy: false, msg: `Rescored ${body.scored ?? 0} deals and generated a new brief.`, link: body.digestId ? `/brief?profile=${profileId}&id=${body.digestId}` : null, error: false });
       router.refresh();
     } catch (err) {
       setState({ busy: false, msg: err instanceof Error ? err.message : "Regenerate failed.", link: null, error: true });
@@ -97,8 +97,8 @@ export function RegenerateButton({ profileId, mode, variant = "primary" }: { pro
         <p className={`max-w-xs text-right text-xs ${variant === "light" ? (state.error ? "font-semibold text-rose-100" : "text-white/85") : state.error ? "text-down" : "text-muted"}`} role="status">
           {state.msg}{" "}
           {state.link ? (
-            <a className={variant === "light" ? "font-semibold text-white underline underline-offset-2" : "link"} href={state.link} target="_blank" rel="noopener noreferrer">
-              Open brief ↗
+            <a className={variant === "light" ? "font-semibold text-white underline underline-offset-2" : "link"} href={state.link}>
+              Open the new brief →
             </a>
           ) : null}
         </p>

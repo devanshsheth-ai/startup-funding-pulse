@@ -13,7 +13,7 @@ export default function RouteError({ reset }: { error: Error & { digest?: string
           /health
         </a>
         . The{" "}
-        <a className="link" href="/brief/latest">
+        <a className="link" href="/brief">
           latest brief
         </a>{" "}
         is always available.

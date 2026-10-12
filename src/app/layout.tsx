@@ -60,7 +60,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               <Link className="hover:text-accent" href="/health">
                 System health
               </Link>
-              <Link className="hover:text-accent" href="/brief/latest">
+              <Link className="hover:text-accent" href="/brief">
                 Latest brief
               </Link>
             </span>
