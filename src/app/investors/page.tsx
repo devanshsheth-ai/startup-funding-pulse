@@ -103,7 +103,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
         {warm && target ? <WarmPath r={warm} query={target} profileId={active.id} /> : <p className="text-sm text-muted">Enter a company that has raised a round to see the shortest introduction chain.</p>}
       </Card>
 
-      <div className="grid gap-4 lg:grid-cols-5">
+      <div className="grid gap-6 lg:grid-cols-5">
         <Card className="lg:col-span-3" title="Leaderboard" n={leaders.length} note={`${win.label}: ${win.start} → ${win.end}. Ranked by deals, then rounds led.`}>
           <div className="mb-2">
             <WindowSelector path="/investors" sp={sp} win={win} />

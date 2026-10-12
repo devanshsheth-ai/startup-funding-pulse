@@ -12,7 +12,7 @@ import { hrefWith, WINDOW_OPTIONS } from "@/lib/view";
 
 export function Page({ title, subtitle, eyebrow, actions, children }: { title: string; subtitle?: ReactNode; eyebrow?: string; actions?: ReactNode; children: ReactNode }) {
   return (
-    <main className="mx-auto w-full max-w-7xl space-y-6 px-4 py-8">
+    <main className="mx-auto w-full max-w-7xl space-y-8 px-4 py-10 sm:px-6">
       <div className="animate-in flex flex-wrap items-end justify-between gap-4">
         <div>
           {eyebrow ? <p className="eyebrow mb-1">{eyebrow}</p> : null}
@@ -23,6 +23,34 @@ export function Page({ title, subtitle, eyebrow, actions, children }: { title: s
       </div>
       {children}
     </main>
+  );
+}
+
+/**
+ * Small ⓘ button that reveals details (sample size, method notes) on hover or
+ * keyboard/tap focus, so cards stay uncluttered while every number remains
+ * explained. CSS-only, works without JavaScript.
+ */
+export function InfoTip({ children, label = "About this section" }: { children: ReactNode; label?: string }) {
+  return (
+    <span className="group/info relative inline-flex">
+      <button
+        type="button"
+        aria-label={label}
+        className="grid h-7 w-7 place-items-center rounded-full text-muted transition-colors hover:bg-accent-soft hover:text-accent focus-visible:bg-accent-soft focus-visible:text-accent"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 11v5M12 8h.01" />
+        </svg>
+      </button>
+      <span
+        role="tooltip"
+        className="pointer-events-none invisible absolute right-0 top-9 z-20 w-72 translate-y-1 rounded-2xl border border-line bg-card p-3.5 text-left text-xs leading-relaxed text-muted opacity-0 shadow-xl transition-all duration-200 group-focus-within/info:pointer-events-auto group-focus-within/info:visible group-focus-within/info:translate-y-0 group-focus-within/info:opacity-100 group-hover/info:pointer-events-auto group-hover/info:visible group-hover/info:translate-y-0 group-hover/info:opacity-100"
+      >
+        {children}
+      </span>
+    </span>
   );
 }
 
@@ -47,37 +75,66 @@ export function Card({
   subtitle?: ReactNode;
   action?: ReactNode;
 }) {
+  const hasInfo = note !== undefined || n !== undefined;
   return (
-    <section id={id} className={`card card-hover animate-in p-5 ${className}`}>
+    <section id={id} className={`card card-hover animate-in p-6 ${className}`}>
       {title ? (
-        <div className="mb-4 flex items-start justify-between gap-3">
+        <div className="mb-5 flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-start gap-3">
-            {icon ? <span className="bg-grad-soft grid h-9 w-9 shrink-0 place-items-center rounded-xl text-accent">{icon}</span> : null}
+            {icon ? <span className="bg-grad-soft grid h-10 w-10 shrink-0 place-items-center rounded-xl text-accent">{icon}</span> : null}
             <div className="min-w-0">
-              <h2 className="text-[15px] font-bold leading-6">{title}</h2>
-              {subtitle ? <p className="text-xs text-muted">{subtitle}</p> : null}
+              <h2 className="text-base font-bold leading-6">{title}</h2>
+              {subtitle ? <p className="mt-0.5 text-[13px] text-muted">{subtitle}</p> : null}
             </div>
           </div>
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 items-center gap-1">
             {action}
-            {n !== undefined ? <span className="rounded-full bg-card-2 px-2 py-0.5 text-[11px] font-medium tabular-nums text-muted ring-1 ring-line">n = {n}</span> : null}
+            {hasInfo ? (
+              <InfoTip>
+                {n !== undefined ? <span className="mb-1 block font-semibold text-foreground">Sample size: n = {n}</span> : null}
+                {note}
+              </InfoTip>
+            ) : null}
           </div>
         </div>
       ) : null}
       {children}
-      {note ? <p className="mt-3 border-t border-line/70 pt-3 text-xs leading-relaxed text-muted">{note}</p> : null}
+      {!title && note ? <p className="mt-3 text-xs text-muted">{note}</p> : null}
     </section>
+  );
+}
+
+/** A labelled band that groups related cards on long pages. */
+export function SectionHeading({ title, subtitle, action }: { title: string; subtitle?: string; action?: ReactNode }) {
+  return (
+    <div className="animate-in flex flex-wrap items-end justify-between gap-3 pt-4">
+      <div>
+        <h2 className="text-xl font-extrabold tracking-tight">{title}</h2>
+        {subtitle ? <p className="mt-0.5 text-sm text-muted">{subtitle}</p> : null}
+      </div>
+      {action}
+    </div>
   );
 }
 
 export function Empty({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-line bg-card-2 py-8 text-center text-sm text-muted">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden className="opacity-60">
-        <circle cx="11" cy="11" r="7" />
-        <path d="m20 20-3.5-3.5" />
+    <div className="flex flex-col items-center gap-3 rounded-2xl bg-card-2 px-6 py-10 text-center text-sm text-muted ring-1 ring-line/60">
+      <svg width="88" height="64" viewBox="0 0 88 64" fill="none" aria-hidden>
+        <defs>
+          <linearGradient id="emptyGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#6366f1" stopOpacity="0.25" />
+            <stop offset="1" stopColor="#ec4899" stopOpacity="0.25" />
+          </linearGradient>
+        </defs>
+        <ellipse cx="44" cy="56" rx="30" ry="5" fill="#94a3b8" opacity="0.18" />
+        <rect x="14" y="8" width="60" height="40" rx="12" fill="url(#emptyGrad)" />
+        <rect x="24" y="30" width="7" height="10" rx="2" fill="#6366f1" opacity="0.55" />
+        <rect x="35" y="22" width="7" height="18" rx="2" fill="#8b5cf6" opacity="0.55" />
+        <rect x="46" y="26" width="7" height="14" rx="2" fill="#ec4899" opacity="0.55" />
+        <rect x="57" y="18" width="7" height="22" rx="2" fill="#06b6d4" opacity="0.5" />
       </svg>
-      {children}
+      <span className="max-w-xs">{children}</span>
     </div>
   );
 }

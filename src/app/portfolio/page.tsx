@@ -55,7 +55,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
         </Card>
       ) : null}
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
         {tracked.map((t) => {
           const edges = timeline.filter((e) => e.portfolioId === t.id);
           const p = pressureScore(edges, now);

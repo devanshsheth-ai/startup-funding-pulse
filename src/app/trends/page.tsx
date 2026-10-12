@@ -118,7 +118,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
         )}
       </Card>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2" title="Mandate sectors vs the ecosystem" n={lines.reduce((a, l) => a + l.ecosystem, 0)} note={`Core sectors: ${core.join(", ")}.`}>
           <WeekLines data={lines} series={[{ key: "ecosystem", label: "All sectors" }, { key: "mandate", label: "Core mandate sectors" }]} money={metric === "capital"} />
         </Card>
@@ -140,7 +140,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
         </Card>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3">
         <Card title="Stage velocity" n={velocity.reduce((a, v) => a + v.n, 0)} note="Median months between a company's previous round and this one, by sector, where the article states the prior round date (≥ 2 deals).">
           {velocity.length === 0 ? (
             <Empty>Too few deals report a prior round date.</Empty>

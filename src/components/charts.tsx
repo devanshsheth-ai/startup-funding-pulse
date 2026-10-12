@@ -15,6 +15,7 @@ import {
   ReferenceLine,
   ResponsiveContainer,
   Tooltip,
+  Treemap,
   XAxis,
   YAxis,
 } from "recharts";
@@ -175,5 +176,66 @@ export function Donut({ data, centerLabel, centerValue, money: isMoney = false, 
         </div>
       </div>
     </div>
+  );
+}
+
+interface TreeDatum {
+  name: string;
+  size: number;
+  capital: number;
+  n: number;
+  delta: number;
+  core: boolean;
+  href: string;
+  [key: string]: string | number | boolean;
+}
+
+/** Colour by week-on-week change in deal count: greens rising, roses cooling, slate flat. */
+function heatColor(delta: number): string {
+  if (delta >= 3) return "#059669";
+  if (delta >= 1) return "#10b981";
+  if (delta <= -3) return "#e11d48";
+  if (delta <= -1) return "#fb7185";
+  return "#94a3b8";
+}
+
+function TreeCell(props: { x?: number; y?: number; width?: number; height?: number; name?: string; capital?: number; n?: number; delta?: number; core?: boolean; href?: string; depth?: number }) {
+  const { x = 0, y = 0, width = 0, height = 0, name = "", capital = 0, n = 0, delta = 0, core = false, href = "#", depth = 1 } = props;
+  if (depth !== 1 || width <= 2 || height <= 2) return null;
+  const fill = heatColor(delta);
+  const big = width > 90 && height > 46;
+  return (
+    <a href={href}>
+      <g style={{ cursor: "pointer" }}>
+        <rect x={x + 2} y={y + 2} width={width - 4} height={height - 4} rx={12} fill={fill} fillOpacity={core ? 0.95 : 0.62} stroke={core ? "var(--foreground)" : "none"} strokeOpacity={0.25} strokeWidth={core ? 1.5 : 0} />
+        {width > 54 && height > 24 ? (
+          <text x={x + 12} y={y + 22} fill="#fff" fontSize={big ? 13 : 11} fontWeight={700}>
+            {name.length > Math.floor(width / 8) ? `${name.slice(0, Math.max(3, Math.floor(width / 8) - 1))}…` : name}
+          </text>
+        ) : null}
+        {big ? (
+          <text x={x + 12} y={y + 40} fill="#fff" fillOpacity={0.9} fontSize={11}>
+            {money(capital)} · {n} deal{n === 1 ? "" : "s"} {delta > 0 ? `▲${delta}` : delta < 0 ? `▼${Math.abs(delta)}` : ""}
+          </text>
+        ) : null}
+      </g>
+    </a>
+  );
+}
+
+/** Sector treemap: area = disclosed capital, colour = change in deal count vs the previous window. */
+export function SectorTreemap({ data, height = 300 }: { data: TreeDatum[]; height?: number }) {
+  return (
+    <ResponsiveContainer width="100%" height={height}>
+      <Treemap data={data} dataKey="size" nameKey="name" isAnimationActive animationDuration={700} content={<TreeCell />}>
+        <Tooltip
+          {...tooltipStyle}
+          formatter={(_v, _n, item) => {
+            const p = (item as { payload?: TreeDatum }).payload;
+            return p ? [`${money(p.capital)} · ${p.n} deals · ${p.delta >= 0 ? "+" : ""}${p.delta} vs previous`, p.name] : "";
+          }}
+        />
+      </Treemap>
+    </ResponsiveContainer>
   );
 }

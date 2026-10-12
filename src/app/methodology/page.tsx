@@ -275,7 +275,7 @@ async function Content({ searchParams }: { searchParams: Promise<Record<string, 
 
 export default function MethodologyPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   return (
-    <main className="mx-auto w-full max-w-7xl space-y-6 px-4 py-8">
+    <main className="mx-auto w-full max-w-7xl space-y-8 px-4 py-10 sm:px-6">
       <header>
         <p className="eyebrow mb-1">Transparency</p>
         <h1 className="text-3xl font-extrabold tracking-tight">Methodology</h1>

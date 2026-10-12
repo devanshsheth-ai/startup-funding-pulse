@@ -92,3 +92,18 @@ export function KpiTile({
     </div>
   );
 }
+
+/** Compact secondary stat: icon, label, value and change on one line (no sparkline). */
+export function StatChip({ label, value, delta, icon, color = "indigo", hint, goodWhenUp = null }: { label: string; value: ReactNode; delta: { text: string; dir: "up" | "down" | "flat" } | null; icon?: ReactNode; color?: TileColor; hint: string; goodWhenUp?: boolean | null }) {
+  const p = PALETTE[color];
+  const tone =
+    !delta || delta.dir === "flat" || goodWhenUp === null ? "text-muted" : (delta.dir === "up") === goodWhenUp ? "text-up" : "text-down";
+  return (
+    <div className="card card-hover flex items-center gap-3 px-4 py-3" title={hint}>
+      {icon ? <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${p.chip}`}>{icon}</span> : null}
+      <span className="min-w-0 flex-1 text-[13px] font-medium text-muted">{label}</span>
+      <span className="num text-xl font-extrabold">{value}</span>
+      <span className={`w-14 text-right text-xs font-semibold tabular-nums ${tone}`}>{delta ? delta.text : ""}</span>
+    </div>
+  );
+}

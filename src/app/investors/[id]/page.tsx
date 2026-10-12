@@ -60,7 +60,7 @@ async function Content({ params, searchParams }: { params: Promise<{ id: string 
         data{inv.aliases.length ? `; also reported as ${inv.aliases.join(", ")}` : ""}.
       </p>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3">
         <Card title="Sector concentration" n={inv.totals.deals} note={active ? "Highlighted: core sectors of the active profile." : undefined}>
           <BarList rows={inv.sectors.map((s) => ({ key: s.sector, label: s.sector, href: `/sectors/${encodeURIComponent(s.sector)}${q}`, value: s.n, display: String(s.n), highlight: core.has(s.sector) }))} />
         </Card>
@@ -118,7 +118,7 @@ async function Title({ params }: { params: Promise<{ id: string }> }) {
 
 export default function InvestorPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: SearchParams }) {
   return (
-    <main className="mx-auto w-full max-w-7xl space-y-6 px-4 py-6">
+    <main className="mx-auto w-full max-w-7xl space-y-8 px-4 py-10 sm:px-6">
       <h1 className="text-2xl font-semibold tracking-tight">
         <Suspense fallback="Investor">
           <Title params={params} />
