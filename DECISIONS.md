@@ -568,3 +568,30 @@ content, so it keeps working when today's pipeline fails, and the route error bo
 an inline script before first paint, so the header toggle (Auto / Light / Dark, remembered in
 localStorage) can override the OS setting without a flash. Every chart colour is a CSS token, so
 charts follow the theme.
+
+**D-076 · Duplicate investors.** The audit found 23 investors under two or three spellings
+("Rainmatter by Zerodha", "Prosus Ventures", "360 One Asset", case variants like "ajvc"),
+splitting their counts on the leaderboard, investor pages, graph and the rotation detector.
+→ Curated aliases join the alias table. New investors resolve to an existing row with the same
+normalised name (the busiest, then the oldest). `npm run merge-investors` relinks deals attached
+to a duplicate by rebuilding their investor links from the stored extractions. Duplicate rows
+are kept, with zero deals, and their spellings are recorded as aliases on the survivor. Ambiguous
+pairs (a corporate and its fund, garbled two-person names) were left separate on purpose.
+
+**D-077 · Design system.** The app moved to a light, vibrant system:
+- **Surfaces:** white rounded cards (20 px radius, a layered soft shadow, a 1 px border) on a
+  tinted background, so sections never blend into the page.
+- **Accents:** an indigo → violet → pink gradient, reserved for calls to action, the active
+  navigation pill and highlighted data.
+- **Type:** Plus Jakarta Sans for headings and figures, Inter for body copy.
+- **Motion:** short fade-up and bar-grow entrance animations, plus count-up KPIs, all disabled
+  under `prefers-reduced-motion`.
+- **Charts:** colours are CSS tokens, so dark mode (now opt-in, light by default) keeps working.
+
+**D-078 · Merge tie-breaks and testing.** The integration test showed the merged amount could
+depend on report order when figures agree within tolerance. Ties now go to the figure most
+sources state exactly, then the earliest report, then publication name. `npm run recompute-deals`
+applied this; a second run changes nothing. The golden file uses, for each verified deal, an
+article whose own extraction matches the corroborated values. Article text is never committed;
+the runner reads it from the database or re-fetches it. `npm run verify:idempotency` runs every
+processing stage twice on live data and compares 16 tables plus deal and score fingerprints.

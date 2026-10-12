@@ -141,6 +141,14 @@ Immediate alerts are emailed with a subject that says what happened (`🔴 Compe
 Age raised $250K (stage undisclosed) — competes with Even Healthcare`). The body gives the
 adjacency rationale, the deal card with sources, and the last 30 days around that tracked company.
 
+## Testing
+
+| Command | What it checks |
+|---|---|
+| `npm test` | 196 unit and integration tests: normalisation, scoring, detector gates, dedupe and merge, alerts hygiene, degradation, plus an integration snapshot of 58 real source reports merging into 25 stored deals |
+| `npm run golden` | Re-extracts 20 real articles with the current prompt and scores company, stage, amount and leads against corroborated values; run on every prompt change (latest: 95 / 95 / 95 / 90%) |
+| `npm run verify:idempotency` | Runs every processing stage twice on live data; fails if any of 16 tables or the deal/score fingerprints change on the second pass |
+
 ## Assumptions
 
 - Aarav's sectors, stages, cheque size, portfolio and watchlist are not in the problem
@@ -167,8 +175,9 @@ adjacency rationale, the deal card with sources, and the last 30 days around tha
   headlines and leads, dated by first sighting (D-036).
 - Regenerate after a mandate change takes up to ~90 s (new sector-fit calls at the free-tier
   rate limit, then narration); with cached fits it takes ~45 s. The sector deep-dive takes 20–60 s.
-- Some investors still appear under two names (e.g. "Mirabilis" and "Mirabilis Investment
-  Trust") where no alias links them; this splits their counts on investor pages and the graph.
+- Investor names are canonicalised through an alias table plus normalised-name matching
+  (D-076); a genuinely new spelling of a known fund can still create a second investor until
+  it is added to `seed/investor-aliases.json` and `npm run merge-investors` is run.
 - Market-map totals are all-time per cluster; sectors with fewer than 6 embedded companies have
   no map yet.
 - Alert emails, like digests, go to `DIGEST_TO` while the Resend test sender is in use.
