@@ -263,7 +263,7 @@ export function MandateEditor({ profileId, initial, sectors, stages, triggerKeys
         </div>
       </Section>
 
-      <div className="no-print card sticky bottom-3 z-10 flex flex-wrap items-start justify-between gap-3 bg-card/90 p-3 backdrop-blur">
+      <div className="no-print card sticky bottom-3 z-10 flex flex-wrap items-start justify-between gap-3 bg-card p-3">
         <div className="text-sm">
           {status.kind === "ok" ? <span className="text-up">{status.msg}</span> : null}
           {status.kind === "error" ? (
