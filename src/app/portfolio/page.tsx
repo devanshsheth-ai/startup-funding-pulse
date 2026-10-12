@@ -2,11 +2,11 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { BarList } from "@/components/deals";
-import { Badge, Card, Disclosure, Empty, Icon, Loading, Page, ProfileSwitcher, Table, td } from "@/components/ui";
+import { Badge, Card, Disclosure, Empty, Icon, Loading, Page, ProfileSwitcher, Table, td, Tip } from "@/components/ui";
 import { getAggregates } from "@/db/queries/aggregates";
 import { getAdjacencyTimeline, getRelatedEvents, getTracked, getWatchlist, pressureScore } from "@/db/queries/portfolio";
 import { RELATIONSHIP_LABELS, STAGE_HELD_LABEL } from "@/lib/copy";
-import { RELATIONSHIP_TEXT, shortDate, usd } from "@/lib/format";
+import { EVENT_HELP, RELATIONSHIP_HELP, RELATIONSHIP_TEXT, shortDate, usd } from "@/lib/format";
 import { param, resolveProfile, type SearchParams } from "@/lib/view";
 import { toIsoDate } from "@/pipeline/normalize";
 
@@ -62,7 +62,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
           const m = sectorRow.get(t.sector);
           const ev = events.get(t.name) ?? [];
           return (
-            <Card key={t.id} title={t.name}>
+            <Card key={t.id} title={t.name} footer={<>Adjacency keywords: {t.keywords.join(" · ")}</>}>
               <div className="-mt-2 mb-3 space-y-1 text-sm">
                 <p className="flex flex-wrap gap-1">
                   <Badge>{RELATIONSHIP_LABELS[t.relationshipType] ?? t.relationshipType}</Badge>
@@ -80,9 +80,9 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
               <div className="mb-3 grid grid-cols-3 gap-2 text-center">
                 <div className="rounded-xl bg-card-2 p-3 ring-1 ring-line/70">
                   <div className="text-lg font-semibold tabular-nums">{p.score.toFixed(2)}</div>
-                  <div className="text-[11px] text-muted" title="Σ weight × confidence × e^(−age/30d); competitor = 1, same layer = 0.6">
-                    competitive pressure
-                  </div>
+                  <Tip text="How much competitive funding is landing near this company: each competitor (weight 1) or same-layer (0.6) raise, times Gemini's confidence, fading with age (a raise 30 days old counts about a third as much). Higher = more pressure.">
+                    <span className="cursor-help text-[11px] text-muted underline decoration-dotted decoration-muted/50 underline-offset-2">competitive pressure</span>
+                  </Tip>
                 </div>
                 <div className="rounded-xl bg-card-2 p-3 ring-1 ring-line/70">
                   <div className="text-lg font-semibold tabular-nums">
@@ -106,7 +106,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
                     <li key={e.dealId} className="relative">
                       <span className="absolute -left-[21px] top-0 mt-1.5 h-2.5 w-2.5 rounded-full bg-accent" />
                       <span className="text-xs text-muted">{shortDate(e.announced)}</span>{" "}
-                      <Badge tone={e.relationship === "competitor" ? "bad" : e.relationship === "same_layer" ? "warn" : "neutral"}>{RELATIONSHIP_TEXT[e.relationship] ?? e.relationship}</Badge>{" "}
+                      <Badge tone={e.relationship === "competitor" ? "bad" : e.relationship === "same_layer" ? "warn" : "neutral"} title={RELATIONSHIP_HELP[e.relationship]}>{RELATIONSHIP_TEXT[e.relationship] ?? e.relationship}</Badge>{" "}
                       <span className="font-medium">{e.company}</span>{" "}
                       <span className="text-muted">
                         {e.stage} · {usd(e.amountUsd)} · conf. {e.confidence.toFixed(2)}
@@ -127,9 +127,9 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
                 <p className="text-sm text-muted">None reported.</p>
               ) : (
                 <ul className="space-y-1 text-sm">
-                  {ev.slice(0, 5).map((e) => (
+                  {ev.slice(0, 8).map((e) => (
                     <li key={e.id}>
-                      <span className="text-xs text-muted">{shortDate(e.date)}</span> <Badge>{e.type.replace("_", " ")}</Badge> {e.headline}{" "}
+                      <span className="text-xs text-muted">{shortDate(e.date)}</span> <Badge title={EVENT_HELP[e.type]}>{e.type.replace("_", " ")}</Badge> {e.headline}{" "}
                       {e.url ? (
                         <a className="link text-xs" href={e.url} target="_blank" rel="noopener noreferrer">
                           ↗
@@ -139,7 +139,6 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
                   ))}
                 </ul>
               )}
-              <p className="mt-3 text-[11px] text-muted">Adjacency keywords: {t.keywords.join(" · ")}</p>
             </Card>
           );
         })}

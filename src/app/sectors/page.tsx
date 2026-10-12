@@ -28,10 +28,11 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
         <SectorTreemap
           data={rows.map((r) => ({ name: r.sector, size: r.capital > 0 ? r.capital : maxCap * 0.02, capital: r.capital, n: r.n, delta: r.recent >= 6 ? 3 : r.recent >= 2 ? 1 : 0, core: core.has(r.sector), href: `/sectors/${encodeURIComponent(r.sector)}${q}`, caption: `${usd(r.capital, { undisclosed: "$0" })} · ${r.recent} deals in 28 days` }))}
           height={340}
+          fill
         />
       </Card>
       <Card icon={Icon.flame} title="Most active right now" subtitle="Deals in the last 28 days" n={rows.reduce((a, r) => a + r.recent, 0)}>
-        <BarList rows={recentMax.slice(0, 10).map((r) => ({ key: r.sector, label: r.sector, href: `/sectors/${encodeURIComponent(r.sector)}${q}`, value: r.recent, display: `${r.recent} deals`, highlight: core.has(r.sector) }))} />
+        <BarList spread rows={recentMax.slice(0, 10).map((r) => ({ key: r.sector, label: r.sector, href: `/sectors/${encodeURIComponent(r.sector)}${q}`, value: r.recent, display: `${r.recent} deals`, highlight: core.has(r.sector) }))} />
       </Card>
     </div>
     <Card title="All sectors" n={rows.reduce((a, r) => a + r.n, 0)} note={active ? `Mandate labels for ${active.displayName}.` : undefined}>

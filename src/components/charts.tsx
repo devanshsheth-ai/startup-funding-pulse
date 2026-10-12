@@ -19,6 +19,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import type { ReactElement } from "react";
 import { SERIES } from "@/lib/chart-colors";
 
 /**
@@ -38,6 +39,30 @@ const tooltipStyle = {
 };
 const legend = { wrapperStyle: { fontSize: 12, paddingTop: 6 }, iconType: "circle" as const, iconSize: 8 };
 
+/** Sizing shared by the charts: `height` is the minimum; with `fill` the chart also grows to take the rest of a flex-column card, so cards in one row line up without blank space. */
+interface Size {
+  height?: number;
+  fill?: boolean;
+}
+
+function Frame({ height, fill, children }: { height: number; fill?: boolean; children: ReactElement }) {
+  if (!fill) {
+    return (
+      <ResponsiveContainer width="100%" height={height}>
+        {children}
+      </ResponsiveContainer>
+    );
+  }
+  return (
+    <div className="relative w-full flex-1" style={{ minHeight: height }}>
+      <div className="absolute inset-0">
+        <ResponsiveContainer width="100%" height="100%">
+          {children}
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}
 
 function Grad({ id, color, from = 0.9, to = 0.35, vertical = true }: { id: string; color: string; from?: number; to?: number; vertical?: boolean }) {
   return (
@@ -48,9 +73,9 @@ function Grad({ id, color, from = 0.9, to = 0.35, vertical = true }: { id: strin
   );
 }
 
-export function CapitalCountChart({ data }: { data: { week: string; capital: number; n: number; partial: boolean }[] }) {
+export function CapitalCountChart({ data, height = 260, fill }: { data: { week: string; capital: number; n: number; partial: boolean }[] } & Size) {
   return (
-    <ResponsiveContainer width="100%" height={260}>
+    <Frame height={height} fill={fill}>
       <ComposedChart data={data.map((d) => ({ ...d, label: d.partial ? `${wk(d.week)}*` : wk(d.week) }))} margin={{ top: 10, right: 4, left: 0, bottom: 0 }}>
         <defs>
           <Grad id="capBar" color="var(--chart-1)" from={0.95} to={0.45} />
@@ -64,13 +89,13 @@ export function CapitalCountChart({ data }: { data: { week: string; capital: num
         <Bar yAxisId="cap" dataKey="capital" name="Capital" fill="url(#capBar)" radius={[8, 8, 3, 3]} maxBarSize={36} {...anim} />
         <Line yAxisId="n" dataKey="n" name="Deals" stroke="var(--chart-4)" strokeWidth={2.5} dot={{ r: 3, strokeWidth: 2, fill: "var(--card)" }} activeDot={{ r: 5 }} type="monotone" {...anim} />
       </ComposedChart>
-    </ResponsiveContainer>
+    </Frame>
   );
 }
 
-export function StageMixChart({ data, keys }: { data: Record<string, number | string>[]; keys: string[] }) {
+export function StageMixChart({ data, keys, height = 230, fill }: { data: Record<string, number | string>[]; keys: string[] } & Size) {
   return (
-    <ResponsiveContainer width="100%" height={230}>
+    <Frame height={height} fill={fill}>
       <AreaChart data={data} stackOffset="expand" margin={{ top: 8, right: 4, left: 0, bottom: 0 }}>
         <defs>
           {keys.map((k, i) => (
@@ -86,13 +111,13 @@ export function StageMixChart({ data, keys }: { data: Record<string, number | st
           <Area key={k} type="monotone" dataKey={k} stackId="1" stroke={SERIES[i % SERIES.length]} strokeWidth={2} fill={`url(#stage-${i})`} {...anim} />
         ))}
       </AreaChart>
-    </ResponsiveContainer>
+    </Frame>
   );
 }
 
-export function HistogramChart({ data, medianLabel }: { data: { label: string; n: number }[]; medianLabel: string | null }) {
+export function HistogramChart({ data, medianLabel, height = 230, fill }: { data: { label: string; n: number }[]; medianLabel: string | null } & Size) {
   return (
-    <ResponsiveContainer width="100%" height={230}>
+    <Frame height={height} fill={fill}>
       <BarChart data={data} margin={{ top: 18, right: 4, left: 0, bottom: 0 }}>
         <defs>
           <Grad id="histBar" color="var(--chart-2)" from={0.95} to={0.45} />
@@ -104,13 +129,13 @@ export function HistogramChart({ data, medianLabel }: { data: { label: string; n
         <Bar dataKey="n" name="Deals" fill="url(#histBar)" radius={[8, 8, 3, 3]} {...anim} />
         {medianLabel ? <ReferenceLine x={medianLabel} stroke="var(--chart-4)" strokeWidth={2} strokeDasharray="5 4" label={{ value: "median", position: "top", fill: "var(--chart-4)", fontSize: 11, fontWeight: 600 }} /> : null}
       </BarChart>
-    </ResponsiveContainer>
+    </Frame>
   );
 }
 
-export function ShareLine({ data, label, baseline }: { data: { week: string; value: number | null }[]; label: string; baseline?: number | null }) {
+export function ShareLine({ data, label, baseline, height = 150, fill }: { data: { week: string; value: number | null }[]; label: string; baseline?: number | null } & Size) {
   return (
-    <ResponsiveContainer width="100%" height={150}>
+    <Frame height={height} fill={fill}>
       <AreaChart data={data.map((d) => ({ ...d, label: wk(d.week) }))} margin={{ top: 8, right: 4, left: 0, bottom: 0 }}>
         <defs>
           <Grad id="shareArea" color="var(--chart-7)" from={0.4} to={0} />
@@ -122,15 +147,15 @@ export function ShareLine({ data, label, baseline }: { data: { week: string; val
         {baseline != null ? <ReferenceLine y={baseline} stroke="var(--muted)" strokeDasharray="4 3" /> : null}
         <Area dataKey="value" name={label} type="monotone" stroke="var(--chart-7)" strokeWidth={2.5} fill="url(#shareArea)" connectNulls dot={{ r: 2.5 }} {...anim} />
       </AreaChart>
-    </ResponsiveContainer>
+    </Frame>
   );
 }
 
 /** Generic multi-series chart over ISO weeks; the first series is drawn as a soft area. */
-export function WeekLines({ data, series, money: isMoney = false, height = 240 }: { data: Record<string, number | string | null>[]; series: { key: string; label: string }[]; money?: boolean; height?: number }) {
+export function WeekLines({ data, series, money: isMoney = false, height = 240, fill }: { data: Record<string, number | string | null>[]; series: { key: string; label: string }[]; money?: boolean } & Size) {
   const uid = series.map((s) => s.key).join("-");
   return (
-    <ResponsiveContainer width="100%" height={height}>
+    <Frame height={height} fill={fill}>
       <ComposedChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
         <defs>
           {series.map((s, i) => (
@@ -150,7 +175,7 @@ export function WeekLines({ data, series, money: isMoney = false, height = 240 }
           ),
         )}
       </ComposedChart>
-    </ResponsiveContainer>
+    </Frame>
   );
 }
 
@@ -226,9 +251,9 @@ function TreeCell(props: { x?: number; y?: number; width?: number; height?: numb
 }
 
 /** Sector treemap: area = disclosed capital, colour = change in deal count vs the previous window. */
-export function SectorTreemap({ data, height = 300 }: { data: TreeDatum[]; height?: number }) {
+export function SectorTreemap({ data, height = 300, fill }: { data: TreeDatum[] } & Size) {
   return (
-    <ResponsiveContainer width="100%" height={height}>
+    <Frame height={height} fill={fill}>
       <Treemap data={data} dataKey="size" nameKey="name" isAnimationActive animationDuration={700} content={<TreeCell />}>
         <Tooltip
           {...tooltipStyle}
@@ -238,6 +263,6 @@ export function SectorTreemap({ data, height = 300 }: { data: TreeDatum[]; heigh
           }}
         />
       </Treemap>
-    </ResponsiveContainer>
+    </Frame>
   );
 }

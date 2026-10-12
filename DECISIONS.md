@@ -668,3 +668,28 @@ Elsewhere:
   method note in the ⓘ popover.
 - Cards gain a visible `footer` slot for links and counts.
 - The Sectors index adds an all-time capital treemap and a "most active right now" chart.
+
+**D-085 · Every deal reachable, no blank strips, hover explanations.** User feedback had three
+parts: show all deals from the brief, enlarge visuals where a card left empty space, and explain
+things on hover.
+- **All deals from the brief:** each tier shows 6 deals, and "Show N more" opens the rest.
+  - A stacked bar shows how every deal in the window scored (act now / high / relevant /
+    context / archived), so it adds up to the window total.
+  - "See all N deals in this window" opens Explorer with the brief's dates, the profile and
+    score sort. Context and archived deals are only stored as counts in the brief, so Explorer
+    is where they are listed.
+- **Filling space:**
+  - Cards are flex columns. Charts take a `fill` flag: they keep a minimum height and grow to
+    the row height set by the tallest card beside them.
+  - Ranked bar lists can `spread` over spare height.
+  - Long tables (pattern history) scroll inside a fill box instead of stretching the row.
+  - Empty states fill their card.
+  - Cards with little data (Overview deals, new-entrant log, cheque evolution) gained real
+    content instead of padding: a "see all" panel, the sectors new investors back, and median
+    cheque bars.
+- **Hover:** a shared CSS `Tip` (hover and keyboard focus) replaces native `title` tooltips
+  on badges, KPI labels, score rings, tier labels, pills, the brief contents list and
+  temperature drivers. The nav uses a fixed-position tip because it scrolls sideways.
+  - Tables keep native titles, because their scroll container would clip a positioned tip.
+  - Tier, relationship and event-type meanings live in `src/lib/format.ts`, so every page uses
+    the same wording.

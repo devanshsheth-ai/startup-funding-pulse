@@ -5,7 +5,7 @@ import { DealList, InvestorLinks, Provenance, SourceLinks } from "@/components/d
 import { Badge, Card, Empty, Loading, Page, Pills, Table, td, Icon } from "@/components/ui";
 import { queryDeals, queryEvents } from "@/db/queries/deals";
 import { filtersToParams, parseDealFilters, parseEventFilters, TIERS, type DealFilters } from "@/lib/deal-filters";
-import { shortDate, TIER_LABELS, usd } from "@/lib/format";
+import { EVENT_HELP, shortDate, TIER_LABELS, usd } from "@/lib/format";
 import { ALL_STAGES, EVENT_TYPES, SECTORS } from "@/lib/taxonomy";
 import { hrefWith, param, resolveProfile, type SearchParams } from "@/lib/view";
 import { translateQuery } from "@/pipeline/nl-search";
@@ -237,7 +237,7 @@ async function Events({ sp }: { sp: Record<string, string | string[] | undefined
             {res.rows.map((e) => (
               <tr key={e.id}>
                 <td className={`${td} whitespace-nowrap`}>{shortDate(e.date)}</td>
-                <td className={td}>
+                <td className={td} title={EVENT_HELP[e.type]}>
                   <Badge>{e.type.replace("_", " ")}</Badge>
                 </td>
                 <td className={td}>
