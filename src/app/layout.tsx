@@ -29,16 +29,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="flex min-h-full flex-col">
         <Splash />
-        <header className="no-print sticky top-0 z-30 border-b border-line/70 bg-card/75 backdrop-blur-xl">
-          <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-4 py-2.5">
-            <Link href="/" className="ds-hover group flex shrink-0 items-center gap-2.5" aria-label={`${BRAND.name} home`}>
-              <span className="bg-grad grid h-9 w-9 place-items-center rounded-xl text-white shadow-[0_6px_16px_-6px_rgb(99_102_241/0.7)] transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105">
-                <LogoGlyph size={21} />
+        <header className="no-print sticky top-0 z-30 px-3 pt-3 sm:px-4">
+          <div className="mx-auto flex w-full max-w-7xl items-center gap-4 rounded-full bg-white/95 py-1.5 pl-2 pr-1.5 shadow-[0_10px_28px_-18px_rgb(15_23_41/0.45)] ring-1 ring-black/[0.06] backdrop-blur-xl dark:bg-[#172131]/95 dark:ring-white/10">
+            <Link href="/" className="ds-hover group flex shrink-0 items-center gap-2 pl-1 pr-2" aria-label={`${BRAND.name} home`}>
+              <span className="bg-grad grid h-8 w-8 place-items-center rounded-full text-white shadow-[0_6px_14px_-6px_rgb(35_181_234/0.8)] transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105">
+                <LogoGlyph size={18} />
               </span>
-              <span className="hidden leading-tight sm:block">
-                <Wordmark className="block text-[16px]" />
-                <span className="block text-[11px] text-muted">{BRAND.tagline}</span>
-              </span>
+              <Wordmark className="hidden text-[19px] sm:block" />
             </Link>
             <div className="min-w-0 flex-1">
               <Suspense fallback={<div className="h-9" />}>

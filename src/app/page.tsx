@@ -118,42 +118,39 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
 
   return (
     <>
-      {/* Hero: the week in one line, with the primary call to action */}
-      <section className="hero-grad animate-in relative overflow-hidden rounded-[1.75rem] p-7 text-white shadow-[0_20px_50px_-20px_rgb(79_70_229/0.6)] sm:p-10">
-        <div className="pointer-events-none absolute -right-16 -top-24 h-72 w-72 rounded-full bg-white/15 blur-3xl" aria-hidden />
-        <div className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-cyan-300/20 blur-3xl" aria-hidden />
-        <div className="relative flex flex-wrap items-end justify-between gap-8">
-          <div className="max-w-2xl">
-            <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-white/80">
+      {/* Summary bar: the window in one line, with the actions beside it */}
+      <section className="card animate-in relative overflow-hidden p-5 sm:p-6">
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-1.5 bg-[var(--cyan-strong)]" aria-hidden />
+        <div className="flex flex-wrap items-center justify-between gap-5 pl-2">
+          <div className="min-w-0">
+            <p className="flex items-center gap-2 text-xs font-semibold text-muted">
               <span className="live-dot" aria-hidden /> {win.label} · {active.displayName}
             </p>
-            <h2 className="mt-3 text-3xl font-extrabold leading-tight sm:text-[2.6rem]">
+            <h2 className="mt-1.5 text-2xl font-bold leading-tight tracking-[-0.03em] sm:text-[1.9rem]">
               <Tip text="Unique funding rounds announced in this window, after merging duplicate reports of the same round." side="bottom">
                 <span className="cursor-help">
                   <span className="num">{stats.n}</span> deals
                 </span>
               </Tip>{" "}
-              ·{" "}
+              <span className="text-muted">·</span>{" "}
               <Tip text={`Sum of the amounts that were disclosed. ${agg.totals.undisclosed_n} rounds did not say how much they raised and add nothing here.`} side="bottom">
                 <span className="cursor-help">
                   <span className="num">{usd(stats.capital, { undisclosed: "$0" })}</span> raised
                 </span>
               </Tip>
             </h2>
-            <p className="mt-3 text-[15px] leading-relaxed text-white/85">
+            <p className="mt-1 text-sm text-muted">
               {hitDeals.length} watchlist {hitDeals.length === 1 ? "hit" : "hits"} · {alerts.adjacency.length} adjacent {alerts.adjacency.length === 1 ? "raise" : "raises"} around your tracked companies · market temperature {agg.temperature.value}/100
             </p>
           </div>
-          <div className="no-print flex flex-col items-end gap-3">
-            <RegenerateButton key={active.id} profileId={active.id} mode={mode} variant="light" />
-            <div className="flex gap-2">
-              <Link href={`/brief?profile=${active.id}`} className="btn btn-sm border border-white/40 bg-white/10 text-white backdrop-blur hover:bg-white/20">
-                Read the brief
-              </Link>
-              <Link href={`/explorer?profile=${active.id}&from=${win.start}&to=${win.end}&sort=score`} className="btn btn-sm border border-white/40 bg-white/10 text-white backdrop-blur hover:bg-white/20">
-                Explore deals →
-              </Link>
-            </div>
+          <div className="no-print flex flex-wrap items-start gap-2">
+            <Link href={`/brief?profile=${active.id}`} className="btn btn-primary">
+              Read the brief
+            </Link>
+            <Link href={`/explorer?profile=${active.id}&from=${win.start}&to=${win.end}&sort=score`} className="btn btn-outline">
+              Explore deals →
+            </Link>
+            <RegenerateButton key={active.id} profileId={active.id} mode={mode} variant="outline" />
           </div>
         </div>
       </section>
@@ -470,7 +467,7 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
                       </span>
                     </div>
                     <span className="ml-9 block h-1.5 overflow-hidden rounded-full bg-line/60">
-                      <span className="animate-grow block h-1.5 rounded-full bg-grad" style={{ width: `${(100 * l.deals) / leadMax}%`, animationDelay: `${i * 50}ms` }} />
+                      <span className="animate-grow block h-1.5 rounded-full bar-accent" style={{ width: `${(100 * l.deals) / leadMax}%`, animationDelay: `${i * 50}ms` }} />
                     </span>
                     <p className="ml-9 mt-1 truncate text-[11px] text-muted">
                       {l.capitalLed > 0 ? `${usd(l.capitalLed)} led · ` : ""}

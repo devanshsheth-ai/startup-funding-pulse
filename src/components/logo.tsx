@@ -25,19 +25,19 @@ export function LogoGlyph({ size = 20, animated = false, className = "" }: { siz
 export function LogoMark({ size = 36, animated = false, className = "" }: { size?: number; animated?: boolean; className?: string }) {
   return (
     <span
-      className={`bg-grad grid shrink-0 place-items-center text-white shadow-[0_6px_16px_-6px_rgb(99_102_241/0.7)] ${className}`}
-      style={{ width: size, height: size, borderRadius: size * 0.3 }}
+      className={`bg-grad grid shrink-0 place-items-center text-white shadow-[0_10px_24px_-12px_rgb(35_181_234/0.9)] ${className}`}
+      style={{ width: size, height: size, borderRadius: size * 0.32 }}
     >
       <LogoGlyph size={Math.round(size * 0.58)} animated={animated} />
     </span>
   );
 }
 
-/** "Deal" in the text colour, "scope" in the gradient. */
+/** "dealscope" in ink with a cyan full stop. */
 export function Wordmark({ className = "" }: { className?: string }) {
   return (
-    <span className={`font-[family-name:var(--font-heading)] font-extrabold tracking-tight ${className}`}>
-      Deal<span className="text-gradient">scope</span>
+    <span className={`font-[family-name:var(--font-heading)] font-extrabold tracking-[-0.04em] ${className}`}>
+      dealscope<span className="text-cyan">.</span>
     </span>
   );
 }

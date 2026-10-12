@@ -753,3 +753,24 @@ Funding Pulse*, stays as the name of the exam problem and is cited in the README
     are the owner's to change in Vercel and GitHub.
   - The `EMAIL_FROM` display name. It is an environment variable, updated in `.env` and to be
     updated in Vercel by the owner.
+
+**D-089 · Payr-inspired visual design.** Two design-only trials were previewed: Payline (lime
+and black) and Payr (white and cyan). The owner chose Payr, with two corrections: the
+dashboard must not read like a marketing page, and the text was too light.
+- **Look:**
+  - Light grey canvas with white cards.
+  - A white floating pill navbar, whose active tab is a light-cyan chip.
+  - The "dealscope." wordmark with a cyan stop.
+  - Pill buttons: deep-cyan primary and ink outline.
+  - Navy active filters, a navy brief masthead, cyan-and-navy charts, and a cyan icon.
+- **Dashboard, not landing page:** the Overview hero is a compact summary bar, with the
+  window and profile, deals and capital, and one line of context on the left and the actions
+  on the right. The content is identical to before.
+- **Legibility (WCAG contrast):**
+  - Muted text: #6b7686 (4.6:1) → #475467 (7.7:1).
+  - Accent text: cyan #0b9fd4 (3.0:1) → #0270a6 (5.4:1).
+  - Primary buttons: white on #23b5ea (2.4:1) → white on #0379b5 (4.7:1).
+  - Body weight 450.
+
+  Bright cyan is kept only for decoration: the logo tile, dots and glows.
+- **The Payline trial** stays on its own branch (`design/payline-trial`) and is not merged.
