@@ -3,7 +3,7 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { WeekLines } from "@/components/charts";
 import { BarList } from "@/components/deals";
-import { Badge, Card, Empty, Loading, Page, Pills, ProfileSwitcher, Table, td } from "@/components/ui";
+import { Badge, Card, Empty, Loading, Page, Pills, ProfileSwitcher, Table, td, Icon } from "@/components/ui";
 import { addWeeks, weekOf, weeksBetween } from "@/db/queries/detection";
 import { getLastDealBySector, getPatternHistory, getSectorWeekGrid, getStageVelocity, type GridCell, type TrendMetric } from "@/db/queries/trends";
 import { shortDate, usd } from "@/lib/format";
@@ -70,7 +70,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
         </div>
       </div>
 
-      <Card title={`Sector × week heatmap — ${METRICS.find((m) => m.key === metric)?.label}`} n={grid.reduce((a, g) => a + g.n, 0)} note="Darker = more. Core mandate sectors listed first (bold). * current week is partial. Capital and medians use disclosed amounts only.">
+      <Card icon={Icon.grid} subtitle="Darker cells = more · bold rows are your core sectors · * = current partial week" title={`Sector × week heatmap — ${METRICS.find((m) => m.key === metric)?.label}`} n={grid.reduce((a, g) => a + g.n, 0)} note="Darker = more. Core mandate sectors listed first (bold). * current week is partial. Capital and medians use disclosed amounts only.">
         {sectors.length === 0 ? (
           <Empty>No deals in this span.</Empty>
         ) : (
@@ -119,10 +119,10 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
       </Card>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <Card className="lg:col-span-2" title="Mandate sectors vs the ecosystem" n={lines.reduce((a, l) => a + l.ecosystem, 0)} note={`Core sectors: ${core.join(", ")}.`}>
+        <Card className="lg:col-span-2" icon={Icon.chart} subtitle="Your core sectors against all sectors, week by week" title="Mandate sectors vs the ecosystem" n={lines.reduce((a, l) => a + l.ecosystem, 0)} note={`Core sectors: ${core.join(", ")}.`}>
           <WeekLines data={lines} series={[{ key: "ecosystem", label: "All sectors" }, { key: "mandate", label: "Core mandate sectors" }]} money={metric === "capital"} />
         </Card>
-        <Card title="Silence tracker" n={core.length} note="Weeks since the last deal in each core sector. The sector-silence detector fires at 3+ weeks.">
+        <Card icon={Icon.bell} subtitle="Weeks since the last deal in each core sector · red = 3+ weeks" title="Silence tracker" n={core.length} note="Weeks since the last deal in each core sector. The sector-silence detector fires at 3+ weeks.">
           <ul className="space-y-2 text-sm">
             {core.map((s) => {
               const l = lastBySector.get(s);
@@ -141,14 +141,14 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <Card title="Stage velocity" n={velocity.reduce((a, v) => a + v.n, 0)} note="Median months between a company's previous round and this one, by sector, where the article states the prior round date (≥ 2 deals).">
+        <Card icon={Icon.layers} subtitle="Median months between a company's rounds, by sector" title="Stage velocity" n={velocity.reduce((a, v) => a + v.n, 0)} note="Median months between a company's previous round and this one, by sector, where the article states the prior round date (≥ 2 deals).">
           {velocity.length === 0 ? (
             <Empty>Too few deals report a prior round date.</Empty>
           ) : (
             <BarList rows={velocity.map((v) => ({ key: v.sector, label: v.sector, value: v.medianMonths, display: `${v.medianMonths.toFixed(1)} mo · n=${v.n}`, highlight: coreSet.has(v.sector) }))} />
           )}
         </Card>
-        <Card className="lg:col-span-2" title="Pattern history" n={patterns.length} note={<>Every pattern that passed all three gates, newest first. “×N” = consecutive weeks it has fired. <Link className="link" href={`/methodology?profile=${active.id}`}>Detector gates</Link></>}>
+        <Card className="lg:col-span-2" icon={Icon.star} subtitle="Every pattern that passed all three gates · ×N = weeks running" title="Pattern history" n={patterns.length} note={<>Every pattern that passed all three gates, newest first. “×N” = consecutive weeks it has fired. <Link className="link" href={`/methodology?profile=${active.id}`}>Detector gates</Link></>}>
           {patterns.length === 0 ? (
             <Empty>No patterns have fired yet.</Empty>
           ) : (

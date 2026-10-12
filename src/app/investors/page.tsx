@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
-import { Badge, Card, Empty, Loading, Page, ProfileSwitcher, Table, td, WindowSelector } from "@/components/ui";
+import { Badge, Card, Empty, Loading, Page, ProfileSwitcher, Table, td, WindowSelector, Icon } from "@/components/ui";
 import { findWarmPath, getLeaderboard, getWatchedInvestors, getNewEntrants, layoutGraph, loadCoInvestGraph, topNetwork, type WarmPathResult } from "@/db/queries/investors";
 import { SERIES } from "@/lib/chart-colors";
 import { shortDate, usd } from "@/lib/format";
@@ -86,7 +86,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
         <ProfileSwitcher path="/investors" sp={sp} profiles={all} active={active} />
       </div>
 
-      <Card title="Warm-path finder" note="Who on your watchlist can introduce you to a company's lead investor?">
+      <Card icon={Icon.link} subtitle="Who on your watchlist can introduce you to a company's lead investor?" title="Warm-path finder" note="Who on your watchlist can introduce you to a company's lead investor?">
         <form method="get" action="/investors" className="no-print mb-3 flex gap-2">
           <input type="hidden" name="profile" value={active.id} />
           <input
@@ -104,7 +104,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
       </Card>
 
       <div className="grid gap-6 lg:grid-cols-5">
-        <Card className="lg:col-span-3" title="Leaderboard" n={leaders.length} note={`${win.label}: ${win.start} → ${win.end}. Ranked by deals, then rounds led.`}>
+        <Card className="lg:col-span-3" icon={Icon.users} subtitle={`Ranked by deals, then rounds led · ${win.start} → ${win.end}`} title="Leaderboard" n={leaders.length} note={`${win.label}: ${win.start} → ${win.end}. Ranked by deals, then rounds led.`}>
           <div className="mb-2">
             <WindowSelector path="/investors" sp={sp} win={win} />
           </div>
@@ -130,7 +130,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
             </Table>
           )}
         </Card>
-        <Card className="lg:col-span-2" title="New-entrant log" n={entrants.length} note={`Investors whose first deal in our data is on or after ${since}. Our history starts ${entrants[0]?.historyStart ?? "—"}, so "new" means new to this dataset, not necessarily new to India.`}>
+        <Card className="lg:col-span-2" icon={Icon.star} subtitle="Investors whose first deal in our data is in the last 4 weeks" title="New-entrant log" n={entrants.length} note={`Investors whose first deal in our data is on or after ${since}. Our history starts ${entrants[0]?.historyStart ?? "—"}, so "new" means new to this dataset, not necessarily new to India.`}>
           {entrants.length === 0 ? (
             <Empty>No new investors in the last 4 weeks.</Empty>
           ) : (
@@ -150,7 +150,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
         </Card>
       </div>
 
-      <Card title="Co-investment graph" n={net.nodes.length} note={`The ${net.nodes.length} best-connected investors; ranked by number of distinct co-investors; a line joins two investors who backed the same round (thicker = more shared rounds). Watchlist investors are highlighted. All-time data.`}>
+      <Card icon={Icon.link} subtitle="Lines join investors who backed the same round · pink = your watchlist · bigger = more connected" title="Co-investment graph" n={net.nodes.length} note={`The ${net.nodes.length} best-connected investors; ranked by number of distinct co-investors; a line joins two investors who backed the same round (thicker = more shared rounds). Watchlist investors are highlighted. All-time data.`}>
         {net.nodes.length < 2 ? (
           <Empty>Not enough repeat co-investment yet to draw a network.</Empty>
         ) : (

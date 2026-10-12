@@ -187,7 +187,9 @@ interface TreeDatum {
   delta: number;
   core: boolean;
   href: string;
-  [key: string]: string | number | boolean;
+  /** Optional second line and tooltip text replacing the week-on-week change. */
+  caption?: string;
+  [key: string]: string | number | boolean | undefined;
 }
 
 /** Colour by week-on-week change in deal count: greens rising, roses cooling, slate flat. */
@@ -199,8 +201,8 @@ function heatColor(delta: number): string {
   return "#94a3b8";
 }
 
-function TreeCell(props: { x?: number; y?: number; width?: number; height?: number; name?: string; capital?: number; n?: number; delta?: number; core?: boolean; href?: string; depth?: number }) {
-  const { x = 0, y = 0, width = 0, height = 0, name = "", capital = 0, n = 0, delta = 0, core = false, href = "#", depth = 1 } = props;
+function TreeCell(props: { x?: number; y?: number; width?: number; height?: number; name?: string; capital?: number; n?: number; delta?: number; core?: boolean; href?: string; depth?: number; caption?: string }) {
+  const { x = 0, y = 0, width = 0, height = 0, name = "", capital = 0, n = 0, delta = 0, core = false, href = "#", depth = 1, caption } = props;
   if (depth !== 1 || width <= 2 || height <= 2) return null;
   const fill = heatColor(delta);
   const big = width > 90 && height > 46;
@@ -215,7 +217,7 @@ function TreeCell(props: { x?: number; y?: number; width?: number; height?: numb
         ) : null}
         {big ? (
           <text x={x + 12} y={y + 40} fill="#fff" fillOpacity={0.9} fontSize={11}>
-            {money(capital)} · {n} deal{n === 1 ? "" : "s"} {delta > 0 ? `▲${delta}` : delta < 0 ? `▼${Math.abs(delta)}` : ""}
+            {caption ?? `${money(capital)} · ${n} deal${n === 1 ? "" : "s"} ${delta > 0 ? `▲${delta}` : delta < 0 ? `▼${Math.abs(delta)}` : ""}`}
           </text>
         ) : null}
       </g>
@@ -232,7 +234,7 @@ export function SectorTreemap({ data, height = 300 }: { data: TreeDatum[]; heigh
           {...tooltipStyle}
           formatter={(_v, _n, item) => {
             const p = (item as { payload?: TreeDatum }).payload;
-            return p ? [`${money(p.capital)} · ${p.n} deals · ${p.delta >= 0 ? "+" : ""}${p.delta} vs previous`, p.name] : "";
+            return p ? [p.caption ?? `${money(p.capital)} · ${p.n} deals · ${p.delta >= 0 ? "+" : ""}${p.delta} vs previous`, p.name] : "";
           }}
         />
       </Treemap>

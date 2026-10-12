@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { WeekLines } from "@/components/charts";
 import { BarList, DealList } from "@/components/deals";
 import { DeepDivePanel } from "@/components/deep-dive";
-import { Badge, Card, Empty, Loading, ProfileSwitcher, Table, td } from "@/components/ui";
+import { Badge, Card, Empty, Loading, ProfileSwitcher, Table, td, Icon } from "@/components/ui";
 import { queryDeals } from "@/db/queries/deals";
 import { getMarketMap, getSectorSummary } from "@/db/queries/sectors";
 import { dealFiltersSchema } from "@/lib/deal-filters";
@@ -46,11 +46,11 @@ async function Content({ params, searchParams }: { params: Promise<{ sector: str
       </p>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <Card className="lg:col-span-2" title="Trend over time" n={s.weekly.reduce((a, w) => a + w.n, 0)} note="Deals per ISO week (left) and disclosed capital (right chart).">
+        <Card className="lg:col-span-2" icon={Icon.chart} subtitle="Deals per week (top) and disclosed capital (bottom)" title="Trend over time" n={s.weekly.reduce((a, w) => a + w.n, 0)} note="Deals per ISO week (left) and disclosed capital (right chart).">
           <WeekLines data={s.weekly.map((w) => ({ label: w.week.slice(5), deals: w.n }))} series={[{ key: "deals", label: "Deals" }]} height={180} />
           <WeekLines data={s.weekly.map((w) => ({ label: w.week.slice(5), capital: w.capital }))} series={[{ key: "capital", label: "Capital" }]} money height={160} />
         </Card>
-        <Card title="Active investors" n={s.investors.length} note={`Window: last ${DEEP_DIVE_DAYS} days. Bar = deals; label shows rounds led.`}>
+        <Card icon={Icon.users} subtitle={`Last ${DEEP_DIVE_DAYS} days · bar = deals, label = rounds led`} title="Active investors" n={s.investors.length} note={`Window: last ${DEEP_DIVE_DAYS} days. Bar = deals; label shows rounds led.`}>
           {s.investors.length === 0 ? (
             <Empty>No named investors in this window.</Empty>
           ) : (
@@ -59,7 +59,7 @@ async function Content({ params, searchParams }: { params: Promise<{ sector: str
         </Card>
       </div>
 
-      <Card title="Market map" n={map.reduce((a, c) => a + c.companies.length, 0)} note={map[0] ? `Clusters pre-computed nightly from company description embeddings (k-means), labelled by Gemini; last computed ${map[0].computedAt.slice(0, 16)} UTC. Tracked companies are placed in their nearest cluster.` : "Computed nightly once a sector has at least 6 companies with embeddings."}>
+      <Card icon={Icon.grid} subtitle="Clusters of similar companies · ★ marks where your tracked companies sit" title="Market map" n={map.reduce((a, c) => a + c.companies.length, 0)} note={map[0] ? `Clusters pre-computed nightly from company description embeddings (k-means), labelled by Gemini; last computed ${map[0].computedAt.slice(0, 16)} UTC. Tracked companies are placed in their nearest cluster.` : "Computed nightly once a sector has at least 6 companies with embeddings."}>
         {map.length === 0 ? (
           <Empty>No market map for this sector yet.</Empty>
         ) : (
@@ -90,7 +90,7 @@ async function Content({ params, searchParams }: { params: Promise<{ sector: str
       </Card>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card title="Cheque evolution by stage" n={s.chequeByStage.reduce((a, c) => a + c.n, 0)} note={`Median round size in the last ${DEEP_DIVE_DAYS} days vs the ${DEEP_DIVE_DAYS} days before. Priced rounds only; small n is shown, not hidden.`}>
+        <Card icon={Icon.layers} subtitle={`Median round size, last ${DEEP_DIVE_DAYS} days vs the ${DEEP_DIVE_DAYS} before`} title="Cheque evolution by stage" n={s.chequeByStage.reduce((a, c) => a + c.n, 0)} note={`Median round size in the last ${DEEP_DIVE_DAYS} days vs the ${DEEP_DIVE_DAYS} days before. Priced rounds only; small n is shown, not hidden.`}>
           {s.chequeByStage.length === 0 ? (
             <Empty>No priced rounds in this window.</Empty>
           ) : (
@@ -115,12 +115,12 @@ async function Content({ params, searchParams }: { params: Promise<{ sector: str
             </Table>
           )}
         </Card>
-        <Card title="Sub-sectors" n={s.subSectors.reduce((a, x) => a + x.n, 0)}>
+        <Card icon={Icon.pie} subtitle="Deals and capital by sub-sector" title="Sub-sectors" n={s.subSectors.reduce((a, x) => a + x.n, 0)}>
           {s.subSectors.length === 0 ? <Empty>No deals in this window.</Empty> : <BarList rows={s.subSectors.map((x) => ({ key: x.sub, label: x.sub, value: x.n, display: `${x.n} · ${usd(x.capital, { undisclosed: "$0" })}` }))} />}
         </Card>
       </div>
 
-      <Card title="Exits and shutdowns" n={s.exits.length}>
+      <Card icon={Icon.bell} subtitle="M&A, IPO filings and shutdowns in this sector" title="Exits and shutdowns" n={s.exits.length}>
         {s.exits.length === 0 ? (
           <Empty>No M&A, IPO filings or shutdowns recorded in this sector.</Empty>
         ) : (
@@ -140,12 +140,12 @@ async function Content({ params, searchParams }: { params: Promise<{ sector: str
       </Card>
 
       {active ? (
-        <Card title="Deep-dive" className="print-break" note="Generated on demand from the statistics on this page; exportable as PDF via your browser's print dialog.">
+        <Card icon={Icon.star} subtitle="A written analysis of this sector, generated on demand (20–60 s)" title="Deep-dive" className="print-break" note="Generated on demand from the statistics on this page; exportable as PDF via your browser's print dialog.">
           <DeepDivePanel sector={sector} profileId={active.id} />
         </Card>
       ) : null}
 
-      <Card title={`All deals, last ${DEEP_DIVE_DAYS} days`} n={deals.total} note={<Link className="link" href={`/explorer?sector=${encodeURIComponent(sector)}${active ? `&profile=${active.id}` : ""}`}>Open in explorer (filters, CSV) →</Link>}>
+      <Card icon={Icon.list} subtitle="Newest first · click a deal for its scorecard" footer={<Link className="link" href={`/explorer?sector=${encodeURIComponent(sector)}${active ? `&profile=${active.id}` : ""}`}>Open in explorer (filters, CSV) →</Link>} title={`All deals, last ${DEEP_DIVE_DAYS} days`} n={deals.total} note={<Link className="link" href={`/explorer?sector=${encodeURIComponent(sector)}${active ? `&profile=${active.id}` : ""}`}>Open in explorer (filters, CSV) →</Link>}>
         {deals.rows.length === 0 ? <Empty>No deals in this window.</Empty> : <DealList deals={deals.rows} showScore={!!active} />}
       </Card>
     </>

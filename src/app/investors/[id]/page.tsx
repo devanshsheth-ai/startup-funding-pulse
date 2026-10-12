@@ -4,7 +4,7 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { WeekLines } from "@/components/charts";
 import { BarList, DealList } from "@/components/deals";
-import { Badge, Card, Empty, Loading } from "@/components/ui";
+import { Badge, Card, Empty, Loading, Icon } from "@/components/ui";
 import { getDb } from "@/db/client";
 import { getDealsByIds } from "@/db/queries/deals";
 import { getInvestorProfile } from "@/db/queries/investors";
@@ -61,13 +61,13 @@ async function Content({ params, searchParams }: { params: Promise<{ id: string 
       </p>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <Card title="Sector concentration" n={inv.totals.deals} note={active ? "Highlighted: core sectors of the active profile." : undefined}>
+        <Card icon={Icon.pie} subtitle="Deals by sector · gradient = your core sectors" title="Sector concentration" n={inv.totals.deals} note={active ? "Highlighted: core sectors of the active profile." : undefined}>
           <BarList rows={inv.sectors.map((s) => ({ key: s.sector, label: s.sector, href: `/sectors/${encodeURIComponent(s.sector)}${q}`, value: s.n, display: String(s.n), highlight: core.has(s.sector) }))} />
         </Card>
-        <Card title="Stage distribution" n={inv.totals.deals}>
+        <Card icon={Icon.layers} subtitle="Deals by round stage" title="Stage distribution" n={inv.totals.deals}>
           <BarList rows={inv.stages.map((s) => ({ key: s.stage, label: s.stage, value: s.n, display: String(s.n) }))} />
         </Card>
-        <Card title="Top co-investors" n={inv.coInvestors.length}>
+        <Card icon={Icon.users} subtitle="Investors most often on the same rounds" title="Top co-investors" n={inv.coInvestors.length}>
           {inv.coInvestors.length === 0 ? (
             <Empty>No co-investors recorded.</Empty>
           ) : (
@@ -76,12 +76,12 @@ async function Content({ params, searchParams }: { params: Promise<{ id: string 
         </Card>
       </div>
 
-      <Card title="Cadence over time" n={inv.cadence.reduce((s, c) => s + c.n, 0)} note="Deals per ISO week in our data.">
+      <Card icon={Icon.chart} subtitle="Deals per ISO week in our data" title="Cadence over time" n={inv.cadence.reduce((s, c) => s + c.n, 0)} note="Deals per ISO week in our data.">
         <WeekLines data={inv.cadence.map((c) => ({ label: c.week.slice(5), deals: c.n }))} series={[{ key: "deals", label: "Deals" }]} height={180} />
       </Card>
 
       {active ? (
-        <Card title={`Overlap with ${active.displayName}'s tracked companies`} n={ov.length} note="Rounds this investor joined that are adjacent to a tracked (simulated) portfolio company.">
+        <Card icon={Icon.bell} subtitle="Rounds adjacent to a tracked (simulated) portfolio company" title={`Overlap with ${active.displayName}'s tracked companies`} n={ov.length} note="Rounds this investor joined that are adjacent to a tracked (simulated) portfolio company.">
           {ov.length === 0 ? (
             <Empty>None of this investor&apos;s rounds are adjacent to a tracked company.</Empty>
           ) : (
@@ -96,7 +96,7 @@ async function Content({ params, searchParams }: { params: Promise<{ id: string 
         </Card>
       ) : null}
 
-      <Card title="All deals" n={inv.dealIds.length} note={inv.dealIds.length > 50 ? "Showing the 50 most recent." : undefined}>
+      <Card icon={Icon.list} subtitle={inv.dealIds.length > 50 ? "50 most recent rounds" : "Every round this investor joined"} title="All deals" n={inv.dealIds.length} note={inv.dealIds.length > 50 ? "Showing the 50 most recent." : undefined}>
         <DealList deals={deals} showScore={!!active} />
       </Card>
       <p className="text-sm">

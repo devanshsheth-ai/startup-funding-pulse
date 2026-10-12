@@ -52,3 +52,34 @@ export function Gauge({ value, max = 100, label, caption }: { value: number; max
     </div>
   );
 }
+
+/** Diverging bars for z-scores (−2σ … +2σ), e.g. the four drivers of market temperature. */
+export function ZBars({ rows }: { rows: { label: string; z: number; detail?: string }[] }) {
+  return (
+    <ul className="space-y-2.5">
+      {rows.map((r) => {
+        const z = Math.max(-2.5, Math.min(2.5, r.z));
+        const w = (Math.abs(z) / 2.5) * 50;
+        const up = z >= 0;
+        return (
+          <li key={r.label} title={r.detail}>
+            <div className="mb-1 flex justify-between text-xs">
+              <span className="font-medium">{r.label}</span>
+              <span className={`font-semibold tabular-nums ${up ? "text-up" : "text-down"}`}>
+                {up ? "+" : ""}
+                {r.z.toFixed(1)}σ
+              </span>
+            </div>
+            <div className="relative h-2 rounded-full bg-line/60">
+              <span className="absolute left-1/2 top-[-2px] h-3 w-px bg-muted/50" aria-hidden />
+              <span
+                className={`animate-grow absolute top-0 h-2 rounded-full ${up ? "bg-gradient-to-r from-emerald-400 to-emerald-500" : "bg-gradient-to-l from-rose-400 to-rose-500"}`}
+                style={up ? { left: "50%", width: `${w}%` } : { right: "50%", width: `${w}%`, transformOrigin: "right" }}
+              />
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
