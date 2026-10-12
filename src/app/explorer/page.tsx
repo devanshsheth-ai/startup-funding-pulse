@@ -2,7 +2,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense, type ReactNode } from "react";
 import { DealList, InvestorLinks, Provenance, SourceLinks } from "@/components/deals";
-import { Badge, Card, Empty, Loading, Page, Pills, Table, td } from "@/components/ui";
+import { Badge, Card, Empty, Loading, Page, Pills, Table, td, Icon } from "@/components/ui";
 import { queryDeals, queryEvents } from "@/db/queries/deals";
 import { filtersToParams, parseDealFilters, parseEventFilters, TIERS, type DealFilters } from "@/lib/deal-filters";
 import { shortDate, TIER_LABELS, usd } from "@/lib/format";
@@ -156,7 +156,7 @@ async function Deals({ sp }: { sp: Record<string, string | string[] | undefined>
           </a>
         </div>
       </div>
-      <Card title={`Deals${active ? ` · scored for ${active.displayName}` : ""}`} n={res.total} note={`Showing ${res.total ? f.cursor + 1 : 0}–${f.cursor + res.rows.length} of ${res.total}. Every row links to its sources.`}>
+      <Card icon={Icon.list} subtitle={`Showing ${res.total ? f.cursor + 1 : 0}–${f.cursor + res.rows.length} of ${res.total} · every row links to its sources`} title={`Deals${active ? ` · scored for ${active.displayName}` : ""}`} n={res.total} note={`Showing ${res.total ? f.cursor + 1 : 0}–${f.cursor + res.rows.length} of ${res.total}. Every row links to its sources.`}>
         {res.rows.length === 0 ? (
           <Empty>No deals match these filters.</Empty>
         ) : view === "cards" ? (
@@ -229,7 +229,7 @@ async function Events({ sp }: { sp: Record<string, string | string[] | undefined
           Apply
         </button>
       </form>
-      <Card title="Events" n={res.total} note="M&A, shutdowns, IPO filings, layoffs, people moves, fund closes and financial results.">
+      <Card icon={Icon.bell} subtitle="M&A, shutdowns, IPO filings, layoffs, people moves, fund closes and results" title="Events" n={res.total} note="M&A, shutdowns, IPO filings, layoffs, people moves, fund closes and financial results.">
         {res.rows.length === 0 ? (
           <Empty>No events match.</Empty>
         ) : (

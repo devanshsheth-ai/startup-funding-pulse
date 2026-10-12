@@ -64,10 +64,13 @@ export function Card({
   icon,
   subtitle,
   action,
+  footer,
 }: {
   title?: ReactNode;
   n?: number | string;
   note?: ReactNode;
+  /** Always-visible footer (links, counts) — unlike `note`, which lives in the ⓘ popover. */
+  footer?: ReactNode;
   children: ReactNode;
   className?: string;
   id?: string;
@@ -100,6 +103,7 @@ export function Card({
       ) : null}
       {children}
       {!title && note ? <p className="mt-3 text-xs text-muted">{note}</p> : null}
+      {footer ? <div className="mt-4 border-t border-line/70 pt-3 text-xs text-muted">{footer}</div> : null}
     </section>
   );
 }

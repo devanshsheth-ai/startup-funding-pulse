@@ -76,7 +76,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
         {a.max_immediate_per_day} immediate alerts a day; one non-critical alert per tracked company per 24 h; cluster = {a.cluster_threshold}+ adjacent raises in {a.cluster_window_days} days. Each
         event alerts once (unique dedupe key). <Link className="link" href={`/settings?profile=${active.id}#mandate`}>Change in settings</Link>.
       </p>
-      <Card title="Alert log" n={rows.length}>
+      <Card icon={Icon.list} subtitle="Newest first · the last column says which rule decided each alert" title="Alert log" n={rows.length}>
         {rows.length === 0 ? (
           <Empty>No alerts {status ? `with status “${status}”` : "yet"}. The engine runs after every pipeline cycle and again after quiet hours.</Empty>
         ) : (

@@ -145,7 +145,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
         })}
       </div>
 
-      <Card title="Watchlist" n={watch.length} note={<>Companies and funds being monitored; no relationship implied. Manage in <Link className="link" href={`/settings?profile=${active.id}#watchlist`}>settings</Link>.</>}>
+      <Card icon={Icon.star} subtitle="Companies and funds you monitor · status and latest round" footer={<Link className="link" href={`/settings?profile=${active.id}#watchlist`}>Manage watchlist →</Link>} title="Watchlist" n={watch.length} note={<>Companies and funds being monitored; no relationship implied. Manage in <Link className="link" href={`/settings?profile=${active.id}#watchlist`}>settings</Link>.</>}>
         {watch.length === 0 ? (
           <Empty>The watchlist is empty.</Empty>
         ) : (

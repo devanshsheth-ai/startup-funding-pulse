@@ -646,3 +646,25 @@ saving. The email-format page (`/share/[token]/email`) and the template-preview 
 removed. `/digests` and `/brief/latest` redirect to `/brief`. Public share links still render
 the same web layout read-only for LPs. `/api/digest/preview` remains as an API endpoint for S11
 but is not linked from the UI.
+
+**D-084 · Restoring detail after the declutter.** User feedback: after D-081 things seemed to be
+missing, especially on the Overview. The hover popovers stay, but content is visible again.
+
+On the Overview:
+- **KPI tiles:** all seven are back with 12-week sparklines.
+- **Market temperature:** the gauge now shows its four drivers as diverging z-score bars.
+- **Sectors:** the treemap sits beside a ranked sector-heat list with names, capital and ▲/▼.
+- **Market structure:** the tabbed card is gone. Capital by stage, stage mix over time, deal
+  sizes, geography and concentration are each visible again.
+- **New cards:** "Patterns this week"; "Exits, fund closes and people"; watchlist activity when
+  there are no hits; "Tracked companies at a glance" (adjacent raises and competitor count per
+  company).
+- **Adjacency:** the map has a readable list below it, with rationale and source.
+- **Deals and investors:** the top 10 deals show, and leaderboard rows add capital led and
+  sectors.
+
+Elsewhere:
+- Every card has a one-line visible subtitle explaining what it shows, with the long
+  method note in the ⓘ popover.
+- Cards gain a visible `footer` slot for links and counts.
+- The Sectors index adds an all-time capital treemap and a "most active right now" chart.
