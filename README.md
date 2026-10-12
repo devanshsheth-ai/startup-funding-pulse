@@ -161,6 +161,11 @@ adjacency rationale, the deal card with sources, and the last 30 days around tha
   - rates between ₹94.5 and ₹96.8 per dollar.
 
   A reported range ("Rs 400–500 crore") is stored at its lower end and marked *estimated*.
+  Further checks on the same day:
+  - every extracted amount (357 of 357) appears verbatim in its article;
+  - FX rates are within 0.17% of an independent provider;
+  - 79 of 83 multi-publication deals agree within 5%. One source typo was found and fixed
+    (D-087).
 
 ## Limitations
 
