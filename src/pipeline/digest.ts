@@ -22,6 +22,7 @@ import {
 } from "@/db/schema";
 import { getEnv } from "@/lib/env";
 import { SIMULATED_PORTFOLIO_FOOTER } from "@/lib/copy";
+import { logger } from "@/lib/logger";
 import type { StageCounters } from "@/lib/run-log";
 import { formatAggregates, formatMandate, narrateDaily, narrateWeekly, type NarrativeItem, type Rejection } from "@/pipeline/narrate";
 import { toIsoDate } from "@/pipeline/normalize";
@@ -434,7 +435,10 @@ export async function buildDigest(profile: ProfileRow & { displayName: string },
       counters,
     );
     if (r.ok && r.value) ({ headline, tldr, narrative, lpTalkingPoints: lp, openQuestions: oq } = r.value);
-    else status = "degraded";
+    else {
+      status = "degraded";
+      logger.warn("weekly narration degraded; digest ships with statistics only", { profile: profile.id, error: r.error });
+    }
     rejected = r.rejected;
   } else {
     const r = await narrateDaily(
@@ -451,7 +455,10 @@ export async function buildDigest(profile: ProfileRow & { displayName: string },
       counters,
     );
     if (r.ok && r.value) ({ headline, context: dailyContext } = r.value);
-    else status = "degraded";
+    else {
+      status = "degraded";
+      logger.warn("daily narration degraded; digest ships with statistics only", { profile: profile.id, error: r.error });
+    }
     rejected = r.rejected;
   }
 
