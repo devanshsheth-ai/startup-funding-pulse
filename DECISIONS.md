@@ -621,3 +621,18 @@ instead of passing silently.
   source on click).
 - **Shorter lists:** the top 5 deals show, with a "Show all" call to action.
 - **Empty states:** illustrated instead of plain text.
+
+**D-082 · Web brief and email legibility.** User feedback: the brief was cluttered and hard to
+read. `/share/[token]` used to serve the email HTML, which is built from narrow tables for email
+clients. → It is now a web page built from the same stored digest content:
+- **Top of page:** a masthead with the headline and a KPI strip, then a sticky table of contents.
+- **Analysis:** set as an article column (about 68 characters per line) with source chips.
+- **Sections:** patterns as cards; alerts with radial adjacency maps; deals grouped by tier;
+  a market section with a treemap, stage donut and temperature gauge; investor bars;
+  LP talking points as callouts.
+- **Print:** `?print=1` still opens the print dialog.
+
+The exact emailed HTML moved to `/share/[token]/email`. The email itself got a gradient header
+band, a 2×2 KPI grid, a "Read the interactive brief" button, accent-barred section titles,
+inline bar charts for sectors and stages, and roomier type. All of it is email-safe inline CSS.
+A rendered weekly email is about 54–67 KB, under the 98 KB clip guard.

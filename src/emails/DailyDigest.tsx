@@ -1,6 +1,6 @@
-import { Body, Container, Head, Html, Preview, Section, Text } from "@react-email/components";
+import { Body, Container, Head, Html, Preview, Text } from "@react-email/components";
 import type { DigestContent } from "@/pipeline/digest";
-import { AdjacencySection, HeldAlerts, C, DealBlock, EventLine, Footer, S, SectionTitle, usd } from "./parts";
+import { AdjacencySection, HeldAlerts, Hero, DealBlock, EventLine, Footer, S, SectionTitle, usd } from "./parts";
 
 /**
  * Daily digest — PRD §16.2. Deliberately a different document: no Patterns,
@@ -18,23 +18,13 @@ export function DailyDigest({ c }: { c: DigestContent }) {
       <Preview>{c.headline}</Preview>
       <Body style={S.body}>
         <Container style={S.container}>
-          {/* 1. Header */}
-          <Text style={S.small}>
-            Daily note · {c.profile.name} · {c.window.end}
-          </Text>
-          {/* 2. Headline + compact KPI line */}
-          <Text style={S.h1}>{c.headline}</Text>
-          <Section style={{ ...S.card, backgroundColor: C.bg }}>
-            <Text style={S.p}>
-              Today: <strong>{c.kpis.deals}</strong> deals · <strong>{usd(c.kpis.capitalUsd)}</strong>
-              {c.rolling7d ? (
-                <>
-                  {" "}
-                  · last 7 days: {c.rolling7d.deals} deals, {usd(c.rolling7d.capitalUsd)}
-                </>
-              ) : null}
+          {/* 1–2. Header band with KPIs and the link to the web brief */}
+          <Hero c={c} eyebrow={`Daily note · ${c.profile.name} · ${c.window.end}`} />
+          {c.rolling7d ? (
+            <Text style={S.small}>
+              Last 7 days: {c.rolling7d.deals} deals, {usd(c.rolling7d.capitalUsd)} raised.
             </Text>
-          </Section>
+          ) : null}
 
           {/* 3. Alerts: watchlist + adjacency */}
           {c.watchlistHits.length ? (

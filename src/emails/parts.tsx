@@ -1,4 +1,4 @@
-import { Hr, Link, Section, Text } from "@react-email/components";
+import { Column, Hr, Link, Row, Section, Text } from "@react-email/components";
 import type { CSSProperties, ReactNode } from "react";
 import type { DealCard, DigestContent, DigestMode, EventItem } from "@/pipeline/digest";
 import { withUtm } from "@/pipeline/digest";
@@ -18,16 +18,73 @@ export const C = {
 };
 
 export const S: Record<string, CSSProperties> = {
-  body: { backgroundColor: "#ffffff", fontFamily: "-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif", color: C.ink, margin: 0 },
-  container: { maxWidth: "600px", margin: "0 auto", padding: "16px" },
-  h1: { fontSize: "22px", lineHeight: "28px", fontWeight: 700, margin: "8px 0" },
-  h2: { fontSize: "17px", lineHeight: "24px", fontWeight: 700, margin: "24px 0 8px" },
-  p: { fontSize: "15px", lineHeight: "23px", margin: "6px 0" },
-  small: { fontSize: "13px", lineHeight: "19px", color: C.muted, margin: "4px 0" },
-  card: { border: `1px solid ${C.line}`, borderRadius: "8px", padding: "12px", margin: "8px 0" },
-  alert: { borderLeft: `4px solid ${C.red}`, backgroundColor: "#fef2f2", borderRadius: "6px", padding: "10px 12px", margin: "8px 0" },
-  link: { color: C.blue, textDecoration: "underline" },
+  body: { backgroundColor: "#f4f6fb", fontFamily: "-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif", color: C.ink, margin: 0, padding: "16px 0" },
+  container: { maxWidth: "620px", margin: "0 auto", padding: "20px", backgroundColor: "#ffffff", borderRadius: "18px", border: `1px solid ${C.line}` },
+  h1: { fontSize: "24px", lineHeight: "31px", fontWeight: 800, margin: "8px 0" },
+  h2: { fontSize: "18px", lineHeight: "24px", fontWeight: 800, margin: "32px 0 12px", paddingLeft: "10px", borderLeft: "4px solid #6366f1" },
+  p: { fontSize: "15px", lineHeight: "25px", margin: "8px 0" },
+  small: { fontSize: "13px", lineHeight: "20px", color: C.muted, margin: "4px 0" },
+  card: { border: `1px solid ${C.line}`, borderRadius: "12px", padding: "14px 16px", margin: "10px 0", backgroundColor: "#ffffff" },
+  alert: { borderLeft: `4px solid ${C.red}`, backgroundColor: "#fef2f2", borderRadius: "10px", padding: "12px 14px", margin: "10px 0" },
+  link: { color: "#4f46e5", textDecoration: "underline" },
 };
+
+const KPI_CELL: CSSProperties = { backgroundColor: "rgba(255,255,255,0.14)", borderRadius: "12px", padding: "12px 14px" };
+
+/** Indigo header band: eyebrow, headline, 2×2 KPI grid and the call to read the web brief. */
+export function Hero({ c, eyebrow }: { c: DigestContent; eyebrow: string }) {
+  const k = c.kpis;
+  const wow = k.prevDeals ? Math.round(((k.deals - k.prevDeals) / k.prevDeals) * 100) : null;
+  const cells: [string, string, string][] = [
+    ["Deals", String(k.deals), wow === null ? "first window" : `${wow >= 0 ? "▲" : "▼"} ${Math.abs(wow)}% vs previous`],
+    ["Capital raised", usd(k.capitalUsd), `${k.pricedDeals} priced deals`],
+    ["Median cheque", usd(k.medianUsd), "disclosed rounds"],
+    ["Temperature", `${k.temperature}/100`, k.temperature >= 60 ? "running hot" : k.temperature <= 40 ? "running cool" : "about normal"],
+  ];
+  const cell = ([label, value, sub]: [string, string, string]) => (
+    <div style={KPI_CELL}>
+      <Text style={{ margin: 0, fontSize: "11px", letterSpacing: "0.08em", textTransform: "uppercase", color: "#e0e7ff", fontWeight: 700 }}>{label}</Text>
+      <Text style={{ margin: "2px 0 0", fontSize: "24px", lineHeight: "30px", fontWeight: 800, color: "#ffffff" }}>{value}</Text>
+      <Text style={{ margin: 0, fontSize: "12px", color: "#e0e7ff" }}>{sub}</Text>
+    </div>
+  );
+  const href = c.links.share ?? c.links.dashboard;
+  return (
+    <Section style={{ backgroundColor: "#4f46e5", backgroundImage: "linear-gradient(135deg,#4f46e5,#7c3aed 55%,#db2777)", borderRadius: "16px", padding: "22px" }}>
+      <Text style={{ margin: 0, fontSize: "11px", letterSpacing: "0.12em", textTransform: "uppercase", color: "#e0e7ff", fontWeight: 700 }}>{eyebrow}</Text>
+      <Text style={{ margin: "10px 0 16px", fontSize: "24px", lineHeight: "31px", fontWeight: 800, color: "#ffffff" }}>{c.headline}</Text>
+      <Row>
+        <Column style={{ width: "50%", paddingRight: "5px", paddingBottom: "10px", verticalAlign: "top" }}>{cell(cells[0]!)}</Column>
+        <Column style={{ width: "50%", paddingLeft: "5px", paddingBottom: "10px", verticalAlign: "top" }}>{cell(cells[1]!)}</Column>
+      </Row>
+      <Row>
+        <Column style={{ width: "50%", paddingRight: "5px", verticalAlign: "top" }}>{cell(cells[2]!)}</Column>
+        <Column style={{ width: "50%", paddingLeft: "5px", verticalAlign: "top" }}>{cell(cells[3]!)}</Column>
+      </Row>
+      <Text style={{ margin: "18px 0 0" }}>
+        <Link href={href} style={{ display: "inline-block", backgroundColor: "#ffffff", color: "#4338ca", fontWeight: 700, fontSize: "14px", padding: "11px 18px", borderRadius: "10px", textDecoration: "none" }}>
+          Read the interactive brief →
+        </Link>
+      </Text>
+    </Section>
+  );
+}
+
+/** One labelled horizontal bar (email-safe: a sized div inside a track). */
+export function BarRow({ label, value, max, display, strong = false, color = "#6366f1" }: { label: string; value: number; max: number; display: string; strong?: boolean; color?: string }) {
+  const pct = Math.max(3, Math.round((100 * value) / Math.max(1, max)));
+  return (
+    <div style={{ margin: "0 0 12px" }}>
+      <Row>
+        <Column style={{ fontSize: "14px", fontWeight: strong ? 700 : 500, color: C.ink }}>{label}</Column>
+        <Column style={{ fontSize: "13px", color: C.muted, textAlign: "right", whiteSpace: "nowrap" }}>{display}</Column>
+      </Row>
+      <div style={{ backgroundColor: "#eef0f6", borderRadius: "999px", height: "8px", marginTop: "5px" }}>
+        <div style={{ backgroundColor: color, width: `${pct}%`, height: "8px", borderRadius: "999px" }} />
+      </div>
+    </div>
+  );
+}
 
 export const usd = (n: number | null | undefined): string =>
   n === null || n === undefined ? "undisclosed" : n >= 1e9 ? `$${(n / 1e9).toFixed(2)}B` : n >= 1e6 ? `$${(n / 1e6).toFixed(1)}M` : `$${Math.round(n / 1e3)}K`;
