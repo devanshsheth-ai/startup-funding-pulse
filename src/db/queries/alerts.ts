@@ -44,7 +44,7 @@ export async function getAlertCounts(profileId: string): Promise<Record<string, 
 export async function getAlertHealth(): Promise<{ byStatus: Record<string, number>; lastRun: string | null; lastRunStatus: string | null }> {
   const db = getDb();
   const [counts, run] = await Promise.all([
-    db.execute(sql`SELECT status, count(*)::int AS n FROM alerts GROUP BY 1`),
+    db.execute(sql`SELECT a.status, count(*)::int AS n FROM alerts a LEFT JOIN profiles pr ON pr.id = a.profile_id WHERE pr.is_active IS NOT FALSE GROUP BY 1`),
     db.execute(sql`SELECT started_at::text AS at, status FROM run_logs WHERE stage = 'alerts' ORDER BY started_at DESC LIMIT 1`),
   ]);
   const r = (run.rows[0] as { at?: string; status?: string } | undefined) ?? {};

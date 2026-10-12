@@ -1,4 +1,5 @@
 import { mandateConfigSchema, type MandateConfig } from "@/config/profile";
+import { eq } from "drizzle-orm";
 import { getDb } from "@/db/client";
 import { profiles } from "@/db/schema";
 import { toIsoDate } from "@/pipeline/normalize";
@@ -27,7 +28,8 @@ export interface ViewProfile {
 export async function loadViewProfiles(): Promise<ViewProfile[]> {
   const rows = await getDb()
     .select({ id: profiles.id, displayName: profiles.displayName, config: profiles.config, isDefault: profiles.isDefault, lastDigestSentAt: profiles.lastDigestSentAt })
-    .from(profiles);
+    .from(profiles)
+    .where(eq(profiles.isActive, true));
   rows.sort((a, b) => Number(b.isDefault) - Number(a.isDefault) || a.id.localeCompare(b.id));
   return rows.map((r) => ({ id: r.id, displayName: r.displayName, config: mandateConfigSchema.parse(r.config), lastDigestSentAt: r.lastDigestSentAt }));
 }

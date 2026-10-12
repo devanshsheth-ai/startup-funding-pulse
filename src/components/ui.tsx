@@ -207,6 +207,8 @@ export function Pills({ items, label }: { items: { href: string; label: string; 
 }
 
 export function ProfileSwitcher({ path, sp, profiles, active }: { path: string; sp: Record<string, string | string[] | undefined>; profiles: ViewProfile[]; active: ViewProfile }) {
+  // With a single active profile there is nothing to switch between.
+  if (profiles.length < 2) return null;
   return (
     <Pills
       label="Profile"

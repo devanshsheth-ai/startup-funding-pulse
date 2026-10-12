@@ -120,8 +120,7 @@ pgvector, with the database's cosine distance matching the value computed locall
 Reading is public. Saving anything (settings, Regenerate) asks once for `ADMIN_SECRET` and keeps
 it in the tab's session storage only (D-064). Demo of S5: change a core sector in `/settings`,
 save, then **Regenerate brief** on `/` — the ranking reorders (verified: making Fintech the only
-core sector for the consumer syndicate moved two Fintech deals into its top six; restoring
-reverted it exactly).
+core sector moved two Fintech deals into the top six; restoring reverted it exactly).
 
 ## Alerts
 
@@ -154,8 +153,22 @@ adjacency rationale, the deal card with sources, and the last 30 days around tha
 - Aarav's sectors, stages, cheque size, portfolio and watchlist are not in the problem
   statement. They are **assumed**, seeded as defaults, and fully editable (PRD §4.2, §8).
 - The portfolio uses real companies as simulated holdings. See the disclosure above.
+- **Amounts are shown in US dollars.** Each deal stores the amount in both rupees and dollars,
+  plus the USD/INR rate used and its date. Rupee rounds ("Rs 1,750 crore") are converted at
+  that day's rate, and dollar rounds are kept as reported. An audit on 12 Oct 2026 found:
+  - all 258 priced deals consistent with their stored rate;
+  - 41 reported in rupees and 217 in dollars;
+  - rates between ₹94.5 and ₹96.8 per dollar.
+
+  A reported range ("Rs 400–500 crore") is stored at its lower end and marked *estimated*.
 
 ## Limitations
+
+- **One profile (Aarav).** The PRD seeds two more demo profiles (a fintech seed fund and a
+  consumer angel syndicate) to show personalisation (§4.2, acceptance S6). They were removed at
+  the owner's request (D-086), so S6 is not demonstrated. The profile system itself is intact:
+  scores, alerts, briefs and settings are all keyed by profile, and a new profile is one seed
+  file away.
 
 - History before live operation began (11 Oct 2026) comes from weekly roundups (Inc42, Entrackr),
   not continuous collection; `/health` shows the backfill/live split. Roundups list fewer
@@ -194,7 +207,7 @@ adjacency rationale, the deal card with sources, and the last 30 days around tha
 | M2 Extraction | Done: 9/10 spot-check correct; 0 unvalidated writes |
 | M3 Dedupe + enrich | Done: multi-outlet deals merge to one row; investor variants resolve |
 | M4 Backfill | Done: 293 unique deals over 14 ISO weeks (249 backfill, 44 live); cross-check logged |
-| M5 Scoring + adjacency | Done: 882 scorecards (294 deals × 3 profiles), 45 adjacency edges with rationales, distinct top-10s per profile; live `/methodology` |
+| M5 Scoring + adjacency | Done: 882 scorecards (294 deals × 3 profiles at the time; two profiles later retired, D-086), 45 adjacency edges with rationales, distinct top-10s per profile; live `/methodology` |
 | M6 Aggregates + patterns | Done: 12 three-gate detectors (5 fired, 5 quiet, 2 suppressed with reasons for W41); zero fires below gates under restricted history; Aggregates object with `n` everywhere |
 | M7 Digest + email | Done: weekly + daily React Email templates (375 px verified), evidence-enforced narration, preview routes, share links; real digest delivered via Resend; window advances only on success |
 | M8 Web application | Done: all PRD §18 screens and §22 endpoints; S5 verified end to end (mandate change → Regenerate → reorder); NL search, warm-path finder, nightly market maps, deep-dive, CSV in/out |

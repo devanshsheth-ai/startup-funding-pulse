@@ -71,7 +71,7 @@ async function seedSources(): Promise<number> {
   return rows.length;
 }
 
-const PROFILE_FILES = ["profile-aarav.json", "profile-fintech-seed-fund.json", "profile-consumer-syndicate.json"];
+const PROFILE_FILES = ["profile-aarav.json"];
 
 
 /** Portfolio and watchlist must not overlap (PRD §8.1). Throws on violation. */

@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
@@ -7,7 +7,7 @@ import { AutoPrint } from "@/components/auto-print";
 import { BriefView } from "@/components/brief";
 import { Loading } from "@/components/ui";
 import { getDb } from "@/db/client";
-import { digests } from "@/db/schema";
+import { digests, profiles } from "@/db/schema";
 import { appUrl, type DigestContent } from "@/pipeline/digest";
 
 /**
@@ -23,7 +23,7 @@ async function Content({ params, searchParams }: { params: Promise<{ token: stri
   const { token } = await params;
   const sp = await searchParams;
   if (!/^[A-Za-z0-9_-]{16,64}$/.test(token)) notFound();
-  const [row] = await getDb().select({ content: digests.content }).from(digests).where(eq(digests.shareToken, token)).limit(1);
+  const [row] = await getDb().select({ content: digests.content }).from(digests).innerJoin(profiles, eq(profiles.id, digests.profileId)).where(and(eq(digests.shareToken, token), eq(profiles.isActive, true))).limit(1);
   if (!row?.content) notFound();
   const base = appUrl();
   return (
