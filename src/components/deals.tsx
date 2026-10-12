@@ -107,82 +107,115 @@ export function SourceLinks({ sources, max = 3 }: { sources: DealListItem["sourc
 export function ScorecardView({ card }: { card: Scorecard }) {
   if (card.excluded) return <p className="text-xs text-muted">Excluded by hard filter: {card.excluded.reason}</p>;
   return (
-    <table className="mt-1 w-full text-xs">
-      <tbody>
-        {card.components
-          ? Object.keys(COMPONENT_LABELS).map((k) => {
-              const c = card.components?.[k as keyof NonNullable<Scorecard["components"]>];
-              if (!c) return null;
-              return (
-                <tr key={k} className="border-t border-line/60">
-                  <td className="py-0.5 pr-2">{COMPONENT_LABELS[k]}</td>
-                  <td className="py-0.5 pr-2 tabular-nums">
-                    {c.points} / {c.max}
-                  </td>
-                  <td className="py-0.5 text-muted">{c.detail}</td>
-                </tr>
-              );
-            })
-          : null}
-        {card.overrides.map((o) => (
-          <tr key={o.key} className="border-t border-line/60">
-            <td className="py-0.5 pr-2">Override</td>
-            <td className="py-0.5 pr-2 tabular-nums">+{o.points}</td>
-            <td className="py-0.5 text-muted">{o.detail}</td>
-          </tr>
-        ))}
-        <tr className="border-t border-line/60">
-          <td className="py-0.5 pr-2 font-medium">Total</td>
-          <td className="py-0.5 pr-2 tabular-nums font-medium">{card.clamped_total}</td>
-          <td className="py-0.5 text-muted">
-            raw {card.raw_total} × confidence {card.confidence_multiplier}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div className="mt-2 space-y-1.5">
+      {card.components
+        ? Object.keys(COMPONENT_LABELS).map((k) => {
+            const c = card.components?.[k as keyof NonNullable<Scorecard["components"]>];
+            if (!c) return null;
+            const pct = c.max ? Math.round((100 * c.points) / c.max) : 0;
+            return (
+              <div key={k} className="grid grid-cols-[8.5rem_1fr_3.5rem] items-center gap-3 text-xs" title={c.detail}>
+                <span className="text-muted">{COMPONENT_LABELS[k]}</span>
+                <span className="h-2 overflow-hidden rounded-full bg-line/70">
+                  <span className="animate-grow block h-2 rounded-full bg-grad" style={{ width: `${Math.max(pct ? 4 : 0, pct)}%` }} />
+                </span>
+                <span className="text-right font-semibold tabular-nums">
+                  {c.points}/{c.max}
+                </span>
+              </div>
+            );
+          })
+        : null}
+      {card.overrides.map((o) => (
+        <div key={o.key} className="flex items-center justify-between gap-2 rounded-lg bg-indigo-50 px-2.5 py-1 text-xs text-indigo-800 dark:bg-indigo-500/15 dark:text-indigo-200">
+          <span>Override · {o.detail}</span>
+          <span className="font-bold tabular-nums">+{o.points}</span>
+        </div>
+      ))}
+      <div className="flex items-center justify-between border-t border-line/70 pt-1.5 text-xs">
+        <span className="text-muted">
+          Raw {card.raw_total} × confidence {card.confidence_multiplier}
+        </span>
+        <span className="font-bold">Score {card.clamped_total}</span>
+      </div>
+    </div>
   );
 }
+
+const AVATAR = ["from-indigo-500 to-violet-500", "from-cyan-500 to-blue-500", "from-pink-500 to-rose-500", "from-amber-500 to-orange-500", "from-emerald-500 to-teal-500", "from-fuchsia-500 to-purple-500"];
+function avatarFor(name: string): string {
+  let h = 0;
+  for (const ch of name) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return AVATAR[h % AVATAR.length] ?? AVATAR[0]!;
+}
+const TIER_RING: Record<string, string> = { act_now: "#e11d48", high: "#f59e0b", relevant: "#6366f1", context: "#94a3b8", archive: "#cbd5e1" };
+
+/** Circular score indicator coloured by tier. */
+export function ScoreRing({ score, tier }: { score: number | null; tier: string | null }) {
+  const v = Math.max(0, Math.min(100, score ?? 0));
+  const c = 2 * Math.PI * 16;
+  const color = TIER_RING[tier ?? "context"] ?? "#94a3b8";
+  return (
+    <span className="relative grid h-11 w-11 shrink-0 place-items-center" title="Relevance score (0–100)">
+      <svg viewBox="0 0 40 40" className="absolute inset-0 -rotate-90">
+        <circle cx="20" cy="20" r="16" fill="none" stroke="var(--grid)" strokeWidth="4" />
+        <circle cx="20" cy="20" r="16" fill="none" stroke={color} strokeWidth="4" strokeLinecap="round" strokeDasharray={`${(c * v) / 100} ${c}`}>
+          <animate attributeName="stroke-dasharray" from={`0 ${c}`} to={`${(c * v) / 100} ${c}`} dur="0.9s" fill="freeze" />
+        </circle>
+      </svg>
+      <span className="num text-[13px] font-extrabold">{score === null ? "—" : Math.round(score)}</span>
+    </span>
+  );
+}
+
+const TIER_TONE: Record<string, "bad" | "warn" | "accent" | "neutral"> = { act_now: "bad", high: "warn", relevant: "accent", context: "neutral", archive: "neutral" };
 
 /** Ranked deal rows with an expandable scorecard per deal. */
 export function DealList({ deals, showScore = true, extra }: { deals: DealListItem[]; showScore?: boolean; extra?: (d: DealListItem) => ReactNode }) {
   return (
-    <ul className="divide-y divide-line">
+    <ul className="stagger space-y-2">
       {deals.map((d) => (
-        <li key={d.id} className="py-2">
-          <details className="group">
-            <summary className="flex cursor-pointer list-none flex-wrap items-baseline gap-x-3 gap-y-1">
+        <li key={d.id}>
+          <details className="group rounded-2xl border border-line/80 bg-card transition-all duration-200 open:shadow-md hover:border-indigo-200 hover:shadow-sm dark:hover:border-indigo-500/30">
+            <summary className="flex cursor-pointer list-none items-center gap-3 p-3 [&::-webkit-details-marker]:hidden">
               {showScore ? (
-                <span className="w-10 shrink-0 text-right font-semibold tabular-nums" title="Relevance score (0–100)">
-                  {d.score === null ? "—" : Math.round(d.score)}
-                </span>
-              ) : null}
+                <ScoreRing score={d.score} tier={d.tier} />
+              ) : (
+                <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br text-sm font-bold text-white ${avatarFor(d.company)}`}>{d.company.slice(0, 1).toUpperCase()}</span>
+              )}
               <span className="min-w-0 flex-1">
-                <span className="font-medium">{d.company}</span>
-                <span className="text-muted">
-                  {" "}
-                  · {d.stage} · {usd(d.amountUsd)} · {d.sector}
-                  {d.city ? ` · ${d.city}` : ""} · {shortDate(d.announced)}
+                <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span className="font-semibold">{d.company}</span>
+                  {d.tier && showScore ? <Badge tone={TIER_TONE[d.tier] ?? "neutral"}>{TIER_LABELS[d.tier] ?? d.tier}</Badge> : null}
                 </span>
-                {d.tier && showScore ? (
-                  <span className="ml-2">
-                    <Badge>{TIER_LABELS[d.tier] ?? d.tier}</Badge>
-                  </span>
-                ) : null}
-                {d.reason ? <span className="block text-xs text-muted">{d.reason}</span> : null}
+                <span className="mt-0.5 flex flex-wrap gap-x-2 text-xs text-muted">
+                  <span className="font-semibold text-foreground">{usd(d.amountUsd)}</span>
+                  <span>· {d.stage}</span>
+                  <span>· {d.sector}</span>
+                  {d.city ? <span>· {d.city}</span> : null}
+                  <span>· {shortDate(d.announced)}</span>
+                </span>
+                {d.reason ? <span className="mt-0.5 block truncate text-xs text-muted">{d.reason}</span> : null}
               </span>
-              <span className="flex shrink-0 flex-col items-end gap-1">
+              <span className="hidden max-w-[40%] shrink-0 flex-col items-end gap-1 lg:flex">
                 <Provenance d={d} />
-                <SourceLinks sources={d.sources} max={2} />
+                <SourceLinks sources={d.sources} max={1} />
               </span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="shrink-0 text-muted transition-transform duration-200 group-open:rotate-180" aria-hidden>
+                <path d="m6 9 6 6 6-6" />
+              </svg>
             </summary>
-            <div className="mt-2 space-y-1 rounded-md bg-black/[0.03] p-3 text-xs dark:bg-white/[0.04] sm:ml-12">
-              {d.description ? <p>{d.description}</p> : null}
+            <div className="animate-in mx-3 mb-3 space-y-2 rounded-xl bg-card-2 p-3 text-xs ring-1 ring-line/60">
+              <div className="flex flex-wrap gap-2 lg:hidden">
+                <Provenance d={d} />
+              </div>
+              {d.description ? <p className="text-[13px] leading-relaxed text-foreground">{d.description}</p> : null}
               <p>
                 <span className="text-muted">Lead:</span> <InvestorLinks list={d.leads} /> · <span className="text-muted">Participating:</span> <InvestorLinks list={d.participants} />
               </p>
               {d.amountRaw ? <p className="text-muted">As reported: {d.amountRaw}</p> : null}
               <p>
-                <span className="text-muted">All sources:</span> <SourceLinks sources={d.sources} max={10} />
+                <span className="text-muted">Sources:</span> <SourceLinks sources={d.sources} max={10} />
               </p>
               {extra ? extra(d) : null}
               {d.breakdown ? <ScorecardView card={d.breakdown} /> : null}
@@ -194,7 +227,7 @@ export function DealList({ deals, showScore = true, extra }: { deals: DealListIt
   );
 }
 
-/** Horizontal ranked bars in plain HTML (sector heat, geography, leaderboards). */
+/** Horizontal ranked bars in plain HTML (sector heat, geography, leaderboards), animated on load. */
 export function BarList({
   rows,
 }: {
@@ -202,26 +235,28 @@ export function BarList({
 }) {
   const max = Math.max(1, ...rows.map((r) => r.value));
   return (
-    <ul className="space-y-1.5">
-      {rows.map((r) => (
-        <li key={r.key} className="grid grid-cols-[minmax(0,10rem)_1fr_auto] items-center gap-2 text-sm">
-          <span className="truncate" title={typeof r.label === "string" ? r.label : undefined}>
-            {r.indicator ? <span className="mr-1">{r.indicator}</span> : null}
-            {r.href ? (
-              <Link className="link" href={r.href}>
-                {r.label}
-              </Link>
-            ) : (
-              r.label
-            )}
-          </span>
-          <span className="h-3 rounded-sm bg-black/5 dark:bg-white/10">
+    <ul className="space-y-2.5">
+      {rows.map((r, i) => (
+        <li key={r.key} className="group">
+          <div className="mb-1 flex items-center justify-between gap-2 text-[13px]">
+            <span className="flex min-w-0 items-center gap-1.5 truncate font-medium" title={typeof r.label === "string" ? r.label : undefined}>
+              {r.indicator ? <span className="text-xs">{r.indicator}</span> : null}
+              {r.href ? (
+                <Link className="truncate transition-colors hover:text-accent" href={r.href}>
+                  {r.label}
+                </Link>
+              ) : (
+                <span className="truncate">{r.label}</span>
+              )}
+            </span>
+            <span className="shrink-0 text-xs tabular-nums text-muted">{r.display}</span>
+          </div>
+          <span className="block h-2.5 overflow-hidden rounded-full bg-line/60">
             <span
-              className={`block h-3 rounded-sm ${r.highlight ? "bg-accent" : "bg-[var(--chart-5)]"}`}
-              style={{ width: `${Math.max(2, (100 * r.value) / max)}%` }}
+              className={`animate-grow block h-2.5 rounded-full ${r.highlight ? "bg-grad" : "bg-gradient-to-r from-slate-300 to-slate-400 dark:from-slate-600 dark:to-slate-500"}`}
+              style={{ width: `${Math.max(2, (100 * r.value) / max)}%`, animationDelay: `${Math.min(i, 10) * 50}ms` }}
             />
           </span>
-          <span className="text-right text-xs tabular-nums text-muted">{r.display}</span>
         </li>
       ))}
     </ul>

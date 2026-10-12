@@ -25,10 +25,10 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
     <>
       <ProfileSwitcher path="/digests" sp={sp} profiles={all} active={active} />
       <div className="no-print flex flex-wrap gap-2 text-sm">
-        <a className="rounded-md border border-line px-3 py-1" href={`/api/digest/preview?profile=${active.id}&mode=weekly`} target="_blank" rel="noopener noreferrer">
+        <a className="btn btn-secondary btn-sm" href={`/api/digest/preview?profile=${active.id}&mode=weekly`} target="_blank" rel="noopener noreferrer">
           Preview weekly template (live, not saved) ↗
         </a>
-        <a className="rounded-md border border-line px-3 py-1" href={`/api/digest/preview?profile=${active.id}&mode=daily`} target="_blank" rel="noopener noreferrer">
+        <a className="btn btn-secondary btn-sm" href={`/api/digest/preview?profile=${active.id}&mode=daily`} target="_blank" rel="noopener noreferrer">
           Preview daily template ↗
         </a>
       </div>
@@ -78,7 +78,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
 
 export default function DigestsPage({ searchParams }: { searchParams: SearchParams }) {
   return (
-    <Page title="Digests" subtitle="Every brief generated for a profile, as sent.">
+    <Page eyebrow="Briefs" title="Brief archive" subtitle="Every brief generated for a profile, as sent.">
       <Suspense fallback={<Loading what="the archive" />}>
         <Content searchParams={searchParams} />
       </Suspense>

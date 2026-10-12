@@ -33,7 +33,7 @@ interface Draft {
   keywords: string;
 }
 
-const input = "w-full rounded-md border border-line bg-background px-2 py-1 text-sm";
+const input = "input";
 const empty = (sector: string): Draft => ({ name: "", description: "", sector, sub_sector: "", stage_held: "", city: "", keywords: "" });
 const toDraft = (t: TrackedView): Draft => ({ id: t.id, name: t.name, description: t.description, sector: t.sector, sub_sector: t.subSector ?? "", stage_held: t.stageHeld ?? "", city: t.city ?? "", keywords: t.keywords.join(", ") });
 const kw = (s: string) => s.split(",").map((x) => x.trim()).filter(Boolean);
@@ -98,7 +98,7 @@ export function PortfolioManager({ profileId, tracked, sectors, stages }: { prof
   return (
     <div className="space-y-3">
       {msg ? <p className={`text-sm ${msg.ok ? "text-up" : "text-down"}`} role="status">{msg.text}</p> : null}
-      <ul className="divide-y divide-line rounded-lg border border-line bg-card">
+      <ul className="card divide-y divide-line overflow-hidden">
         {tracked.map((t) => (
           <li key={t.id} className="flex flex-wrap items-start justify-between gap-2 p-3 text-sm">
             <div className="min-w-0 flex-1">
@@ -109,10 +109,10 @@ export function PortfolioManager({ profileId, tracked, sectors, stages }: { prof
               <div className="mt-1 text-xs">Keywords: {t.keywords.join(" · ")}</div>
             </div>
             <div className="flex gap-1">
-              <button type="button" className="rounded-md border border-line px-2 py-0.5 text-xs" onClick={() => setDraft(toDraft(t))}>
+              <button type="button" className="btn btn-secondary btn-sm" onClick={() => setDraft(toDraft(t))}>
                 Edit
               </button>
-              <button type="button" className="rounded-md border border-line px-2 py-0.5 text-xs text-down" disabled={busy} onClick={() => remove(t)}>
+              <button type="button" className="btn btn-secondary btn-sm !text-down" disabled={busy} onClick={() => remove(t)}>
                 Stop tracking
               </button>
             </div>
@@ -177,16 +177,16 @@ export function PortfolioManager({ profileId, tracked, sectors, stages }: { prof
             <p className="text-xs text-amber-700 dark:text-amber-300">Fewer than 6 keywords: adjacency recall may be low.</p>
           ) : null}
           <div className="flex gap-2">
-            <button type="button" disabled={busy || problems.length > 0 || count < 3} onClick={save} className="rounded-md bg-accent px-3 py-1 text-white disabled:opacity-50">
+            <button type="button" disabled={busy || problems.length > 0 || count < 3} onClick={save} className="btn btn-primary btn-sm">
               {busy ? "Saving…" : "Save"}
             </button>
-            <button type="button" className="rounded-md border border-line px-3 py-1" onClick={() => setDraft(null)}>
+            <button type="button" className="btn btn-secondary btn-sm" onClick={() => setDraft(null)}>
               Cancel
             </button>
           </div>
         </div>
       ) : (
-        <button type="button" className="rounded-md border border-line px-3 py-1 text-sm" onClick={() => setDraft(empty(sectors[0] ?? "Fintech"))}>
+        <button type="button" className="btn btn-secondary btn-sm" onClick={() => setDraft(empty(sectors[0] ?? "Fintech"))}>
           + Track a company
         </button>
       )}

@@ -53,23 +53,23 @@ async function Content({ searchParams }: { searchParams: Promise<Record<string, 
 
   return (
     <>
-      <nav className="flex flex-wrap gap-2 text-sm" aria-label="Profile">
+      <nav className="inline-flex flex-wrap gap-1 rounded-2xl bg-card p-1 shadow-sm ring-1 ring-line" aria-label="Profile">
         {profiles.map((p) => (
           <a
             key={p.id}
             href={`/methodology?profile=${p.id}`}
-            className={`rounded border px-3 py-1 ${p.id === active.id ? "border-current font-semibold" : "border-black/15 opacity-70 dark:border-white/20"}`}
+            className={`rounded-xl px-3 py-1.5 text-xs font-semibold transition-all ${p.id === active.id ? "bg-grad text-white shadow-[0_4px_12px_-4px_rgb(99_102_241/0.55)]" : "text-muted hover:bg-accent-soft hover:text-accent"}`}
           >
             {p.displayName}
           </a>
         ))}
       </nav>
 
-      <section>
-        <h2 className="mb-2 text-lg font-semibold">1. Scoring weights (live from {active.displayName})</h2>
-        <div className="overflow-x-auto rounded border border-black/10 dark:border-white/15">
+      <section className="card animate-in p-5">
+        <h2 className="mb-3 text-[17px] font-bold">1. Scoring weights (live from {active.displayName})</h2>
+        <div className="overflow-x-auto rounded-xl ring-1 ring-line">
           <table className="w-full min-w-[640px] text-left text-sm">
-            <thead className="bg-black/[0.03] dark:bg-white/[0.05]">
+            <thead className="bg-card-2 text-[11px] uppercase tracking-wide text-muted">
               <tr>
                 <th className="px-3 py-2">Component</th>
                 <th className="px-3 py-2">Max points</th>
@@ -78,7 +78,7 @@ async function Content({ searchParams }: { searchParams: Promise<Record<string, 
             </thead>
             <tbody>
               {COMPONENT_ROWS.map((r) => (
-                <tr key={r.key} className="border-t border-black/5 align-top dark:border-white/10">
+                <tr key={r.key} className="border-t border-line/70 align-top transition-colors hover:bg-accent-soft/50">
                   <td className="px-3 py-2 font-medium">{r.label}</td>
                   <td className="px-3 py-2">{w[r.key as keyof typeof w]}</td>
                   <td className="px-3 py-2 opacity-85">{r.how}</td>
@@ -93,12 +93,12 @@ async function Content({ searchParams }: { searchParams: Promise<Record<string, 
         </p>
       </section>
 
-      <section>
-        <h2 className="mb-2 text-lg font-semibold">2. Worked example (a real deal)</h2>
+      <section className="card animate-in p-5">
+        <h2 className="mb-3 text-[17px] font-bold">2. Worked example (a real deal)</h2>
         {!example ? (
           <p className="text-sm opacity-70">No scored deals yet for this profile.</p>
         ) : (
-          <div className="rounded border border-black/10 p-3 text-sm dark:border-white/15">
+          <div className="rounded-xl bg-card-2 p-4 text-sm ring-1 ring-line">
             <p className="font-medium">
               {example.sourceUrl ? (
                 <a className="underline underline-offset-4" href={example.sourceUrl}>
@@ -118,7 +118,7 @@ async function Content({ searchParams }: { searchParams: Promise<Record<string, 
                     const c = example.card.components?.[r.key as keyof NonNullable<typeof example.card.components>];
                     return c ? [[r.key, c] as const] : [];
                   }).map(([k, c]) => (
-                    <tr key={k} className="border-t border-black/5 dark:border-white/10">
+                    <tr key={k} className="border-t border-line/70">
                       <td className="py-1 pr-3">{COMPONENT_ROWS.find((r) => r.key === k)?.label ?? k}</td>
                       <td className="py-1 pr-3 tabular-nums">
                         {c.points} / {c.max}
@@ -127,7 +127,7 @@ async function Content({ searchParams }: { searchParams: Promise<Record<string, 
                     </tr>
                   ))}
                   {example.card.overrides.map((o) => (
-                    <tr key={o.key} className="border-t border-black/5 dark:border-white/10">
+                    <tr key={o.key} className="border-t border-line/70">
                       <td className="py-1 pr-3">Override</td>
                       <td className="py-1 pr-3 tabular-nums">+{o.points}</td>
                       <td className="py-1 opacity-80">{o.detail}</td>
@@ -143,8 +143,8 @@ async function Content({ searchParams }: { searchParams: Promise<Record<string, 
         )}
       </section>
 
-      <section className="space-y-1 text-sm">
-        <h2 className="mb-2 text-lg font-semibold">3. Overrides</h2>
+      <section className="card card-hover animate-in p-5 space-y-1 text-sm">
+        <h2 className="mb-3 text-[17px] font-bold">3. Overrides</h2>
         <p>
           <strong>+{w.override_watchlist}</strong> when the company is on your watchlist; it always surfaces in the watchlist section.
         </p>
@@ -167,8 +167,8 @@ async function Content({ searchParams }: { searchParams: Promise<Record<string, 
         <p className="opacity-70">Scores are clamped to 0–100 for display; the raw value is kept in every deal&apos;s breakdown.</p>
       </section>
 
-      <section className="text-sm">
-        <h2 className="mb-2 text-lg font-semibold">4. Tiers</h2>
+      <section className="card card-hover animate-in p-5 text-sm">
+        <h2 className="mb-3 text-[17px] font-bold">4. Tiers</h2>
         <ul className="grid gap-1 sm:grid-cols-5">
           <li>🔴 Act now: ≥ {t.act_now}</li>
           <li>🟠 High: {t.high}–{t.act_now - 1}</li>
@@ -178,8 +178,8 @@ async function Content({ searchParams }: { searchParams: Promise<Record<string, 
         </ul>
       </section>
 
-      <section className="text-sm">
-        <h2 className="mb-2 text-lg font-semibold">5. The Serendipity Rule</h2>
+      <section className="card card-hover animate-in p-5 text-sm">
+        <h2 className="mb-3 text-[17px] font-bold">5. The Serendipity Rule</h2>
         <blockquote className="border-l-4 border-black/20 pl-3 italic dark:border-white/30">{SERENDIPITY_RULE}</blockquote>
         <p className="mt-1 opacity-75">
           Selection: up to {cfg.serendipity.count} deals in the current window whose mandate score (everything except ecosystem significance) is below{" "}
@@ -187,16 +187,16 @@ async function Content({ searchParams }: { searchParams: Promise<Record<string, 
         </p>
       </section>
 
-      <section className="text-sm">
-        <h2 className="mb-2 text-lg font-semibold">6. Pattern detectors</h2>
+      <section className="card card-hover animate-in p-5 text-sm">
+        <h2 className="mb-3 text-[17px] font-bold">6. Pattern detectors</h2>
         <p className="mb-2 opacity-75">
           A detector fires only when all three gates pass: sample size ≥ n_min, effect size ≥ e_min and weeks of history ≥ b_min. A detector without enough history is
           shown as <strong>suppressed</strong> with its reason, never silently absent.
           {detectors?.week ? ` Status for ISO week ${detectors.week}.` : " No detector run recorded yet."}
         </p>
-        <div className="overflow-x-auto rounded border border-black/10 dark:border-white/15">
+        <div className="overflow-x-auto rounded-xl ring-1 ring-line">
           <table className="w-full min-w-[760px] text-left text-sm">
-            <thead className="bg-black/[0.03] dark:bg-white/[0.05]">
+            <thead className="bg-card-2 text-[11px] uppercase tracking-wide text-muted">
               <tr>
                 <th className="px-3 py-2">Detector</th>
                 <th className="px-3 py-2">n_min</th>
@@ -213,7 +213,7 @@ async function Content({ searchParams }: { searchParams: Promise<Record<string, 
                 const label = st ? (st.status === "fired" ? "active" : st.status) : "not run";
                 const cls = st?.status === "fired" ? "text-emerald-700 dark:text-emerald-400" : st?.status === "suppressed" ? "text-amber-700 dark:text-amber-400" : "opacity-70";
                 return (
-                  <tr key={k} className="border-t border-black/5 align-top dark:border-white/10">
+                  <tr key={k} className="border-t border-line/70 align-top transition-colors hover:bg-accent-soft/50">
                     <td className="px-3 py-2">
                       <span className="font-medium">{g.label}</span>
                       {g.bestEffort ? <span className="ml-1 rounded bg-black/5 px-1 text-xs dark:bg-white/10">best effort</span> : null}
@@ -236,8 +236,8 @@ async function Content({ searchParams }: { searchParams: Promise<Record<string, 
         </div>
       </section>
 
-      <section className="space-y-1 text-sm">
-        <h2 className="mb-2 text-lg font-semibold">7. Data provenance</h2>
+      <section className="card card-hover animate-in p-5 space-y-1 text-sm">
+        <h2 className="mb-3 text-[17px] font-bold">7. Data provenance</h2>
         {prov ? (
           <>
             <p>
@@ -261,10 +261,10 @@ async function Content({ searchParams }: { searchParams: Promise<Record<string, 
         ) : null}
       </section>
 
-      <section className="space-y-2 text-sm">
-        <h2 className="mb-2 text-lg font-semibold">8. Assumptions</h2>
+      <section className="card card-hover animate-in p-5 space-y-2 text-sm">
+        <h2 className="mb-3 text-[17px] font-bold">8. Assumptions</h2>
         <p>{cfg.assumption_note} Sectors, stages, cheque size, geographies, portfolio and watchlist are assumed defaults, editable in settings.</p>
-        <blockquote className="rounded border border-amber-300 bg-amber-50 p-3 text-amber-950 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-100">
+        <blockquote className="rounded-2xl border border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 p-4 text-amber-950 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-100">
           <strong>{SIMULATED_PORTFOLIO_DISCLOSURE.lead}</strong> {SIMULATED_PORTFOLIO_DISCLOSURE.body} <strong>{SIMULATED_PORTFOLIO_DISCLOSURE.emphasis}</strong>{" "}
           {SIMULATED_PORTFOLIO_DISCLOSURE.tail}
         </blockquote>
@@ -275,9 +275,10 @@ async function Content({ searchParams }: { searchParams: Promise<Record<string, 
 
 export default function MethodologyPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   return (
-    <main className="mx-auto w-full max-w-5xl space-y-8 px-4 py-8">
+    <main className="mx-auto w-full max-w-7xl space-y-6 px-4 py-8">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">Methodology</h1>
+        <p className="eyebrow mb-1">Transparency</p>
+        <h1 className="text-3xl font-extrabold tracking-tight">Methodology</h1>
         <p className="text-sm opacity-70">How every deal is ranked. Everything below is rendered from the live profile configuration and real scored deals.</p>
       </header>
       <Suspense fallback={<p className="text-sm opacity-70">Loading methodology…</p>}>

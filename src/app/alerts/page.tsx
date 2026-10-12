@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
-import { Badge, Card, Empty, Loading, Page, Pills, ProfileSwitcher, Table, td } from "@/components/ui";
+import { Donut } from "@/components/charts";
+import { Badge, Card, Empty, Icon, Loading, Page, Pills, ProfileSwitcher, Table, td } from "@/components/ui";
 import { getAlertCounts, getAlertInbox } from "@/db/queries/alerts";
 import { hrefWith, param, resolveProfile, type SearchParams } from "@/lib/view";
 import { TRIGGERS, type TriggerKey } from "@/pipeline/alerts/policy";
@@ -32,9 +33,37 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
   const status = STATUSES.find((s) => s === param(sp, "status")) ?? null;
   const [rows, counts] = await Promise.all([getAlertInbox(active.id, status), getAlertCounts(active.id)]);
   const a = active.config.alerts;
+  const total = Object.values(counts).reduce((x, y) => x + y, 0);
+  const severity = rows.reduce<Record<string, number>>((m, r) => ((m[r.severity] = (m[r.severity] ?? 0) + 1), m), {});
   return (
     <>
       <ProfileSwitcher path="/alerts" sp={sp} profiles={all} active={active} />
+      <div className="grid gap-4 lg:grid-cols-3">
+        <Card icon={Icon.pie} title="Where alerts went" subtitle="Every alert is logged with its outcome" n={total}>
+          {total === 0 ? (
+            <Empty>No alerts yet.</Empty>
+          ) : (
+            <Donut data={STATUSES.map((st) => ({ name: st, value: counts[st] ?? 0 }))} centerLabel="alerts" centerValue={String(total)} height={200} />
+          )}
+        </Card>
+        <div className="stagger grid grid-cols-2 gap-4 lg:col-span-2">
+          {(
+            [
+              ["critical", "Critical", "from-rose-500 to-pink-500", "Competitor and watchlist raises: always immediate"],
+              ["high", "High", "from-amber-500 to-orange-500", "Large same-layer raises, mentions, acquisitions"],
+              ["medium", "Medium", "from-violet-500 to-indigo-500", "Clusters, shutdowns, momentum flips"],
+              ["info", "Info", "from-cyan-500 to-blue-500", "Suppliers and watchlist investors in adjacent deals"],
+            ] as const
+          ).map(([k, label, grad, help]) => (
+            <div key={k} className="card card-hover relative overflow-hidden p-4">
+              <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${grad}`} />
+              <div className="text-xs font-semibold text-muted">{label}</div>
+              <div className="num mt-1 text-3xl font-extrabold">{severity[k] ?? 0}</div>
+              <p className="mt-1 text-[11px] text-muted">{help}</p>
+            </div>
+          ))}
+        </div>
+      </div>
       <Pills
         label="Status"
         items={[
@@ -84,7 +113,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
 
 export default function AlertsPage({ searchParams }: { searchParams: SearchParams }) {
   return (
-    <Page title="Alerts" subtitle="Every alert the engine raised, and what happened to it.">
+    <Page eyebrow="Signals" title="Alerts" subtitle="Every alert the engine raised, and what happened to it.">
       <Suspense fallback={<Loading what="alerts" />}>
         <Content searchParams={searchParams} />
       </Suspense>

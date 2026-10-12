@@ -13,13 +13,13 @@ export function AdminBar() {
     setUnlocked(hasAdminSecret());
   }, []);
   return (
-    <div className="no-print flex flex-wrap items-center gap-2 rounded-lg border border-line bg-card p-3 text-sm">
+    <div className="no-print flex flex-wrap items-center gap-2 card p-3 text-sm">
       {unlocked ? (
         <>
           <span>🔓 Changes enabled for this tab.</span>
           <button
             type="button"
-            className="rounded-md border border-line px-2 py-0.5"
+            className="btn btn-secondary btn-sm"
             onClick={() => {
               forgetAdminSecret();
               setUnlocked(false);
@@ -40,8 +40,8 @@ export function AdminBar() {
           }}
         >
           <span>🔒 Viewing is public; saving changes needs the admin secret.</span>
-          <input type="password" value={value} onChange={(e) => setValue(e.target.value)} placeholder="ADMIN_SECRET" aria-label="Admin secret" autoComplete="off" className="rounded-md border border-line bg-background px-2 py-0.5" />
-          <button type="submit" className="rounded-md bg-foreground px-2 py-0.5 text-background">
+          <input type="password" value={value} onChange={(e) => setValue(e.target.value)} placeholder="ADMIN_SECRET" aria-label="Admin secret" autoComplete="off" className="input !w-auto !py-1" />
+          <button type="submit" className="btn btn-primary btn-sm">
             Unlock
           </button>
         </form>

@@ -62,7 +62,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
 
 export default function SettingsPage({ searchParams }: { searchParams: SearchParams }) {
   return (
-    <Page title="Settings" subtitle="Change the mandate, then Regenerate on the dashboard to see the brief reorder.">
+    <Page eyebrow="Configuration" title="Settings" subtitle="Change the mandate, then Regenerate on the dashboard to see the brief reorder.">
       <Suspense fallback={<Loading what="settings" />}>
         <Content searchParams={searchParams} />
       </Suspense>

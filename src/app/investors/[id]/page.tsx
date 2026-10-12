@@ -49,7 +49,7 @@ async function Content({ params, searchParams }: { params: Promise<{ id: string 
           ["Capital in rounds led", usd(inv.totals.capitalLed, { undisclosed: "—" })],
           ["First seen", shortDate(inv.firstDeal)],
         ].map(([k, v]) => (
-          <div key={k} className="rounded-lg border border-line bg-card p-3">
+          <div key={k} className="card card-hover p-4">
             <div className="text-xs text-muted">{k}</div>
             <div className="text-lg font-semibold tabular-nums">{v}</div>
           </div>

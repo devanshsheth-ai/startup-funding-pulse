@@ -4,33 +4,35 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
 const LINKS = [
-  { href: "/", label: "This period" },
+  { href: "/", label: "Overview" },
   { href: "/trends", label: "Trends" },
   { href: "/investors", label: "Investors" },
   { href: "/portfolio", label: "Portfolio" },
   { href: "/alerts", label: "Alerts" },
   { href: "/explorer", label: "Explorer" },
   { href: "/sectors", label: "Sectors" },
-  { href: "/digests", label: "Digests" },
+  { href: "/digests", label: "Briefs" },
   { href: "/methodology", label: "Methodology" },
   { href: "/settings", label: "Settings" },
   { href: "/health", label: "Health" },
 ];
 
-/** Top navigation. Carries the active `?profile=` across pages so the switcher sticks. */
+/** Top navigation, horizontally scrollable on small screens. Carries `?profile=` across pages. */
 export function Nav() {
   const path = usePathname();
   const sp = useSearchParams();
   const profile = sp.get("profile");
   return (
-    <nav aria-label="Main" className="flex flex-wrap gap-x-1 gap-y-1 text-sm">
+    <nav aria-label="Main" className="no-scrollbar flex gap-1 overflow-x-auto text-sm">
       {LINKS.map((l) => {
         const active = l.href === "/" ? path === "/" : path.startsWith(l.href);
         return (
           <Link
             key={l.href}
             href={profile ? `${l.href}?profile=${encodeURIComponent(profile)}` : l.href}
-            className={`rounded-md px-2.5 py-1 ${active ? "bg-foreground text-background" : "text-muted hover:bg-black/5 hover:text-foreground dark:hover:bg-white/10"}`}
+            className={`shrink-0 rounded-xl px-3 py-1.5 font-medium transition-all duration-200 ${
+              active ? "bg-grad text-white shadow-[0_4px_14px_-4px_rgb(99_102_241/0.6)]" : "text-muted hover:bg-accent-soft hover:text-accent"
+            }`}
             aria-current={active ? "page" : undefined}
           >
             {l.label}

@@ -21,11 +21,11 @@ export function DeepDivePanel({ sector, profileId }: { sector: string; profileId
   return (
     <div className="space-y-3">
       <div className="no-print flex flex-wrap items-center gap-2">
-        <button type="button" onClick={run} disabled={state.busy} className="rounded-md bg-foreground px-3 py-1.5 text-sm font-medium text-background disabled:opacity-60">
+        <button type="button" onClick={run} disabled={state.busy} className="btn btn-primary">
           {state.busy ? "Writing the deep-dive (20–60 s)…" : dd ? "Regenerate deep-dive" : "Generate deep-dive"}
         </button>
         {dd?.ok ? (
-          <button type="button" onClick={() => window.print()} className="rounded-md border border-line px-3 py-1.5 text-sm">
+          <button type="button" onClick={() => window.print()} className="btn btn-secondary">
             Save as PDF
           </button>
         ) : null}

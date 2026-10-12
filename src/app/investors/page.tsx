@@ -3,6 +3,7 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { Badge, Card, Empty, Loading, Page, ProfileSwitcher, Table, td, WindowSelector } from "@/components/ui";
 import { findWarmPath, getLeaderboard, getWatchedInvestors, getNewEntrants, layoutGraph, loadCoInvestGraph, topNetwork, type WarmPathResult } from "@/db/queries/investors";
+import { SERIES } from "@/lib/chart-colors";
 import { shortDate, usd } from "@/lib/format";
 import { param, resolveProfile, resolveWindow, type SearchParams } from "@/lib/view";
 import { toIsoDate } from "@/pipeline/normalize";
@@ -93,9 +94,9 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
             defaultValue={target ?? ""}
             placeholder="Target company, e.g. Kinetic Age"
             aria-label="Target company"
-            className="w-full max-w-md rounded-md border border-line bg-card px-2 py-1.5 text-sm"
+            className="input max-w-md"
           />
-          <button type="submit" className="rounded-md bg-foreground px-3 text-sm text-background">
+          <button type="submit" className="btn btn-primary">
             Find path
           </button>
         </form>
@@ -159,7 +160,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
                 const a = pos.get(e.a);
                 const b = pos.get(e.b);
                 if (!a || !b) return null;
-                return <line key={`${e.a}-${e.b}`} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke="var(--muted)" strokeOpacity={0.45} strokeWidth={Math.min(5, e.w)} />;
+                return <line key={`${e.a}-${e.b}`} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke="var(--chart-7)" strokeOpacity={0.25 + Math.min(0.5, e.w / 6)} strokeWidth={Math.min(5, e.w * 1.2)} strokeLinecap="round" />;
               })}
               {net.nodes.map((n) => {
                 const p = pos.get(n.id);
@@ -167,7 +168,8 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
                 const watched = watchedIds.has(n.id);
                 return (
                   <a key={n.id} href={`/investors/${n.id}?profile=${active.id}`}>
-                    <circle cx={p.x} cy={p.y} r={4 + Math.min(8, n.degree)} fill={watched ? "var(--accent)" : "var(--chart-5)"} />
+                    {watched ? <circle cx={p.x} cy={p.y} r={8 + Math.min(8, n.degree)} fill="none" stroke="var(--chart-4)" strokeWidth="2.5" strokeDasharray="3 2" /> : null}
+                    <circle cx={p.x} cy={p.y} r={4 + Math.min(8, n.degree)} fill={watched ? "var(--chart-4)" : SERIES[n.degree % 5]} fillOpacity={0.9} stroke="var(--card)" strokeWidth="1.5" />
                     <text x={p.x} y={p.y - 8 - Math.min(8, n.degree)} textAnchor="middle" fontSize="10" fill="var(--foreground)">
                       {n.name.length > 22 ? `${n.name.slice(0, 21)}…` : n.name}
                     </text>
@@ -184,7 +186,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
 
 export default function InvestorsPage({ searchParams }: { searchParams: SearchParams }) {
   return (
-    <Page title="Investors" subtitle="Who is writing cheques, who they write them with, and how to reach them.">
+    <Page eyebrow="Capital sources" title="Investors" subtitle="Who is writing cheques, who they write them with, and how to reach them.">
       <Suspense fallback={<Loading what="investor data" />}>
         <Content searchParams={searchParams} />
       </Suspense>
