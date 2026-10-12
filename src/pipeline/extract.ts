@@ -95,6 +95,38 @@ async function extractBatch(kind: Kind, batch: ArticleRow[], stage: StageRun) {
   return { version: r.promptVersion, perArticle: new Map(r.data.articles.map((x) => [x.article_id, x.events as unknown[]])) };
 }
 
+/**
+ * Funding extraction for arbitrary articles, outside the stage loop (golden
+ * runner, PRD §25). Same prompt, schema, batching and cache as Stage B.
+ */
+export async function extractFunding(
+  articles: { id: number; url: string; headline: string | null; bodyText: string | null; publishedAt: Date | null; sourceName: string | null }[],
+  counters: StageRun["counters"] = { itemsIn: 0, itemsOut: 0, geminiCalls: 0, geminiTokens: 0 },
+): Promise<{ promptVersion: string; perArticle: Map<number, unknown[]> }> {
+  const stub = { counters } as StageRun;
+  const rows: ArticleRow[] = articles.map((a) => ({ ...a, eventTypeGuess: "funding", sourceType: null }));
+  const perArticle = new Map<number, unknown[]>();
+  let version = "";
+  for (let i = 0; i < rows.length; i += PIPELINE.extract.batchSize) {
+    const batch = rows.slice(i, i + PIPELINE.extract.batchSize);
+    // As in the stage: a malformed batch reply is retried one article at a time.
+    const parts = await extractBatch("funding", batch, stub).then(
+      (r) => [r],
+      async (err: unknown) => {
+        if (!(err instanceof GeminiOutputError)) throw err;
+        const singles = [];
+        for (const a of batch) singles.push(await extractBatch("funding", [a], stub).catch(() => ({ version, perArticle: new Map<number, unknown[]>() })));
+        return singles;
+      },
+    );
+    for (const r of parts) {
+      version = r.version || version;
+      for (const [k, v] of r.perArticle) perArticle.set(k, v);
+    }
+  }
+  return { promptVersion: version, perArticle };
+}
+
 async function persist(kind: Kind, articles: ArticleRow[], result: Awaited<ReturnType<typeof extractBatch>>, runId: string, mode: string) {
   const db = getDb();
   let records = 0;

@@ -1,0 +1,395 @@
+{
+ "generatedAt": "2026-10-11T23:57:29.500Z",
+ "cases": [
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/from-ultraviolette-automotive-to-galaxeye-indian-startups-raised-over-203-mn-this-week",
+    "headline": "From Ultraviolette Automotive To GalaxEye — Indian Startups Raised Over $203 Mn This Week",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "Ema",
+    "aliases": [],
+    "stage": "Series B",
+    "amountUsd": 77000000,
+    "fxRate": 95.74,
+    "leads": [
+     "Creaegis"
+    ],
+    "sector": "AI Applications"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/from-simple-energy-to-arivihan-indian-startups-raised-over-233-mn-this-week",
+    "headline": "From Simple Energy To Arivihan — Indian Startups Raised Over $233 Mn This Week",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "Balwaan Krishi",
+    "aliases": [],
+    "stage": "Series B",
+    "amountUsd": 10400000,
+    "fxRate": 95.98,
+    "leads": [
+     "First Bridge India Growth Fund Private Equity"
+    ],
+    "sector": "Agritech"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/from-pixxel-to-swish-indian-startups-raised-over-321-9-mn-this-week",
+    "headline": "From Pixxel To Swish — Indian Startups Raised Over $321.9 Mn This Week",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "Circolife",
+    "aliases": [],
+    "stage": "Pre-Series A",
+    "amountUsd": 4500000,
+    "fxRate": 94.49,
+    "leads": [
+     "Bharat Jaisinghani"
+    ],
+    "sector": "Climate & Energy"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/from-third-wave-coffee-to-matter-indian-startups-raised-over-210-mn-this-week",
+    "headline": "From Third Wave Coffee To MATTER — Indian Startups Raised Over $210 Mn This Week",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "InstaAstro",
+    "aliases": [],
+    "stage": "Series A",
+    "amountUsd": 12000000,
+    "fxRate": 95.54,
+    "leads": [
+     "Artha Venture Fund",
+     "Singularity AMC"
+    ],
+    "sector": "Consumer Internet"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://entrackr.com/exclusive/exclusive-nat-habit-to-kick-off-15-mn-funding-round-led-by-trident-growth-partners-12660433",
+    "headline": "Exclusive: Nat Habit to kick off $15 Mn funding round led by Trident Growth Partners",
+    "publication": "Entrackr"
+   },
+   "expected": {
+    "company": "Nat Habit",
+    "aliases": [
+     "Breathe Life"
+    ],
+    "stage": "Series C",
+    "amountUsd": 14680037,
+    "fxRate": 96.73,
+    "leads": [
+     "Trident Growth Partners"
+    ],
+    "sector": "D2C & Commerce"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/from-flam-to-verifaix-indian-startups-raised-about-59-mn-this-week",
+    "headline": "From Flam To VerifAIX — Indian Startups Raised About $59 Mn This Week",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "VerifAIX",
+    "aliases": [],
+    "stage": "Seed",
+    "amountUsd": 5000000,
+    "fxRate": 95.96,
+    "leads": [
+     "Bluehill VC",
+     "Endiya Partners"
+    ],
+    "sector": "Deeptech"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/from-simple-energy-to-arivihan-indian-startups-raised-over-233-mn-this-week",
+    "headline": "From Simple Energy To Arivihan — Indian Startups Raised Over $233 Mn This Week",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "Arivihan",
+    "aliases": [],
+    "stage": "Series A",
+    "amountUsd": 10000000,
+    "fxRate": 95.83,
+    "leads": [
+     "Accel India",
+     "Prosus"
+    ],
+    "sector": "Edtech"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/from-flam-to-verifaix-indian-startups-raised-about-59-mn-this-week",
+    "headline": "From Flam To VerifAIX — Indian Startups Raised About $59 Mn This Week",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "Factrika",
+    "aliases": [],
+    "stage": "Seed",
+    "amountUsd": 928000,
+    "fxRate": 95.94,
+    "leads": [
+     "Info Edge Ventures"
+    ],
+    "sector": "Enterprise Services"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/neogrowth-raises-%e2%82%b985-cr-to-expand-digital-lending-capabilities",
+    "headline": "NeoGrowth Raises ₹85 Cr To Expand Digital Lending Capabilities",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "NeoGrowth",
+    "aliases": [],
+    "stage": "Debt",
+    "amountUsd": 8787346,
+    "fxRate": 96.73,
+    "leads": [
+     "FMO",
+     "LeapFrog Investments"
+    ],
+    "sector": "Fintech"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/from-ultraviolette-automotive-to-galaxeye-indian-startups-raised-over-203-mn-this-week",
+    "headline": "From Ultraviolette Automotive To GalaxEye — Indian Startups Raised Over $203 Mn This Week",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "1312 Interactive",
+    "aliases": [],
+    "stage": "Seed",
+    "amountUsd": 1000000,
+    "fxRate": 95.82,
+    "leads": [
+     "Chimera VC",
+     "T-Accelerate Capital"
+    ],
+    "sector": "Gaming"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/from-simple-energy-to-arivihan-indian-startups-raised-over-233-mn-this-week",
+    "headline": "From Simple Energy To Arivihan — Indian Startups Raised Over $233 Mn This Week",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "Simple Energy",
+    "aliases": [],
+    "stage": "Series C",
+    "amountUsd": 182615047,
+    "fxRate": 95.83,
+    "leads": [
+     "Arokiaswamy Velumani Family Office"
+    ],
+    "sector": "Mobility & EV"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/from-ultraviolette-automotive-to-galaxeye-indian-startups-raised-over-203-mn-this-week",
+    "headline": "From Ultraviolette Automotive To GalaxEye — Indian Startups Raised Over $203 Mn This Week",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "Rio Health",
+    "aliases": [],
+    "stage": "Pre-Series A",
+    "amountUsd": 4500000,
+    "fxRate": 95.96,
+    "leads": [
+     "Version One Ventures"
+    ],
+    "sector": "Quick Commerce"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/from-freehand-to-sids-farms-indian-startups-raised-142-mn-this-week",
+    "headline": "From Freehand To Sid’s Farms — Indian Startups Raised $142 Mn This Week",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "House of Student",
+    "aliases": [],
+    "stage": "Seed",
+    "amountUsd": 2000000,
+    "fxRate": 95.86,
+    "leads": [
+     "Nirmitsu Ventures"
+    ],
+    "sector": "Real Estate & Proptech"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/from-pixxel-to-swish-indian-startups-raised-over-321-9-mn-this-week",
+    "headline": "From Pixxel To Swish — Indian Startups Raised Over $321.9 Mn This Week",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "Pixxel",
+    "aliases": [],
+    "stage": "Series C",
+    "amountUsd": 100000000,
+    "fxRate": 94.49,
+    "leads": [
+     "Seraphim Space",
+     "Temasek"
+    ],
+    "sector": "Spacetech"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/from-navi-to-bookmyshow-indian-startups-raised-over-233-mn-this-week",
+    "headline": "From Navi To BookMyShow — Indian Startups Raised Over $233 Mn This Week",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "Yantra Packs",
+    "aliases": [],
+    "stage": "Seed",
+    "amountUsd": 1200000,
+    "fxRate": 95.76,
+    "leads": [
+     "Caret Capital"
+    ],
+    "sector": "Supply Chain & Logistics"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/from-ultraviolette-automotive-to-galaxeye-indian-startups-raised-over-203-mn-this-week",
+    "headline": "From Ultraviolette Automotive To GalaxEye — Indian Startups Raised Over $203 Mn This Week",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "Dextr AI",
+    "aliases": [
+     "Dextr"
+    ],
+    "stage": "Seed",
+    "amountUsd": 6700000,
+    "fxRate": 95.96,
+    "leads": [
+     "Elevation Capital"
+    ],
+    "sector": "AI Applications"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/from-river-mobility-to-blissclub-indian-startups-raised-274-mn-this-week",
+    "headline": "From River Mobility To BlissClub — Indian Startups Raised $274 Mn This Week",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "Mitti Labs",
+    "aliases": [],
+    "stage": "Series A",
+    "amountUsd": 9500000,
+    "fxRate": 95.21,
+    "leads": [
+     "Aramco Venture"
+    ],
+    "sector": "Agritech"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/from-ultrahuman-to-comet-indian-startups-raised-over-177-mn-this-week",
+    "headline": "From Ultrahuman To Comet — Indian Startups Raised Over $177 Mn This Week",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "YOGa Clean Air",
+    "aliases": [],
+    "stage": "Series A",
+    "amountUsd": 2100000,
+    "fxRate": 95.17,
+    "leads": [
+     "Info Edge Ventures"
+    ],
+    "sector": "Climate & Energy"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://entrackr.com/report/weekly-funding-report-weekly-funding-report/funding-and-acquisitions-in-indian-startups-this-week-july-06-july-11-12176124",
+    "headline": null,
+    "publication": "Entrackr"
+   },
+   "expected": {
+    "company": "Quick Clean",
+    "aliases": [],
+    "stage": "Series B",
+    "amountUsd": 14000000,
+    "fxRate": 96.26,
+    "leads": [
+     "Stakeboat Capital"
+    ],
+    "sector": "Consumer Internet"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  },
+  {
+   "article": {
+    "url": "https://inc42.com/buzz/from-simple-energy-to-arivihan-indian-startups-raised-over-233-mn-this-week",
+    "headline": "From Simple Energy To Arivihan — Indian Startups Raised Over $233 Mn This Week",
+    "publication": "Inc42"
+   },
+   "expected": {
+    "company": "EDT",
+    "aliases": [],
+    "stage": "Pre-Series A",
+    "amountUsd": 2400000,
+    "fxRate": 95.83,
+    "leads": [
+     "Sauce VC"
+    ],
+    "sector": "D2C & Commerce"
+   },
+   "basis": "the article's own figures, which two or more independent publications agree on (is_verified, no disputed field)"
+  }
+ ]
+}
