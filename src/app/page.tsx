@@ -132,7 +132,7 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
             </p>
           </div>
           <div className="no-print flex flex-col items-end gap-3">
-            <RegenerateButton profileId={active.id} mode={mode} variant="light" />
+            <RegenerateButton key={active.id} profileId={active.id} mode={mode} variant="light" />
             <div className="flex gap-2">
               <Link href={`/brief?profile=${active.id}`} className="btn btn-sm border border-white/40 bg-white/10 text-white backdrop-blur hover:bg-white/20">
                 Read the brief

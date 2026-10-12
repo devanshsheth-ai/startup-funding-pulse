@@ -74,7 +74,7 @@ async function Content({ searchParams }: { searchParams: SearchParams }) {
           <Link href={live ? `/brief?profile=${active.id}` : `/brief?profile=${active.id}&live=1`} className="btn btn-secondary">
             {live ? "Back to the latest saved brief" : "Live preview"}
           </Link>
-          <RegenerateButton profileId={active.id} mode={mode} />
+          <RegenerateButton key={active.id} profileId={active.id} mode={mode} />
         </div>
       </div>
 
