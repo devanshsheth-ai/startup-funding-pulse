@@ -118,15 +118,16 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
 
   return (
     <>
-      {/* Summary bar: the window in one line, with the actions beside it */}
-      <section className="card animate-in relative overflow-hidden p-5 sm:p-6">
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-1.5 bg-[var(--cyan-strong)]" aria-hidden />
-        <div className="flex flex-wrap items-center justify-between gap-5 pl-2">
+      {/* Summary panel: the window at a glance, with the actions beside it */}
+      <section className="card animate-in relative overflow-hidden p-7 sm:p-10">
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-2 bg-[var(--cyan-strong)]" aria-hidden />
+        <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-[var(--cyan)]/15 blur-3xl" aria-hidden />
+        <div className="relative flex flex-wrap items-center justify-between gap-8 pl-3">
           <div className="min-w-0">
-            <p className="flex items-center gap-2 text-xs font-semibold text-muted">
+            <p className="flex items-center gap-2 text-sm font-semibold text-muted">
               <span className="live-dot" aria-hidden /> {win.label} · {active.displayName}
             </p>
-            <h2 className="mt-1.5 text-2xl font-bold leading-tight tracking-[-0.03em] sm:text-[1.9rem]">
+            <h2 className="mt-3 text-[2.4rem] font-bold leading-[1.05] tracking-[-0.035em] sm:text-[3.25rem]">
               <Tip text="Unique funding rounds announced in this window, after merging duplicate reports of the same round." side="bottom">
                 <span className="cursor-help">
                   <span className="num">{stats.n}</span> deals
@@ -139,15 +140,21 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
                 </span>
               </Tip>
             </h2>
-            <p className="mt-1 text-sm text-muted">
-              {hitDeals.length} watchlist {hitDeals.length === 1 ? "hit" : "hits"} · {alerts.adjacency.length} adjacent {alerts.adjacency.length === 1 ? "raise" : "raises"} around your tracked companies · market temperature {agg.temperature.value}/100
-            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              <span className="rounded-full bg-card-2 px-3.5 py-1.5 text-sm font-medium text-foreground/80 ring-1 ring-line">
+                {hitDeals.length} watchlist {hitDeals.length === 1 ? "hit" : "hits"}
+              </span>
+              <span className="rounded-full bg-card-2 px-3.5 py-1.5 text-sm font-medium text-foreground/80 ring-1 ring-line">
+                {alerts.adjacency.length} adjacent {alerts.adjacency.length === 1 ? "raise" : "raises"} around your tracked companies
+              </span>
+              <span className="rounded-full bg-card-2 px-3.5 py-1.5 text-sm font-medium text-foreground/80 ring-1 ring-line">market temperature {agg.temperature.value}/100</span>
+            </div>
           </div>
-          <div className="no-print flex flex-wrap items-start gap-2">
-            <Link href={`/brief?profile=${active.id}`} className="btn btn-primary">
+          <div className="no-print flex flex-wrap items-start gap-3">
+            <Link href={`/brief?profile=${active.id}`} className="btn btn-primary px-6 py-3 text-[15px]">
               Read the brief
             </Link>
-            <Link href={`/explorer?profile=${active.id}&from=${win.start}&to=${win.end}&sort=score`} className="btn btn-outline">
+            <Link href={`/explorer?profile=${active.id}&from=${win.start}&to=${win.end}&sort=score`} className="btn btn-outline px-6 py-3 text-[15px]">
               Explore deals →
             </Link>
             <RegenerateButton key={active.id} profileId={active.id} mode={mode} variant="outline" />
