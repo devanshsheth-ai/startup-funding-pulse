@@ -5,19 +5,20 @@
 
 /* ── Design tokens: light, vibrant, high-contrast surfaces ─────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #0f1729;
+  --background: #f3f5f8;
+  --foreground: #0b1220;
   --card: #ffffff;
-  --card-2: #f5f7fa;
-  --muted: #6b7686;
-  --border: #e9edf2;
-  --accent: #0b9fd4;
+  --card-2: #f4f6f9;
+  --muted: #475467;
+  --border: #e2e7ee;
+  --accent: #0270a6;
   --accent-2: #38bdf8;
   --accent-3: #1e3a5f;
   --accent-soft: #e8f7fd;
   --cyan: #23b5ea;
+  --cyan-strong: #0379b5;
   --navy: #1c2a3d;
-  --up: #059669;
+  --up: #047857;
   --down: #e11d48;
   --chart-1: #23b5ea;
   --chart-2: #1c2a3d;
@@ -29,9 +30,9 @@
   --grid: #eef1f5;
   --shadow: 0 1px 2px rgb(15 23 41 / 0.04), 0 14px 34px -16px rgb(15 23 41 / 0.14);
   --shadow-hover: 0 2px 4px rgb(15 23 41 / 0.05), 0 22px 44px -18px rgb(11 159 212 / 0.28);
-  --grad: linear-gradient(135deg, #23b5ea 0%, #0b9fd4 100%);
-  --grad-soft: linear-gradient(135deg, #eef9fe 0%, #f4f7fb 100%);
-  --grad-text: linear-gradient(120deg, #0b9fd4 0%, #23b5ea 100%);
+  --grad: linear-gradient(135deg, #0a8fd0 0%, #0372ad 100%);
+  --grad-soft: linear-gradient(135deg, #eaf6fd 0%, #f2f5f9 100%);
+  --grad-text: linear-gradient(120deg, #035f91 0%, #0a8fd0 100%);
 }
 
 :root.dark {
@@ -39,13 +40,14 @@
   --foreground: #e8edf4;
   --card: #121a27;
   --card-2: #172131;
-  --muted: #94a0b2;
+  --muted: #aab4c3;
   --border: #223047;
   --accent: #38c4f2;
   --accent-2: #7dd3fc;
   --accent-3: #93c5fd;
   --accent-soft: #10293a;
   --cyan: #23b5ea;
+  --cyan-strong: #0a8fd0;
   --navy: #0a1220;
   --up: #34d399;
   --down: #fb7185;
@@ -90,9 +92,8 @@ html {
 body {
   color: var(--foreground);
   font-family: var(--font-body), system-ui, sans-serif;
-  background:
-    radial-gradient(1100px 520px at 50% 0%, color-mix(in srgb, var(--cyan) 7%, transparent), transparent 70%),
-    var(--background);
+  background: var(--background);
+  font-weight: 450;
 }
 h1,
 h2,
@@ -155,11 +156,11 @@ h3 {
   }
   .btn-primary {
     color: #fff;
-    background: var(--cyan);
-    box-shadow: 0 10px 24px -12px rgb(35 181 234 / 0.9);
+    background: var(--cyan-strong);
+    box-shadow: 0 10px 24px -12px rgb(3 121 181 / 0.8);
   }
   .btn-primary:hover:not(:disabled) {
-    background: #14a6dc;
+    background: #03689c;
     box-shadow: 0 14px 28px -12px rgb(35 181 234 / 0.95);
     transform: translateY(-1px);
   }
@@ -216,8 +217,8 @@ h3 {
     background: var(--grad-soft);
   }
   .eyebrow {
-    font-size: 0.7rem;
-    font-weight: 700;
+    font-size: 0.72rem;
+    font-weight: 750;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--accent);

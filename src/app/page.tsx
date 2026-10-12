@@ -118,30 +118,33 @@ async function Dashboard({ searchParams }: { searchParams: SearchParams }) {
 
   return (
     <>
-      {/* Hero: the week in one line, with the primary call to action */}
-      <section className="hero-air animate-in relative overflow-hidden rounded-[2rem] px-6 py-14 text-center ring-1 ring-line sm:py-20">
-        <div className="relative mx-auto max-w-3xl">
-          <p className="inline-flex items-center gap-2 text-xs font-semibold text-muted">
-            <span className="live-dot" aria-hidden /> {win.label} · {active.displayName}
-          </p>
-          <h2 className="mt-5 text-[2.5rem] font-bold leading-[1.08] tracking-[-0.04em] sm:text-[3.6rem]">
-            <Tip text="Unique funding rounds announced in this window, after merging duplicate reports of the same round." side="bottom">
-              <span className="cursor-help">
-                <span className="num">{stats.n}</span> deals.
-              </span>
-            </Tip>
-            <br />
-            <Tip text={`Sum of the amounts that were disclosed. ${agg.totals.undisclosed_n} rounds did not say how much they raised and add nothing here.`} side="bottom">
-              <span className="cursor-help text-[#8a94a3]">
-                <span className="num">{usd(stats.capital, { undisclosed: "$0" })}</span> raised.
-              </span>
-            </Tip>
-          </h2>
-          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-muted">
-            {hitDeals.length} watchlist {hitDeals.length === 1 ? "hit" : "hits"} · {alerts.adjacency.length} adjacent {alerts.adjacency.length === 1 ? "raise" : "raises"} around your tracked companies · market temperature {agg.temperature.value}/100
-          </p>
-          <div className="no-print mt-8 flex flex-wrap items-start justify-center gap-3">
-            <Link href={`/brief?profile=${active.id}`} className="btn btn-primary px-6">
+      {/* Summary bar: the window in one line, with the actions beside it */}
+      <section className="card animate-in relative overflow-hidden p-5 sm:p-6">
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-1.5 bg-[var(--cyan-strong)]" aria-hidden />
+        <div className="flex flex-wrap items-center justify-between gap-5 pl-2">
+          <div className="min-w-0">
+            <p className="flex items-center gap-2 text-xs font-semibold text-muted">
+              <span className="live-dot" aria-hidden /> {win.label} · {active.displayName}
+            </p>
+            <h2 className="mt-1.5 text-2xl font-bold leading-tight tracking-[-0.03em] sm:text-[1.9rem]">
+              <Tip text="Unique funding rounds announced in this window, after merging duplicate reports of the same round." side="bottom">
+                <span className="cursor-help">
+                  <span className="num">{stats.n}</span> deals
+                </span>
+              </Tip>{" "}
+              <span className="text-muted">·</span>{" "}
+              <Tip text={`Sum of the amounts that were disclosed. ${agg.totals.undisclosed_n} rounds did not say how much they raised and add nothing here.`} side="bottom">
+                <span className="cursor-help">
+                  <span className="num">{usd(stats.capital, { undisclosed: "$0" })}</span> raised
+                </span>
+              </Tip>
+            </h2>
+            <p className="mt-1 text-sm text-muted">
+              {hitDeals.length} watchlist {hitDeals.length === 1 ? "hit" : "hits"} · {alerts.adjacency.length} adjacent {alerts.adjacency.length === 1 ? "raise" : "raises"} around your tracked companies · market temperature {agg.temperature.value}/100
+            </p>
+          </div>
+          <div className="no-print flex flex-wrap items-start gap-2">
+            <Link href={`/brief?profile=${active.id}`} className="btn btn-primary">
               Read the brief
             </Link>
             <Link href={`/explorer?profile=${active.id}&from=${win.start}&to=${win.end}&sort=score`} className="btn btn-outline">

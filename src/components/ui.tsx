@@ -181,14 +181,14 @@ export function Badge({ children, tone = "neutral", title }: { children: ReactNo
 
 export function Pills({ items, label }: { items: { href: string; label: string; active: boolean; hint?: string }[]; label: string }) {
   return (
-    <nav aria-label={label} className="no-print inline-flex max-w-full flex-wrap gap-1 rounded-full bg-card-2 p-1 ring-1 ring-line">
+    <nav aria-label={label} className="no-print inline-flex max-w-full flex-wrap gap-1 rounded-full bg-card p-1 shadow-sm ring-1 ring-line">
       {items.map((i) => {
         const link = (
           <Link
             key={i.href + i.label}
             href={i.href}
             className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all duration-200 ${
-              i.active ? "bg-card text-foreground shadow-[0_2px_8px_-3px_rgb(15_23_41/0.25)] ring-1 ring-line" : "text-muted hover:text-foreground"
+              i.active ? "bg-[var(--navy)] text-white shadow-[0_4px_12px_-6px_rgb(15_23_41/0.6)] dark:bg-[var(--cyan-strong)]" : "text-muted hover:bg-card-2 hover:text-foreground"
             }`}
             aria-current={i.active ? "true" : undefined}
           >

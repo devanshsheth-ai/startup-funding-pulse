@@ -30,7 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col">
         <Splash />
         <header className="no-print sticky top-0 z-30 px-3 pt-3 sm:px-4">
-          <div className="mx-auto flex w-full max-w-7xl items-center gap-4 rounded-full bg-[#f1f3f6]/90 py-1.5 pl-2 pr-1.5 shadow-[0_8px_24px_-16px_rgb(15_23_41/0.35)] ring-1 ring-black/5 backdrop-blur-xl dark:bg-[#172131]/90 dark:ring-white/10">
+          <div className="mx-auto flex w-full max-w-7xl items-center gap-4 rounded-full bg-white/95 py-1.5 pl-2 pr-1.5 shadow-[0_10px_28px_-18px_rgb(15_23_41/0.45)] ring-1 ring-black/[0.06] backdrop-blur-xl dark:bg-[#172131]/95 dark:ring-white/10">
             <Link href="/" className="ds-hover group flex shrink-0 items-center gap-2 pl-1 pr-2" aria-label={`${BRAND.name} home`}>
               <span className="bg-grad grid h-8 w-8 place-items-center rounded-full text-white shadow-[0_6px_14px_-6px_rgb(35_181_234/0.8)] transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105">
                 <LogoGlyph size={18} />
