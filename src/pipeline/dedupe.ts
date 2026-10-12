@@ -300,8 +300,21 @@ export async function resolveCompany(
   return id;
 }
 
-async function upsertInvestor(name: string, seenAt: string): Promise<number> {
+export async function upsertInvestor(name: string, seenAt: string): Promise<number> {
   const seen = new Date(`${seenAt}T00:00:00Z`);
+  // Reuse an existing investor whose normalised name matches ("360 ONE Asset" = "360 One Asset"),
+  // preferring the established (busiest, then oldest) row; only then create a new one.
+  const key = normalizeInvestorKey(name);
+  const [existing] = await getDb()
+    .select({ id: investors.id })
+    .from(investors)
+    .where(eq(investors.normalizedName, key))
+    .orderBy(sql`${investors.dealCount} DESC`, investors.id)
+    .limit(1);
+  if (existing) {
+    await getDb().update(investors).set({ firstSeenAt: sql`least(${investors.firstSeenAt}, ${seen})`, updatedAt: new Date() }).where(eq(investors.id, existing.id));
+    return existing.id;
+  }
   const [row] = await getDb()
     .insert(investors)
     .values({ canonicalName: name, normalizedName: normalizeInvestorKey(name), aliases: [], firstSeenAt: seen })

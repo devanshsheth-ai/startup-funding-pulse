@@ -1,5 +1,5 @@
 {
-  "$comment": "Known Indian VC name variants \u2192 canonical name (PRD \u00a710 Stage E.3). Lookup is on normalised names (lowercase, punctuation stripped). Extend freely; new investors are created as-is when no alias matches.",
+  "$comment": "Known Indian VC name variants → canonical name (PRD §10 Stage E.3). Lookup is on normalised names (lowercase, punctuation stripped). Extend freely; new investors are created as-is when no alias matches.",
   "investors": {
     "Accel India": [
       "Accel",
@@ -100,6 +100,7 @@
     ],
     "Rainmatter": [
       "Rainmatter Capital",
+      "Rainmatter by Zerodha",
       "Zerodha Rainmatter"
     ],
     "Fireside Ventures": [
@@ -198,6 +199,85 @@
       "Sauce",
       "Sauce.vc",
       "Sauce Ventures"
+    ],
+    "360 ONE Asset": [
+      "360 One Asset",
+      "360 One Asset Management",
+      "360 ONE Asset Management",
+      "360 ONE",
+      "IIFL Asset Management"
+    ],
+    "Alkemi Growth Capital": [
+      "Alkemi"
+    ],
+    "Amplify Partners": [
+      "Amplify Partner",
+      "Amplify"
+    ],
+    "EAAA Alternatives": [
+      "EAAA",
+      "Edelweiss Alternatives"
+    ],
+    "Elev8 Venture Partners": [
+      "Elev8",
+      "Elev8 Ventures"
+    ],
+    "Equentis Angel Fund": [
+      "Equentis"
+    ],
+    "GVFL": [
+      "GVFL Prarambh Fund",
+      "Gujarat Venture Finance Limited"
+    ],
+    "Genesia Ventures": [
+      "Genesia"
+    ],
+    "Hero Enterprise": [
+      "Hero Enterprise Family Office"
+    ],
+    "ISV Capital": [
+      "ISV"
+    ],
+    "Lumikai": [
+      "Lumikai Fund"
+    ],
+    "Mirabilis Investment Trust": [
+      "Mirabilis"
+    ],
+    "Multiply Ventures": [
+      "Multiply"
+    ],
+    "Niveshaay": [
+      "Niveshaay Investment",
+      "Niveshaay Investments"
+    ],
+    "Norwest": [
+      "Norwest Capital",
+      "Norwest Venture Partners"
+    ],
+    "Prosus": [
+      "Prosus Ventures"
+    ],
+    "RPSG Capital Ventures": [
+      "RPSG Capital",
+      "RPSG Ventures"
+    ],
+    "SBI Ventures": [
+      "SBI Ventures Limited",
+      "SBI Ventures (Neev II Fund)",
+      "SBI Ventures Neev II Fund"
+    ],
+    "Seraphim Space": [
+      "Seraphim",
+      "Seraphim Capital",
+      "Seraphim Space Investment Trust"
+    ],
+    "Arokiaswamy Velumani Family Office": [
+      "Dr. Arokiaswamy Velumani Family Office",
+      "Dr Arokiaswamy Velumani Family Office",
+      "family office of Dr Arokiaswamy Velumani",
+      "Family Office of Dr. Arokiaswamy Velumani",
+      "Arokiaswamy Velumani"
     ]
   }
 }
